@@ -1,0 +1,9 @@
+import type { TabRootProps } from "./types";
+
+export function TabRoot({ children, className }: TabRootProps) {
+	return (
+		<div className={className} data-tab-root>
+			{children}
+		</div>
+	);
+}

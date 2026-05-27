@@ -1,0 +1,42 @@
+{
+  "name": "achorde-musical-domain",
+  "version": "0.3.0",
+  "private": false,
+  "type": "module",
+  "description": "Shared musical domain contracts for chord charts, parsed tabs and fretted voicings.",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/achorde/achorde.git",
+    "directory": "packages/musical-domain"
+  },
+  "bugs": {
+    "url": "https://github.com/achorde/achorde/issues"
+  },
+  "homepage": "https://github.com/achorde/achorde/tree/main/packages/musical-domain#readme",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "files": [
+    "dist",
+    "README.md",
+    "CHANGELOG.md",
+    "docs"
+  ],
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    }
+  },
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "prepare": "pnpm build",
+    "lint": "tsc -p tsconfig.json --noEmit",
+    "test": "vitest run",
+    "prepublishOnly": "pnpm build && pnpm test"
+  },
+  "devDependencies": {
+    "typescript": "^5.9.3",
+    "vitest": "^4.1.6"
+  }
+}

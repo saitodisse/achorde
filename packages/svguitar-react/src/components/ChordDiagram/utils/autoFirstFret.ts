@@ -1,0 +1,226 @@
+/**
+ * @fileoverview Utility functions for automatic firstFret calculation
+ * @author svguitar-react
+ * @version 1.0.0
+ */
+
+import type { Finger, ChordDiagramProps } from "../types";
+
+/**
+ * Maximum allowed fret count (doesn't make sense to show frets beyond 12th fret for most guitars)
+ */
+const MAX_FRET_COUNT = 12;
+
+/**
+ * Filters fingers to get only pressed ones (fret > 0)
+ * @param fingers - Array of finger positions
+ * @returns Array of pressed fingers (excluding open strings and muted strings)
+ * @example
+ * ```typescript
+ * const fingers = [
+ *   { fret: 0, string: 1, is_muted: false },
+ *   { fret: 5, string: 2, is_muted: false },
+ *   { fret: 7, string: 3, is_muted: false }
+ * ];
+ * const pressed = getPressedFingers(fingers);
+ * // Returns: [{ fret: 5, string: 2, is_muted: false }, { fret: 7, string: 3, is_muted: false }]
+ * ```
+ */
+export function getPressedFingers(fingers: Finger[]): Finger[] {
+	return fingers.filter(finger => finger.fret > 0);
+}
+
+/**
+ * Checks if autoFirstFret should be activated based on finger positions
+ * @param fingers - Array of finger positions
+ * @param currentFretCount - Current fretCount from props
+ * @returns true if any pressed finger is outside the range 1-fretCount
+ * @example
+ * ```typescript
+ * const fingers = [
+ *   { fret: 0, string: 1, is_muted: false },
+ *   { fret: 5, string: 2, is_muted: false }
+ * ];
+ * shouldActivateAutoFirstFret(fingers, 4); // true (fret 5 is outside 1-4)
+ * shouldActivateAutoFirstFret(fingers, 6); // false (fret 5 is within 1-6)
+ * ```
+ */
+export function shouldActivateAutoFirstFret(fingers: Finger[], currentFretCount: number): boolean {
+	const pressedFingers = getPressedFingers(fingers);
+
+	// No pressed fingers, no need to activate
+	if (pressedFingers.length === 0) {
+		return false;
+	}
+
+	// Check if any finger is outside the range 1-fretCount
+	return pressedFingers.some(finger => finger.fret > currentFretCount);
+}
+
+/**
+ * Calculates automatic firstFret and fretCount based on finger positions
+ *
+ * RULE: Only adjust firstFret if maxFret > currentFretCount
+ * - If fingers fit in range 1-fretCount: keep firstFret=1 (show open strings)
+ * - If fingers don't fit: adjust firstFret=minFret
+ *
+ * @param fingers - Array of finger positions
+ * @param currentFretCount - Current fretCount from props
+ * @returns Object containing calculated firstFret, fretCount, and whether adjustment was made
+ * @example
+ * ```typescript
+ * // Example 1: "005500" - Fingers fit, keep firstFret=1
+ * const fingers1 = [
+ *   { fret: 0, string: 1, is_muted: false }, // open
+ *   { fret: 0, string: 2, is_muted: false }, // open
+ *   { fret: 5, string: 3, is_muted: false }, // pressed
+ *   { fret: 5, string: 4, is_muted: false }, // pressed
+ * ];
+ * calculateAutoFirstFret(fingers1, 5);
+ * // maxFret=5 <= fretCount=5 → keep firstFret=1
+ * // Returns: { firstFret: 1, fretCount: 5, wasAdjusted: false }
+ *
+ * // Example 2: "xx55xx" - Fingers fit, keep firstFret=1 (no open strings)
+ * const fingers2 = [
+ *   { fret: 0, string: 1, is_muted: true },  // muted
+ *   { fret: 0, string: 2, is_muted: true },  // muted
+ *   { fret: 5, string: 3, is_muted: false }, // pressed
+ *   { fret: 5, string: 4, is_muted: false }, // pressed
+ * ];
+ * calculateAutoFirstFret(fingers2, 5);
+ * // maxFret=5 <= fretCount=5 → keep firstFret=1
+ * // Returns: { firstFret: 1, fretCount: 5, wasAdjusted: false }
+ *
+ * // Example 3: "355333" - Fingers fit, keep firstFret=1 (all pressed)
+ * const fingers3 = [
+ *   { fret: 3, string: 1, is_muted: false },
+ *   { fret: 5, string: 2, is_muted: false },
+ *   { fret: 5, string: 3, is_muted: false },
+ *   { fret: 3, string: 4, is_muted: false },
+ *   { fret: 3, string: 5, is_muted: false },
+ *   { fret: 3, string: 6, is_muted: false },
+ * ];
+ * calculateAutoFirstFret(fingers3, 5);
+ * // maxFret=5 <= fretCount=5 → keep firstFret=1
+ * // Returns: { firstFret: 1, fretCount: 5, wasAdjusted: false }
+ *
+ * // Example 4: "006600" - Fingers don't fit, adjust
+ * const fingers4 = [
+ *   { fret: 0, string: 1, is_muted: false }, // open
+ *   { fret: 6, string: 3, is_muted: false }, // pressed
+ *   { fret: 6, string: 4, is_muted: false }, // pressed
+ * ];
+ * calculateAutoFirstFret(fingers4, 5);
+ * // maxFret=6 > fretCount=5 → adjust to firstFret=6
+ * // Returns: { firstFret: 6, fretCount: 5, wasAdjusted: false }
+ *
+ * // Example 5: Wide range - adjust fretCount
+ * const fingers5 = [
+ *   { fret: 5, string: 1, is_muted: false },
+ *   { fret: 10, string: 2, is_muted: false }
+ * ];
+ * calculateAutoFirstFret(fingers5, 4);
+ * // maxFret=10 > fretCount=4 → adjust firstFret=5, increase fretCount=6
+ * // Returns: { firstFret: 5, fretCount: 6, wasAdjusted: true }
+ *
+ * // Example 6: No pressed fingers (edge case)
+ * const fingers6 = [
+ *   { fret: 0, string: 1, is_muted: false },
+ *   { fret: 0, string: 2, is_muted: false }
+ * ];
+ * calculateAutoFirstFret(fingers6, 4);
+ * // Returns: { firstFret: 1, fretCount: 4, wasAdjusted: false }
+ * ```
+ */
+export function calculateAutoFirstFret(
+	fingers: Finger[],
+	currentFretCount: number
+): {
+	firstFret: number;
+	fretCount: number;
+	wasAdjusted: boolean;
+} {
+	const pressedFingers = getPressedFingers(fingers);
+
+	// Edge case: No pressed fingers, return defaults
+	if (pressedFingers.length === 0) {
+		return {
+			firstFret: 1,
+			fretCount: currentFretCount,
+			wasAdjusted: false,
+		};
+	}
+
+	// Calculate the range of pressed fingers
+	const fretNumbers = pressedFingers.map(finger => finger.fret);
+	const minFret = Math.min(...fretNumbers);
+	const maxFret = Math.max(...fretNumbers);
+
+	// SIMPLIFIED RULE: Only adjust firstFret if maxFret > fretCount
+	// When fingers fit in the default range, always keep firstFret=1 for consistency
+	if (maxFret <= currentFretCount) {
+		// Fingers fit in range 1-fretCount → keep firstFret=1
+		return {
+			firstFret: 1,
+			fretCount: currentFretCount,
+			wasAdjusted: false,
+		};
+	}
+
+	// Fingers don't fit in default range, need to adjust
+	const rangeRequired = maxFret - minFret + 1;
+	let newFretCount = currentFretCount;
+	let wasAdjusted = false;
+
+	if (rangeRequired > currentFretCount) {
+		// Need to increase fretCount to fit all fingers
+		newFretCount = Math.min(rangeRequired, MAX_FRET_COUNT);
+		wasAdjusted = true;
+	}
+
+	return {
+		firstFret: minFret,
+		fretCount: newFretCount,
+		wasAdjusted,
+	};
+}
+
+/**
+ * Checks if autoFirstFret feature should be applied based on component props
+ * @param props - ChordDiagram component props
+ * @param currentFirstFret - Current firstFret value from chord data
+ * @returns true if autoFirstFret should be applied
+ * @example
+ * ```typescript
+ * // autoFirstFret enabled and no manual firstFret
+ * shouldApplyAutoFirstFret({ autoFirstFret: true }, undefined); // true
+ *
+ * // autoFirstFret enabled but manual firstFret provided
+ * shouldApplyAutoFirstFret({ autoFirstFret: true, firstFret: 5 }, 5); // false
+ *
+ * // autoFirstFret disabled
+ * shouldApplyAutoFirstFret({ autoFirstFret: false }, undefined); // false
+ * ```
+ */
+export function shouldApplyAutoFirstFret(
+	props: ChordDiagramProps,
+	currentFirstFret: number | undefined
+): boolean {
+	// autoFirstFret must be explicitly enabled
+	if (!props.autoFirstFret) {
+		return false;
+	}
+
+	// If firstFret is manually provided in props, it takes precedence
+	if (props.firstFret !== undefined) {
+		return false;
+	}
+
+	// If firstFret was set in chord data, check if it's the default value
+	// If currentFirstFret is undefined or 1 (default), we can apply autoFirstFret
+	if (currentFirstFret !== undefined && currentFirstFret !== 1) {
+		return false;
+	}
+
+	return true;
+}

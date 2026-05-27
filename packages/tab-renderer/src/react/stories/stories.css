@@ -1,0 +1,131 @@
+/* Story surfaces — light defaults */
+:root {
+	--tab-story-surface: #f5f0ea;
+	--tab-story-inset-bg: #ffffff;
+	--tab-story-inset-text: #1a121f;
+	--tab-story-inset-border: #d4c8bc;
+}
+
+html[data-app-theme="light"] {
+	--tab-story-surface: #f5f0ea;
+	--tab-story-inset-bg: #ffffff;
+	--tab-story-inset-text: #1a121f;
+	--tab-story-inset-border: #d4c8bc;
+}
+
+html[data-app-theme="dark"] {
+	--tab-story-surface: #1a1512;
+	--tab-story-inset-bg: #2b231e;
+	--tab-story-inset-text: #f3ebe4;
+	--tab-story-inset-border: #4a3f37;
+}
+
+/* Dark: OS preference */
+@media (prefers-color-scheme: dark) {
+	:root {
+		--tab-story-surface: #1a1512;
+		--tab-story-inset-bg: #2b231e;
+		--tab-story-inset-text: #f3ebe4;
+		--tab-story-inset-border: #4a3f37;
+	}
+}
+
+/* Dark: Storybook toolbar (preview.tsx) or explicit html class */
+html.sb-story-dark,
+html.dark,
+html.sb-dark,
+html[data-theme="dark"],
+html[data-color-scheme="dark"] {
+	--text: #d2c8c1;
+	--text-h: #fff8f3;
+	--bg: #16110f;
+	--border: #4a3f37;
+	--code-bg: #271f1b;
+	--accent: #f28d99;
+
+	--tab-story-surface: #1a1512;
+	--tab-story-inset-bg: #2b231e;
+	--tab-story-inset-text: #f3ebe4;
+	--tab-story-inset-border: #4a3f37;
+}
+
+.tab-story-frame {
+	margin: 1.5rem;
+	padding: 1.5rem 2rem;
+	max-width: min(100%, 72rem);
+	overflow-x: auto;
+	border: 1px solid var(--tab-story-inset-border);
+	border-radius: 12px;
+	background: var(--tab-story-surface);
+	font-family: var(
+		--mono,
+		"SFMono-Regular",
+		Consolas,
+		"Liberation Mono",
+		Menlo,
+		monospace
+	);
+	font-size: 0.95rem;
+	line-height: 1.35;
+	color: var(--text, var(--tab-story-inset-text));
+}
+
+.tab-story-frame * {
+	font-family: inherit;
+}
+
+.tab-story-panel {
+	display: grid;
+	gap: 0.75rem;
+}
+
+.tab-story-caption {
+	margin: 0;
+	font-size: 0.85rem;
+	line-height: 1.45;
+	color: var(--text-h, var(--tab-story-inset-text));
+	opacity: 0.9;
+}
+
+.tab-story-step-label {
+	margin: 0;
+	font-size: 0.72rem;
+	font-weight: 600;
+	letter-spacing: 0.06em;
+	text-transform: uppercase;
+	color: var(--accent, #b23a48);
+}
+
+.tab-story-ast-summary {
+	font-weight: 600;
+}
+
+.tab-story-raw,
+.tab-story-ast {
+	margin: 0;
+	padding: 0.75rem 1rem;
+	border: 1px dashed var(--tab-story-inset-border);
+	border-radius: 8px;
+	background: var(--tab-story-inset-bg);
+	color: var(--tab-story-inset-text);
+	white-space: pre-wrap;
+	overflow-x: auto;
+}
+
+.tab-story-chord {
+	color: var(--accent, #b23a48);
+	font-weight: 600;
+}
+
+.tab-story-lyric {
+	color: var(--tab-story-inset-text);
+}
+
+.tab-story-frame [data-tab-root] h2 {
+	margin: 0 0 0.5rem;
+	font-size: 1rem;
+	font-weight: 600;
+	letter-spacing: 0.04em;
+	text-transform: uppercase;
+	color: var(--text-h, var(--tab-story-inset-text));
+}
