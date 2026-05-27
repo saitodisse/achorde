@@ -7,7 +7,6 @@ Monorepo for the shared music ecosystem.
 - `packages/musical-domain` - shared musical domain contracts
 - `packages/svguitar-react` - React/SVG chord diagram library
 - `packages/tab-renderer` - chord sheet parser and renderer
-- no private application code
 
 ## Root Commands
 
