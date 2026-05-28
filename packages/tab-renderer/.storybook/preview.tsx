@@ -1,6 +1,14 @@
+import React from "react";
 import type { Preview } from "@storybook/react-vite";
+import {
+  basePreviewParameters,
+  createObservabilityDecorator,
+  installStorybookPreviewObservability,
+} from "achorde-storybook-config/preview";
 import { StoryTheme } from "./StoryTheme";
 import "../src/index.css";
+
+installStorybookPreviewObservability("tab-renderer");
 
 const preview: Preview = {
   globalTypes: {
@@ -25,6 +33,7 @@ const preview: Preview = {
         : "light",
   },
   decorators: [
+    createObservabilityDecorator("tab-renderer"),
     (Story, { globals }) => (
       <StoryTheme theme={globals.storyTheme ?? "light"}>
         <Story />
@@ -32,12 +41,7 @@ const preview: Preview = {
     ),
   ],
   parameters: {
-    controls: {
-      matchers: {
-        color: /(background|color)$/i,
-        date: /Date$/i,
-      },
-    },
+    ...basePreviewParameters,
     backgrounds: {
       default: "app",
       values: [

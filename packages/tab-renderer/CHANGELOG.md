@@ -2,6 +2,26 @@
 
 All notable changes to this project are documented in this file.
 
+## [0.5.0] - 2026-05-28
+
+### Added
+
+- Strict `parseTab()` grammar: four line kinds (`section-header`, `chords`, `lyrics`, `blank`); invalid authoring emits `severity: "error"` diagnostics with original line text preserved.
+- `transposeChordSymbol()` and `transposeParsedTab()` for headless AST transposition (slash chords, repeat `/` invariant).
+- `collectDiagrammableChords()` and exported `STRICT_LINE_DIAGNOSTIC_CODES`.
+- `parseChordSymbol()` extracted to `src/core/parser/parseChordSymbol.ts`.
+- Dev-only parse observability (`summarizeParsedTab`, `[tab-renderer]` console groups) in Storybook and local dev.
+- Storybook group `00 Strict parser (phase 1)` with runtime health panel and parse inspectors.
+- Workspace package `achorde-storybook-config` for shared Storybook + Vite 7 setup.
+
+### Changed
+
+- `TAB_RENDERER_PARSER_VERSION` and `TAB_RENDERER_AST_VERSION` bumped to `2.0.0` (breaking strict grammar vs permissive lines).
+- `chordsFound` excludes repeat markers (`/`).
+- Section headers on their own line appear as `ParsedTabLine` with `kind: "section-header"`.
+- Storybook uses Vite 7 (monorepo override) to avoid iframe `500` / `Missing field moduleType` with Vite 8.
+- Removed default Storybook starter stories under `src/stories/` (library stories live under `src/react/stories/`).
+
 ## [0.4.0] - 2026-05-27
 
 ### Added

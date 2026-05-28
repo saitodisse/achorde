@@ -33,7 +33,7 @@ export const RawBody: Story = {
 export const Transform: Story = {
   name: "2. parseTab(body) → ParsedTab",
   render: () => (
-    <StoryPanel caption="The headless core turns the same body into an AST: ParsedTab → ParsedTabSection[] → ParsedTabLine[] → ParsedTabToken[].">
+    <StoryPanel caption="Strict parseTab: ParsedTab → sections → lines (kind) → tokens; diagnostics and chordsFound on the root. See also 00 Strict parser for phase-1 API stories.">
       <StoryStepLabel>Summary counts, then full JSON</StoryStepLabel>
       <RawBodyPreview body={tuaFlorBody} />
       <AstSongSummary song={tuaFlorSong} />

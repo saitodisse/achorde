@@ -8,9 +8,16 @@
     "dev": "turbo run dev --parallel",
     "test": "turbo run test",
     "typecheck": "turbo run typecheck",
-    "lint": "turbo run lint"
+    "lint": "turbo run lint",
+    "storybook:tab-renderer": "pnpm --filter tab-renderer storybook",
+    "storybook:svguitar": "pnpm --filter svguitar-react storybook"
   },
   "devDependencies": {
     "turbo": "^2.6.1"
+  },
+  "pnpm": {
+    "overrides": {
+      "vite": "7.3.3"
+    }
   }
 }

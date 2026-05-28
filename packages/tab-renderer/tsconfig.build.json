@@ -11,7 +11,8 @@
     "moduleResolution": "Bundler",
     "target": "ES2023",
     "jsx": "react-jsx",
-    "skipLibCheck": true
+    "skipLibCheck": true,
+    "types": ["vite/client"]
   },
   "include": [
     "src/core/**/*",

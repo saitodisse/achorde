@@ -7,7 +7,9 @@ describe("parseTab", () => {
     const result = parseTab(tuaFlorBody);
 
     expect(result.sections.length).toBeGreaterThan(0);
-    expect(result.sections.some((section) => section.lines.length > 0)).toBe(true);
+    expect(result.sections.some((section) => section.lines.length > 0)).toBe(
+      true,
+    );
     expect(
       result.sections.some((section) =>
         section.lines.some((line) =>
@@ -25,7 +27,9 @@ describe("parseTab", () => {
     expect(result.chordsFound.length).toBeGreaterThan(0);
     expect(result.chordsFound[0]).toBe("Em7");
     expect(result.diagnostics.length).toBeGreaterThan(0);
-    expect(result.diagnostics.some((diagnostic) => diagnostic.severity === "error")).toBe(true);
+    expect(
+      result.diagnostics.some((diagnostic) => diagnostic.severity === "error"),
+    ).toBe(true);
     expect(
       result.diagnostics.some(
         (diagnostic) => diagnostic.code === "chords-and-lyrics-on-same-line",
@@ -38,8 +42,12 @@ describe("parseTab", () => {
 
     expect(result.sections).toHaveLength(1);
     expect(result.sections[0]?.title).toBe("Verse");
-    expect(result.sections[0]?.lines[0]?.text).toBe("C");
-    expect(result.sections[0]?.lines[1]?.text).toBe("Line");
+    expect(result.sections[0]?.lines[0]).toMatchObject({
+      text: "[Verse]",
+      kind: "section-header",
+    });
+    expect(result.sections[0]?.lines[1]?.text).toBe("C");
+    expect(result.sections[0]?.lines[2]?.text).toBe("Line");
     expect(result.chordsFound).toEqual(["C"]);
   });
 });
