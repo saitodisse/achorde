@@ -17,10 +17,10 @@ export const FullConfig: Story = {
   name: "1. All style controls (tua-flor)",
   args: {
     body: tuaFlorBody,
-    fontSize: 21,
+    fontSize: 28,
     lineHeight: 0.184,
     chordHeight: 0.07,
-    blockMarginRight: 0.6,
+    blockMarginRight: 0.555,
     transposeNumber: 0,
     viewMode: "e",
     displayMode: "both",
