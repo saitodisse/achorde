@@ -1,6 +1,6 @@
 {
   "name": "achorde-musical-domain",
-  "version": "0.3.0",
+  "version": "0.3.1",
   "private": false,
   "type": "module",
   "description": "Shared musical domain contracts for chord charts, parsed tabs and fretted voicings.",

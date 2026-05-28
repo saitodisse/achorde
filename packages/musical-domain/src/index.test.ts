@@ -15,7 +15,7 @@ const STRICT_LINE_KINDS = [
 
 describe("achorde-musical-domain", () => {
   it("exports the contract version", () => {
-    expect(ACHORDE_MUSICAL_DOMAIN_CONTRACT_VERSION).toBe("0.3.0");
+    expect(ACHORDE_MUSICAL_DOMAIN_CONTRACT_VERSION).toBe("0.3.1");
   });
 
   it("accepts only strict ParsedTabLineKind values", () => {

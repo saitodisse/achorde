@@ -1,7 +1,11 @@
 import type { ParseDiagnostic } from "./diagnostics.js";
 import type { ParsedChordSymbol } from "./chord-symbol.js";
 
-export type ParsedTabTokenKind = "ChordToken" | "LyricToken" | "SpaceToken";
+export type ParsedTabTokenKind =
+  | "ChordToken"
+  | "LyricToken"
+  | "DecorationToken"
+  | "SpaceToken";
 
 export type ParsedTabToken = {
   kind: ParsedTabTokenKind;
@@ -16,7 +20,8 @@ export type ParsedTabToken = {
  *
  * - `section-header` — line contains only `[Title]` markup; may appear in
  *   `section.lines` for traceability with empty chord tokens.
- * - `chords` — chord tokens only (including repeat `/`).
+ * - `chords` — chord symbols dominate the line; may include `DecorationToken`
+ *   (e.g. parentheses around chord groups) but not lyric words.
  * - `lyrics` — lyric tokens only.
  * - `blank` — empty or whitespace-only line.
  */

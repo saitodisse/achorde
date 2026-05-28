@@ -2,6 +2,8 @@ import type { ParsedChordSymbol } from "../types";
 
 const CHORD_ROOT_RE = /^([A-G])([#b♯♭]?)(.*)$/;
 const CHORD_BASS_RE = /^([A-G])([#b♯♭]?)$/;
+/** Slash followed by an alteration figure (e.g. D7/9), not a bass note. */
+const CHORD_SLASH_EXTENSION_RE = /^[#b♯♭]?\d[\w\-+°º♭♯#()]*$/;
 
 function normalizeNoteName(note: string): string {
   return note.replace("♯", "#").replace("♭", "b");
@@ -9,6 +11,10 @@ function normalizeNoteName(note: string): string {
 
 function noteLooksValid(note: string): boolean {
   return /^[A-G][#b]?$/.test(note);
+}
+
+function isSlashExtension(segment: string): boolean {
+  return CHORD_SLASH_EXTENSION_RE.test(segment);
 }
 
 export function parseChordSymbol(token: string): ParsedChordSymbol | null {
@@ -32,17 +38,21 @@ export function parseChordSymbol(token: string): ParsedChordSymbol | null {
     return null;
   }
 
-  const suffix = rootMatch[3] ?? "";
+  let suffix = rootMatch[3] ?? "";
   let bass: string | undefined;
 
   if (parts.length === 2) {
-    const bassMatch = parts[1]?.match(CHORD_BASS_RE);
-    if (!bassMatch) {
-      return null;
-    }
+    const right = parts[1] ?? "";
+    const bassMatch = right.match(CHORD_BASS_RE);
 
-    bass = normalizeNoteName(`${bassMatch[1]}${bassMatch[2] ?? ""}`);
-    if (!noteLooksValid(bass)) {
+    if (bassMatch) {
+      bass = normalizeNoteName(`${bassMatch[1]}${bassMatch[2] ?? ""}`);
+      if (!noteLooksValid(bass)) {
+        return null;
+      }
+    } else if (isSlashExtension(right)) {
+      suffix = `${suffix}/${right}`;
+    } else {
       return null;
     }
   }

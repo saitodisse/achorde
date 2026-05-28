@@ -2,6 +2,23 @@
 
 All notable changes to this project are documented in this file.
 
+## [0.7.0] - 2026-05-28
+
+### Added
+
+- `DecorationToken` in the strict AST for parenthesis markers that are not part of a chord spelling.
+- `prepareSongFromParsedTab()` bridges `parseTab()` token positions into the interleaved styled viewer pipeline.
+- `extractChordLineMarkers()` elevates each decoration and chord at its source column for `blockMarginRight` / `chordHeight` layout.
+- Chord spelling support for slash alterations (`D7/9`), parenthetical extensions (`C7(13)`), and glued decoration parens (`(C7`, `B7)`).
+- `TabDecoration` primitive and `CONTEXT.md` glossary for strict chord-line parsing.
+
+### Changed
+
+- `TAB_RENDERER_PARSER_VERSION` and `TAB_RENDERER_AST_VERSION` bumped to `2.2.0`.
+- Styled `Tab` uses `parseTab` → `transposeParsedTab` → `prepareSongFromParsedTab` → `generateBarList` (restores RFC 0002 interleaved offsets).
+- Chord-line classification uses a token-majority rule instead of requiring every content token to be a chord.
+- Depends on `achorde-musical-domain` `0.3.1` for `DecorationToken` in `ParsedTabTokenKind`.
+
 ## [0.6.0] - 2026-05-28
 
 ### Added

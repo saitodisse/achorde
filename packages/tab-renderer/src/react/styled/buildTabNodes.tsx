@@ -29,6 +29,72 @@ function appendBarItem(
   index: number,
   style: TabStyleConfig,
 ) {
+  if (curr.isChordLineDecoration && curr.decorationText) {
+    if (style.displayMode === "lyrics") {
+      return;
+    }
+
+    const decorationStyles = getChordSpanStyle({
+      chordText: curr.decorationText,
+      isNoLyricsLine: curr.isNoLyricsLine,
+      style,
+    });
+
+    prev.push(
+      <span
+        key={`chord_decoration_${index}`}
+        data-nolyricsline={curr.isNoLyricsLine || undefined}
+        data-chord-line-decoration=""
+      >
+        <span
+          style={{
+            ...decorationStyles,
+            fontWeight: "normal",
+            color: style.lyricColor,
+            opacity: 0.75,
+          }}
+        >
+          {curr.decorationText}
+        </span>
+      </span>,
+    );
+    return;
+  }
+
+  if (curr.liricPart && !curr.isSpace && curr.isChordLinePrefix) {
+    if (style.displayMode === "lyrics") {
+      return;
+    }
+
+    for (const [charIndex, character] of [...curr.liricPart].entries()) {
+      const prefixStyles = getChordSpanStyle({
+        chordText: character,
+        isNoLyricsLine: curr.isNoLyricsLine,
+        style,
+      });
+
+      prev.push(
+        <span
+          key={`chord_prefix_${index}_${charIndex}`}
+          data-nolyricsline={curr.isNoLyricsLine || undefined}
+          data-chord-line-prefix=""
+        >
+          <span
+            style={{
+              ...prefixStyles,
+              fontWeight: "normal",
+              color: style.lyricColor,
+              opacity: 0.75,
+            }}
+          >
+            {character}
+          </span>
+        </span>,
+      );
+    }
+    return;
+  }
+
   if (curr.liricPart && !curr.isSpace) {
     if (style.displayMode === "chords") {
       return;

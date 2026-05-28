@@ -9,9 +9,27 @@ export type SimpleChord = {
 /** A chord with position and beat information. */
 export type ChordItem = {
   chordPosition?: number;
+  /** Literal chord-line text before this chord (spaces, DecorationToken parens, etc.). */
+  chordLinePrefix?: string;
+  chordTextLength?: number;
   beatType?: "strong" | "week";
   simpleChord: SimpleChord | null;
 };
+
+/** Elevated chord-line token used for interleaved rendering. */
+export type ChordLineMarker =
+  | {
+      kind: "chord";
+      position: number;
+      textLength: number;
+      beatType: "strong" | "week";
+      simpleChord: SimpleChord | null;
+    }
+  | {
+      kind: "decoration";
+      position: number;
+      text: string;
+    };
 
 /** A paired chord line + lyric line within a section. */
 export type BarLine = {
@@ -19,6 +37,7 @@ export type BarLine = {
   chordsTextBar?: string;
   sufixBar?: string;
   chordsList?: ChordItem[];
+  chordLineMarkers?: ChordLineMarker[];
 };
 
 /** A section of a tab (e.g. [Verse], [Chorus]) with its lines. */
@@ -34,6 +53,11 @@ export type BarsListItem = {
   chordItem?: ChordItem;
   isSpace?: boolean;
   isNoLyricsLine?: boolean;
+  /** Spacing/decoration from the chord line rendered above lyrics. */
+  isChordLinePrefix?: boolean;
+  /** Single decoration character/token elevated above lyrics. */
+  isChordLineDecoration?: boolean;
+  decorationText?: string;
 };
 
 export type BarsList = BarsListItem[];

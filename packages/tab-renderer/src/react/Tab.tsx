@@ -1,6 +1,8 @@
 /* eslint-disable react-refresh/only-export-components */
 import { useMemo } from "react";
-import { prepareSong } from "../core/prepareSong";
+import { parseTab } from "../core/parseTab";
+import { prepareSongFromParsedTab } from "../core/prepareSongFromParsedTab";
+import { transposeParsedTab } from "../core/transposeParsedTab";
 import { DEFAULT_TAB_STYLE, type TabStyleConfig } from "../core/preparedTypes";
 import { TabRoot } from "./TabRoot";
 import { TabSection } from "./TabSection";
@@ -16,20 +18,17 @@ function mergeStyle(partial?: Partial<TabStyleConfig>): TabStyleConfig {
 function TabComponent({ body, className, style: stylePartial }: TabProps) {
   const style = mergeStyle(stylePartial);
 
-  const preparedSong = useMemo(
-    () =>
-      prepareSong({
-        body,
-        transposeNumber: style.transposeNumber,
-        viewMode: style.viewMode,
-      }),
-    [body, style.transposeNumber, style.viewMode],
-  );
-
-  const sectionNodes = useMemo(
-    () => buildTabNodes(preparedSong.sections, style),
-    [preparedSong.sections, style],
-  );
+  const sectionNodes = useMemo(() => {
+    const parsed = parseTab(body);
+    const transposed =
+      style.transposeNumber === 0
+        ? parsed
+        : transposeParsedTab(parsed, style.transposeNumber);
+    const prepared = prepareSongFromParsedTab(transposed, {
+      viewMode: style.viewMode,
+    });
+    return buildTabNodes(prepared.sections, style);
+  }, [body, style]);
 
   return (
     <TabStyledContainer className={className} style={style}>

@@ -18,4 +18,6 @@ export {
 export * from "./preparedTypes";
 export { chordToText } from "./transposer/chordToText";
 export { generateBarList } from "./renderer/generateBarList";
+export { prepareSongFromParsedTab } from "./prepareSongFromParsedTab";
+export { prepareSong } from "./prepareSong";
 export type { SectionText, SectionBarList, BarsListItem } from "./parser/types";

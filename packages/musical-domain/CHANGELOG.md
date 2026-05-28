@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.3.1 - 2026-05-28
+
+### Added
+
+- `DecorationToken` in `ParsedTabTokenKind` for parenthesis markers on chord lines that are not part of a chord symbol spelling.
+
 ## 0.3.0 - 2026-05-27
 
 ### Breaking

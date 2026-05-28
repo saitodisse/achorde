@@ -101,4 +101,112 @@ describe("strict parseTab grammar", () => {
 
     expect(result.sections[0]?.lines[0]?.text).toBe("[Intro] Cm7");
   });
+
+  it("classifies parenthesized chord rows as chords with DecorationToken", () => {
+    const body = [
+      "               A7          Em7",
+      "É só deixar fluir este sorriso",
+      "             ( C7          B7 )        Em7      E7",
+      "Liberte-se com este seu vestido colorido",
+    ].join("\n");
+    const result = parseTab(body);
+
+    const chordRow = result.sections[0]?.lines[2];
+    expect(chordRow).toMatchObject({
+      kind: "chords",
+      text: "             ( C7          B7 )        Em7      E7",
+    });
+    expect(
+      chordRow?.tokens.filter((token) => token.kind === "ChordToken"),
+    ).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({ text: "C7" }),
+        expect.objectContaining({ text: "B7" }),
+        expect.objectContaining({ text: "Em7" }),
+        expect.objectContaining({ text: "E7" }),
+      ]),
+    );
+    expect(
+      chordRow?.tokens.filter((token) => token.kind === "DecorationToken"),
+    ).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({ text: "(" }),
+        expect.objectContaining({ text: ")" }),
+      ]),
+    );
+    expect(chordRow?.tokens.some((token) => token.kind === "LyricToken")).toBe(
+      false,
+    );
+    expect(result.chordsFound).toEqual(
+      expect.arrayContaining(["A7", "Em7", "C7", "B7", "E7"]),
+    );
+    expect(result.diagnostics).toEqual([]);
+  });
+
+  it("tokenizes glued parentheses around chord symbols", () => {
+    const result = parseTab("(C7)    C7)    (C7");
+
+    const line = result.sections[0]?.lines[0];
+    expect(line?.kind).toBe("chords");
+    expect(line?.tokens).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({ kind: "DecorationToken", text: "(" }),
+        expect.objectContaining({ kind: "ChordToken", text: "C7" }),
+        expect.objectContaining({ kind: "DecorationToken", text: ")" }),
+      ]),
+    );
+  });
+
+  it("keeps a tie between one chord and one lyric word as lyrics", () => {
+    const result = parseTab("Am7 texto");
+
+    expect(result.sections[0]?.lines[0]).toMatchObject({
+      kind: "lyrics",
+    });
+  });
+
+  it("classifies a tie with only chord and decoration tokens as chords", () => {
+    const result = parseTab("C7 (");
+
+    expect(result.sections[0]?.lines[0]).toMatchObject({
+      kind: "chords",
+    });
+  });
+
+  it("parses slash alteration chords such as D7/9", () => {
+    const result = parseTab(
+      "      Am7        D7/9         Gmaj7\nLogo agora que eu já me fiz primeiro",
+    );
+
+    const chordRow = result.sections[0]?.lines[0];
+    expect(chordRow?.tokens).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({ kind: "ChordToken", text: "D7/9" }),
+      ]),
+    );
+    expect(result.chordsFound).toEqual(["Am7", "D7/9", "Gmaj7"]);
+    expect(result.diagnostics).toEqual([]);
+  });
+
+  it("keeps chord extensions such as C7(13) in a single ChordToken", () => {
+    const result = parseTab(
+      "                  C7(13)       B7(9)       Em7\nLinha",
+    );
+
+    const chordRow = result.sections[0]?.lines[0];
+    expect(chordRow?.kind).toBe("chords");
+    expect(
+      chordRow?.tokens.filter((token) => token.kind === "ChordToken"),
+    ).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({ text: "C7(13)" }),
+        expect.objectContaining({ text: "B7(9)" }),
+        expect.objectContaining({ text: "Em7" }),
+      ]),
+    );
+    expect(
+      chordRow?.tokens.some((token) => token.kind === "DecorationToken"),
+    ).toBe(false);
+    expect(result.chordsFound).toEqual(["C7(13)", "B7(9)", "Em7"]);
+  });
 });

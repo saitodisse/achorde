@@ -5,7 +5,10 @@ import { describe, expect, it } from "vitest";
 import { parseTab } from "../parseTab";
 
 const body = readFileSync(
-  join(dirname(fileURLToPath(import.meta.url)), "../../test/stubs/tua-flor.txt"),
+  join(
+    dirname(fileURLToPath(import.meta.url)),
+    "../../test/stubs/tua-flor.txt",
+  ),
   "utf8",
 );
 
@@ -18,13 +21,16 @@ describe("tua-flor fixture lines for stories", () => {
     const preds = {
       chordOnly: (line: (typeof section.lines)[number]) =>
         line.tokens.some((t) => t.kind === "ChordToken") &&
-        !line.tokens.some((t) => t.kind === "LyricToken"),
+        !line.tokens.some((t) => t.kind === "LyricToken") &&
+        !line.tokens.some((t) => t.kind === "DecorationToken"),
       lyricOnly: (line: (typeof section.lines)[number]) =>
-        line.tokens.every((t) => t.kind === "LyricToken" || t.kind === "SpaceToken") &&
-        line.tokens.some((t) => t.kind === "LyricToken"),
+        line.tokens.every(
+          (t) => t.kind === "LyricToken" || t.kind === "SpaceToken",
+        ) && line.tokens.some((t) => t.kind === "LyricToken"),
       chordDense: (line: (typeof section.lines)[number]) =>
         line.text.includes("A7") && line.text.includes("Em7"),
-      lyricDense: (line: (typeof section.lines)[number]) => line.text.includes("maré mansa"),
+      lyricDense: (line: (typeof section.lines)[number]) =>
+        line.text.includes("maré mansa"),
       withParens: (line: (typeof section.lines)[number]) =>
         line.text.includes("C7") && line.text.includes("B7"),
     };

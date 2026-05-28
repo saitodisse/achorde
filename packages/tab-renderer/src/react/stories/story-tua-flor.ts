@@ -47,6 +47,13 @@ export const tuaFlorLines = {
     (line) => line.text.includes("A7") && line.text.includes("Em7"),
   ),
   lyricDense: findLine((line) => line.text.includes("maré mansa")),
+  parenChordRow: findLine(
+    (line) =>
+      line.kind === "chords" &&
+      line.tokens.some((t) => t.kind === "DecorationToken") &&
+      line.text.includes("C7") &&
+      line.text.includes("B7"),
+  ),
   withParens: findLine(
     (line) => line.text.includes("C7") && line.text.includes("B7"),
   ),

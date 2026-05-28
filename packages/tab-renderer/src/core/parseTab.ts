@@ -5,7 +5,7 @@ import {
   measureTabRenderer,
   summarizeParsedTab,
 } from "./observe";
-import { parseChordSymbol } from "./parser/parseChordSymbol";
+import { tokenizeRawLine } from "./parser/tokenizeRawLine";
 import type {
   ParseDiagnostic,
   ParsedTab,
@@ -15,8 +15,8 @@ import type {
   ParsedTabToken,
 } from "./types";
 
-export const TAB_RENDERER_PARSER_VERSION = "2.1.0";
-export const TAB_RENDERER_AST_VERSION = "2.1.0";
+export const TAB_RENDERER_PARSER_VERSION = "2.2.0";
+export const TAB_RENDERER_AST_VERSION = "2.2.0";
 
 const SECTION_LABEL_RE = /^\s*\[([^\]]+)\](.*)$/;
 const COMMENT_LINE_RE = /^\s*(#|\/\/)/;
@@ -43,42 +43,6 @@ function createLineId(sectionOrder: number, lineOrder: number): string {
   return `section-${sectionOrder + 1}-line-${lineOrder + 1}`;
 }
 
-function tokenizeRawLine(raw: string): ParsedTabToken[] {
-  if (raw.trim().length === 0) {
-    return [];
-  }
-
-  const tokens: ParsedTabToken[] = [];
-  const pattern = /\s+|[^\s]+/g;
-
-  for (const match of raw.matchAll(pattern)) {
-    const text = match[0] ?? "";
-    const startColumn = match.index ?? 0;
-    const endColumn = startColumn + text.length;
-
-    if (/^\s+$/.test(text)) {
-      tokens.push({
-        kind: "SpaceToken",
-        text,
-        startColumn,
-        endColumn,
-      });
-      continue;
-    }
-
-    const chord = parseChordSymbol(text);
-    tokens.push({
-      kind: chord ? "ChordToken" : "LyricToken",
-      text,
-      startColumn,
-      endColumn,
-      ...(chord ? { chord } : {}),
-    });
-  }
-
-  return tokens;
-}
-
 function classifyLine(
   raw: string,
   tokens: ParsedTabToken[],
@@ -91,8 +55,15 @@ function classifyLine(
   const chordCount = contentTokens.filter(
     (token) => token.kind === "ChordToken",
   ).length;
+  const lyricCount = contentTokens.filter(
+    (token) => token.kind === "LyricToken",
+  ).length;
 
-  if (chordCount === contentTokens.length && contentTokens.length > 0) {
+  if (chordCount === 0) {
+    return "lyrics";
+  }
+
+  if (chordCount > lyricCount) {
     return "chords";
   }
 
