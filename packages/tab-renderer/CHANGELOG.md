@@ -2,6 +2,19 @@
 
 All notable changes to this project are documented in this file.
 
+## [0.6.0] - 2026-05-28
+
+### Added
+
+- Interactive live demo on the package site: editable source, responsive wide split, and preview tabs (Rendered, Chords, Details, Sections, Complete JSON) backed by `parseTab()` inspectors.
+- `ChordsFoundPanel` Storybook helper for diagrammable chord lists.
+
+### Changed
+
+- `TAB_RENDERER_PARSER_VERSION` and `TAB_RENDERER_AST_VERSION` bumped to `2.1.0`; chords and lyrics may appear on the same line (removed `chordsAndLyricsOnSameLine` strict error).
+- DialKit style controls are hidden by default and opened from a floating top-right toggle; main content uses full width.
+- Default `TabStyleConfig` demo values aligned with the DialKit panel (font size, line height, colors).
+
 ## [0.5.0] - 2026-05-28
 
 ### Added

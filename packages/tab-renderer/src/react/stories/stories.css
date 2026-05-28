@@ -117,6 +117,41 @@ html[data-color-scheme="dark"] {
 	font-weight: 600;
 }
 
+.tab-story-chords-panel {
+	display: grid;
+	gap: 0.75rem;
+}
+
+.tab-story-chords-lede {
+	margin: 0;
+	max-width: 72ch;
+	font-size: 0.9rem;
+	line-height: 1.5;
+	color: var(--text-h, var(--tab-story-inset-text));
+}
+
+.tab-story-chords-found {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 0.5rem;
+	margin: 0;
+	padding: 0;
+	list-style: none;
+}
+
+.tab-story-chord-chip {
+	display: inline-block;
+	padding: 0.35rem 0.65rem;
+	border: 1px solid var(--tab-story-inset-border);
+	border-radius: 999px;
+	background: var(--tab-story-inset-bg);
+	color: var(--accent, #b23a48);
+	font-family: inherit;
+	font-size: 0.95rem;
+	font-weight: 700;
+	letter-spacing: 0.02em;
+}
+
 .tab-story-lyric {
 	color: var(--tab-story-inset-text);
 }

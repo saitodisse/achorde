@@ -21,10 +21,10 @@ export const REACT_USAGE_SNIPPET = `import { Tab } from "tab-renderer/react";
   }}
 />`;
 
-export const CORE_USAGE_SNIPPET = `import { prepareSong } from "tab-renderer";
+export const CORE_USAGE_SNIPPET = `import { parseTab, transposeParsedTab } from "tab-renderer";
 
-const prepared = prepareSong({
-  body: chordSheetText,
-  transposeNumber: 0,
-  viewMode: "e",
-});`;
+const parsed = parseTab(chordSheetText);
+// parsed.chordsFound — diagrammable symbols (no "/")
+// parsed.diagnostics — strict authoring errors
+
+const transposed = transposeParsedTab(parsed, 2);`;

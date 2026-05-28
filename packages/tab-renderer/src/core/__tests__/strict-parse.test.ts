@@ -40,19 +40,15 @@ describe("strict parseTab grammar", () => {
     ]);
   });
 
-  it("rejects mixed chord and lyric tokens on the same line", () => {
+  it("ignores mixed chord and lyric tokens on the same line without a diagnostic", () => {
     const result = parseTab("C letra misturada");
 
     expect(result.sections[0]?.lines[0]).toMatchObject({
       text: "C letra misturada",
       kind: "lyrics",
     });
-    expect(result.diagnostics).toEqual([
-      expect.objectContaining({
-        code: STRICT_LINE_DIAGNOSTIC_CODES.chordsAndLyricsOnSameLine,
-        severity: "error",
-      }),
-    ]);
+    expect(result.diagnostics).toEqual([]);
+    expect(result.chordsFound).toEqual(["C"]);
   });
 
   it("rejects invalid chord tokens such as C/D/E", () => {

@@ -3,7 +3,7 @@ import { parseTab } from "../parseTab";
 import { tuaFlorBody } from "../../test/stubs/tua-flor";
 
 describe("parseTab", () => {
-  it("parses the tua flor body into an explicit AST and flags invalid mixed lines", () => {
+  it("parses the tua flor body into an explicit AST with chordsFound", () => {
     const result = parseTab(tuaFlorBody);
 
     expect(result.sections.length).toBeGreaterThan(0);
@@ -26,15 +26,11 @@ describe("parseTab", () => {
     ).toBe(true);
     expect(result.chordsFound.length).toBeGreaterThan(0);
     expect(result.chordsFound[0]).toBe("Em7");
-    expect(result.diagnostics.length).toBeGreaterThan(0);
-    expect(
-      result.diagnostics.some((diagnostic) => diagnostic.severity === "error"),
-    ).toBe(true);
     expect(
       result.diagnostics.some(
         (diagnostic) => diagnostic.code === "chords-and-lyrics-on-same-line",
       ),
-    ).toBe(true);
+    ).toBe(false);
   });
 
   it("keeps section headers and line text in the parsed AST", () => {

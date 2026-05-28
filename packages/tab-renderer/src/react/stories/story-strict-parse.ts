@@ -23,10 +23,6 @@ export const invalidAuthoringSamples = {
     label: "section-header-with-content",
     body: "[Intro] Cm7",
   },
-  chordsAndLyricsOnSameLine: {
-    label: "chords-and-lyrics-on-same-line",
-    body: "C letra misturada",
-  },
   invalidChordToken: {
     label: "invalid-chord-token",
     body: "C/D/E",

@@ -44,14 +44,14 @@ export type PrepareSongOptions = {
 };
 
 export const DEFAULT_TAB_STYLE: TabStyleConfig = {
-  fontSize: 21,
+  fontSize: 16,
   transposeNumber: 0,
-  lineHeight: 0.184,
-  blockMarginRight: 0.575,
+  lineHeight: 0.18,
+  blockMarginRight: 0.582,
   chordHeight: 0.07,
   chordColor: "#5884fe",
   lyricColor: "#d1dff5",
-  backgroundColor: "#000000",
+  backgroundColor: "#292623",
   viewMode: "e",
   displayMode: "both",
   contentMarginRightPx: 0,

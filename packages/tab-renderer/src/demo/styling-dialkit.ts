@@ -15,15 +15,15 @@ function slider(
 }
 
 export const defaultLightStylingPreset: TabStyleConfig = {
-  fontSize: 21,
+  fontSize: 16,
   viewMode: "e",
   transposeNumber: 0,
-  lineHeight: 0.184,
-  chordColor: "#1d57f7",
+  lineHeight: 0.18,
+  chordColor: "#f52500",
   lyricColor: "#1b2027",
-  backgroundColor: "#ffffff",
+  backgroundColor: "#fffdfa",
   chordHeight: 0.07,
-  blockMarginRight: 0.575,
+  blockMarginRight: 0.582,
   displayMode: "both",
   contentMarginRightPx: 0,
   sectionGap: 24,
@@ -36,7 +36,7 @@ export const defaultDarkStylingPreset: TabStyleConfig = {
 };
 
 const onlyLyricsStylingBase = {
-  fontSize: 21,
+  fontSize: 16,
   lineHeight: 0.06,
   chordHeight: 0.07,
   blockMarginRight: 0.575,

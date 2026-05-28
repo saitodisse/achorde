@@ -15,8 +15,8 @@ import type {
   ParsedTabToken,
 } from "./types";
 
-export const TAB_RENDERER_PARSER_VERSION = "2.0.0";
-export const TAB_RENDERER_AST_VERSION = "2.0.0";
+export const TAB_RENDERER_PARSER_VERSION = "2.1.0";
+export const TAB_RENDERER_AST_VERSION = "2.1.0";
 
 const SECTION_LABEL_RE = /^\s*\[([^\]]+)\](.*)$/;
 const COMMENT_LINE_RE = /^\s*(#|\/\/)/;
@@ -172,25 +172,9 @@ function buildLineDiagnostic(
     };
   }
 
-  const chordTokens = contentTokens.filter(
-    (token) => token.kind === "ChordToken",
-  );
   const lyricTokens = contentTokens.filter(
     (token) => token.kind === "LyricToken",
   );
-
-  if (chordTokens.length > 0 && lyricTokens.length > 0) {
-    return {
-      code: STRICT_LINE_DIAGNOSTIC_CODES.chordsAndLyricsOnSameLine,
-      message: `Line ${lineNumber} mixes chords and lyrics on the same line.`,
-      severity: "error",
-      line: lineNumber,
-      sourceRange: {
-        startColumn: 0,
-        endColumn: raw.length,
-      },
-    };
-  }
 
   if (
     lyricTokens.length > 0 &&
@@ -224,8 +208,6 @@ function resolveKindForError(
       const remainderTokens = tokenizeRawLine(remainder);
       return classifyLine(remainder, remainderTokens);
     }
-    case STRICT_LINE_DIAGNOSTIC_CODES.chordsAndLyricsOnSameLine:
-      return "lyrics";
     case STRICT_LINE_DIAGNOSTIC_CODES.invalidChordToken:
       return "chords";
     case STRICT_LINE_DIAGNOSTIC_CODES.invalidLine:

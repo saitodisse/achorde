@@ -34,6 +34,33 @@ export function AstPreview({ value }: { value: unknown }) {
   return <pre className="tab-story-ast">{JSON.stringify(value, null, 2)}</pre>;
 }
 
+export function ChordsFoundPanel({ song }: { song: ParsedTab }) {
+  return (
+    <div className="tab-story-chords-panel">
+      <ParserVersionBadge
+        parserVersion={song.parserVersion}
+        astVersion={song.astVersion}
+      />
+      <p className="tab-story-chords-lede">
+        <strong>{song.chordsFound.length}</strong> diagrammable chord(s) in{" "}
+        <code>chordsFound</code> — deduplicated, no <code>/</code> marker.
+      </p>
+      {song.chordsFound.length > 0 ? (
+        <ul className="tab-story-chords-found" aria-label="Extracted chords">
+          {song.chordsFound.map((chord) => (
+            <li key={chord}>
+              <span className="tab-story-chord-chip">{chord}</span>
+            </li>
+          ))}
+        </ul>
+      ) : (
+        <p className="tab-story-diagnostics-empty">No chords found.</p>
+      )}
+      <AstSongSummary song={song} />
+    </div>
+  );
+}
+
 export function AstSongSummary({ song }: { song: ParsedTab }) {
   const lineCount = song.sections.reduce((n, s) => n + s.lines.length, 0);
   const tokenCount = countTokens(song);

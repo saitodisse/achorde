@@ -1,8 +1,13 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useDialKit, DialRoot } from "dialkit";
+import { parseTab } from "./core";
+import {
+  LiveDemoMobileTabs,
+  LiveDemoWideDemo,
+  useLiveDemoSplitLayout,
+} from "./demo/live-demo-workspace";
 import { Tab } from "./react";
 import { tuaFlorBody } from "./test/stubs/tua-flor";
-import { StoryPanel } from "./react/stories/story-ui";
 import {
   stylingDialkitConfig,
   TAB_STYLING_PANEL_NAME,
@@ -25,24 +30,11 @@ import "./App.css";
 
 function App() {
   const [pageTheme, setPageTheme] = useState<AppPageTheme>("light");
-  const [mobileControlsOpen, setMobileControlsOpen] = useState(false);
-  const [isMobileViewport, setIsMobileViewport] = useState(() =>
-    typeof window !== "undefined"
-      ? window.matchMedia("(max-width: 900px)").matches
-      : false,
-  );
+  const [styleControlsOpen, setStyleControlsOpen] = useState(false);
 
   useEffect(() => {
     document.documentElement.dataset.appTheme = pageTheme;
   }, [pageTheme]);
-
-  useEffect(() => {
-    const mediaQuery = window.matchMedia("(max-width: 900px)");
-    const syncViewport = () => setIsMobileViewport(mediaQuery.matches);
-    syncViewport();
-    mediaQuery.addEventListener("change", syncViewport);
-    return () => mediaQuery.removeEventListener("change", syncViewport);
-  }, []);
 
   const dial = useDialKit(TAB_STYLING_PANEL_NAME, stylingDialkitConfig, {
     onAction: (path) => {
@@ -51,19 +43,18 @@ function App() {
     },
   });
   const style = stylingDialToTabStyle(dial);
+  const [chartSource, setChartSource] = useState(tuaFlorBody);
+  const parsedSong = useMemo(() => parseTab(chartSource), [chartSource]);
+  const isLiveDemoSplit = useLiveDemoSplitLayout();
+
+  const liveDemoResult = (
+    <Tab body={chartSource} style={style} className="tab-demo-1" />
+  );
 
   return (
     <div className="app-layout">
       <main className="app-shell">
-        <section className="demo-panel" aria-label="Live demo">
-          <div className="tab-story-frame">
-            <StoryPanel caption="Live preview — interleaved pipeline, CSS chord offsets, and viewer preferences.">
-              <Tab body={tuaFlorBody} style={style} className="tab-demo-1" />
-            </StoryPanel>
-          </div>
-        </section>
-
-        <header className="app-header">
+        <header className="app-header app-header--hero">
           <div className="lib-hero-meta">
             <h1>{LIB_NAME}</h1>
             <p className="lib-badge">
@@ -73,12 +64,37 @@ function App() {
           <p className="lib-subtitle">
             Open-source chord sheet parsing and rendering
           </p>
+        </header>
+
+        <section className="demo-panel" aria-label="Live demo">
+          {isLiveDemoSplit ? (
+            <LiveDemoWideDemo
+              source={chartSource}
+              onSourceChange={setChartSource}
+              previewCaption="Live preview"
+              parsed={parsedSong}
+              result={liveDemoResult}
+            />
+          ) : (
+            <div className="tab-story-frame app-live-split">
+              <LiveDemoMobileTabs
+                source={chartSource}
+                onSourceChange={setChartSource}
+                parsed={parsedSong}
+                result={liveDemoResult}
+              />
+            </div>
+          )}
+        </section>
+
+        <div className="app-header app-header--docs">
           <p className="lede">
             {LIB_NAME} ships a headless core for parsing, transposition, and
             interleaved bar preparation, plus a React adapter with a styled{" "}
             <code>Tab</code> viewer and composable primitives for custom
-            layouts. The live demo above uses the shared{" "}
-            <code>tua-flor.txt</code> fixture — tweak every{" "}
+            layouts. The chart above starts from <code>tua-flor.txt</code>; edit
+            in <strong>Source</strong> and inspect <code>parseTab</code> under{" "}
+            <strong>Transformation</strong>. Tune every{" "}
             <code>TabStyleConfig</code> control in the panel on the right.
           </p>
 
@@ -135,14 +151,14 @@ function App() {
               </pre>
             </section>
           </div>
-        </header>
+        </div>
       </main>
 
       <aside
         id="app-style-controls"
-        className={`app-controls${mobileControlsOpen ? " is-open" : ""}`}
+        className={`app-controls${styleControlsOpen ? " is-open" : ""}`}
         aria-label="Style controls"
-        aria-hidden={isMobileViewport && !mobileControlsOpen}
+        aria-hidden={!styleControlsOpen}
       >
         <DialRoot
           mode="inline"
@@ -156,13 +172,13 @@ function App() {
         type="button"
         className="app-controls-toggle"
         aria-controls="app-style-controls"
-        aria-expanded={mobileControlsOpen}
+        aria-expanded={styleControlsOpen}
         aria-label={
-          mobileControlsOpen ? "Hide style controls" : "Show style controls"
+          styleControlsOpen ? "Hide style controls" : "Show style controls"
         }
-        onClick={() => setMobileControlsOpen((open) => !open)}
+        onClick={() => setStyleControlsOpen((open) => !open)}
       >
-        {mobileControlsOpen ? "×" : "Style"}
+        {styleControlsOpen ? "×" : "Style"}
       </button>
     </div>
   );
