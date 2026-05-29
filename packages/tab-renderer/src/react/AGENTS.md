@@ -11,6 +11,7 @@ The React layer renders the normalized AST exposed by the core.
   - `Tab.Line`
   - `Tab.Chord`
   - `Tab.Lyric`
+  - `TabDecoration`
 - `Tab` is the styled viewer (`prepareSong` + `TabStyleConfig`). Primitives remain headless and consume `ParsedTab` for custom composition.
 
 ## Rules

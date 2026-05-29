@@ -19,6 +19,11 @@ All notable changes to this project are documented in this file.
 - Chord-line classification uses a token-majority rule instead of requiring every content token to be a chord.
 - Depends on `achorde-musical-domain` `0.3.1` for `DecorationToken` in `ParsedTabTokenKind`.
 
+### Documentation
+
+- README, RFC/plan index, `CONTEXT.md`, and [`docs/plans/2026-05-28-decoration-markers-parsed-tab-bridge.md`](./docs/plans/2026-05-28-decoration-markers-parsed-tab-bridge.md) describe the ParsedTab bridge and decoration marker rendering.
+- Shared fixture `so-quero-esse-amor.txt` for extensions and parenthesized chord rows.
+
 ## [0.6.0] - 2026-05-28
 
 ### Added

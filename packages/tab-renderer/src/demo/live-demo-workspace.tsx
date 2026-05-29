@@ -216,7 +216,7 @@ function LiveDemoPreviewPanels({
 export function LiveDemoPreviewWorkspace({
   parsed,
   result,
-  previewCaption = "Live preview",
+  previewCaption = "",
   showCaption = true,
 }: LiveDemoPreviewWorkspaceProps) {
   const baseId = useId();
@@ -353,7 +353,7 @@ export function LiveDemoMobileTabs({
   onSourceChange,
   parsed,
   result,
-  previewCaption = "Live preview",
+  previewCaption = "",
 }: LiveDemoMobileTabsProps) {
   const baseId = useId();
   const [activeTab, setActiveTab] = useState<LiveDemoTab>("source");

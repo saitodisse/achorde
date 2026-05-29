@@ -24,3 +24,10 @@ Bootstrap docs (v0.1):
 | ------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------- |
 | [Plan — Strict parse and transpose](./plans/2026-05-27-fase1-strict-parse-and-transpose.md)                   | `parseTab` rewrite, tests, transposition API                  |
 | [achorde-musical-domain contracts](../../musical-domain/docs/plans/2026-05-27-fase1-strict-line-contracts.md) | Four line kinds, error diagnostics, deprecate `ChordChartAst` |
+
+## Decoration markers and ParsedTab bridge (v0.7.0)
+
+| Document                                                                                                      | Description                                                                |
+| ------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------- |
+| [Plan — Decoration markers](./plans/2026-05-28-decoration-markers-parsed-tab-bridge.md)                       | `DecorationToken`, `prepareSongFromParsedTab`, interleaved marker rendering |
+| [CONTEXT.md](../CONTEXT.md)                                                                                   | Domain glossary (chord line, slash alteration, decoration vs extension)    |

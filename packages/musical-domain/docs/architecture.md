@@ -6,7 +6,7 @@
 
 - parser diagnostic contracts
 - parsed chord-symbol contracts
-- textual tab AST contracts (`ParsedTab` — canonical chart AST with four strict line kinds)
+- textual tab AST contracts (`ParsedTab` — four strict line kinds; `ParsedTabTokenKind` includes `DecorationToken` since 0.3.1)
 - legacy chord-chart AST contracts with sections, lines, and segments (`ChordChartAst`, deprecated)
 - fretted-instrument voicing contracts
 - an explicit port for external music-theory adapters

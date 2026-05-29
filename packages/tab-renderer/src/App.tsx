@@ -71,7 +71,7 @@ function App() {
             <LiveDemoWideDemo
               source={chartSource}
               onSourceChange={setChartSource}
-              previewCaption="Live preview"
+              previewCaption=""
               parsed={parsedSong}
               result={liveDemoResult}
             />

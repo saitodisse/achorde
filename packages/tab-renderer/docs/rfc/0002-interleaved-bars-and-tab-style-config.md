@@ -4,6 +4,8 @@
 
 Accepted — implementation follows [plan](../plans/2026-05-23-styled-viewer-pipeline-and-stories.md).
 
+**Amendment (2026-05-28):** Styled `Tab` builds bars from `parseTab()` via `prepareSongFromParsedTab()` and `extractChordLineMarkers()`. `DecorationToken` markers use the same `blockMarginRight` / `chordHeight` CSS trick as chords. See [plan — decoration markers](../plans/2026-05-28-decoration-markers-parsed-tab-bridge.md).
+
 ## Context
 
 [PRD 0002](../prd/0002-styled-viewer-pipeline.md) extends the library beyond per-line tokenization. Achordex proved that chord-over-lyric layout requires:
@@ -34,25 +36,30 @@ Custom design systems may still use `prepareSong` + primitives + their own CSS.
 
 ## Pipeline Architecture
 
-Orchestrator: **`prepareSong(options)`** (exported from `.`)
+Orchestrators (exported from `.`):
+
+**`prepareSongFromParsedTab(parsed)`** — used by React `Tab` (strict AST positions):
 
 ```
-body: string
+parseTab(body) → ParsedTab
     │
     ▼
-splitSections()          → SectionText[]
+transposeParsedTab()     → optional (before bar prep)
     │
     ▼
-pairLines()              → BarLine[] per section (chord row + lyric row aligned)
+alignLines() per chord/lyric pair
     │
     ▼
-extractChords()          → ChordItem[] with positions (beat 4 default)
+extractChordLineMarkers() → ChordLineMarker[] (chord + decoration columns)
     │
     ▼
-transposeSection()       → transposed sections (transposeNumber)
-    │
-    ▼
-generateBarList()        → PreparedSection[] with interleaved BarSegment[]
+generateBarList()        → interleaved BarSegment[]
+```
+
+**`prepareSong(options)`** — legacy pairer path:
+
+```
+body → splitSections() → pairLines() → extractChords() → transposeSection() → generateBarList()
 ```
 
 Equivalent Achordex files (reference only):
@@ -194,7 +201,8 @@ Never add typography deps to the bars memo.
 ### Core (`.`)
 
 ```ts
-export { prepareSong } from "./core/prepareSong";
+export { prepareSong, prepareSongFromParsedTab } from "./core";
+export { parseTab, transposeParsedTab } from "./core";
 export type {
   PreparedSong,
   PreparedSection,

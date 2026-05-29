@@ -21,16 +21,18 @@ The package exposes two public entrypoints:
 
 ### Rendering model
 
-**`Tab` (public viewer)** — interleaved chord-over-lyric layout (sections → pair → extract → transpose → `barList`):
+**`Tab` (public viewer)** — interleaved chord-over-lyric layout (RFC 0002 CSS trick):
 
-- `prepareSong()` runs sections → pair → extract → transpose → interleaved `barList`
-- Chords sit above lyrics via CSS (`position: relative`, `bottom`, negative `marginRight`) inside `white-space: pre-wrap`
+- `parseTab()` → optional `transposeParsedTab()` → `prepareSongFromParsedTab()` → `generateBarList()` → React nodes
+- Chord and **decoration** markers (`DecorationToken`) sit above lyrics via `position: relative`, `bottom`, and negative `marginRight` (`chordHeight`, `blockMarginRight`) inside `white-space: pre-wrap`
 - `Tab` accepts `style?: Partial<TabStyleConfig>` (typography, colors, `displayMode`, `viewMode`, transpose, margins)
+
+**Legacy styled pipeline** — `prepareSong()` still runs the Achordex pairer (`splitSections` → `pairLines` → `extractChords` → transpose). Prefer the ParsedTab bridge above for strict grammar and column positions.
 
 **Headless AST** — for custom UI or inspection:
 
-- `parseTab()` → `ParsedTab` → `ParsedTabSection` → `ParsedTabLine` → `ParsedTabToken`
-- Compose with `Tab.Root`, `Tab.Section`, `Tab.Line`, `Tab.Chord`, `Tab.Lyric`
+- `parseTab()` → `ParsedTab` → `ParsedTabSection` → `ParsedTabLine` → `ParsedTabToken` (`ChordToken`, `LyricToken`, `DecorationToken`, `SpaceToken`)
+- Compose with `Tab.Root`, `Tab.Section`, `Tab.Line`, `Tab.Chord`, `Tab.Lyric`, `TabDecoration`
 
 See [PRD 0002](./docs/prd/0002-styled-viewer-pipeline.md) and [RFC 0002](./docs/rfc/0002-interleaved-bars-and-tab-style-config.md).
 
@@ -61,18 +63,25 @@ Peer dependencies: `react` and `react-dom` (^18 or ^19).
 
 ## Core usage
 
-### Styled pipeline (interleaved bars)
+### Styled pipeline (used by `Tab`)
+
+```ts
+import { parseTab, prepareSongFromParsedTab, transposeParsedTab } from "tab-renderer";
+
+const parsed = parseTab(body);
+const transposed = transposeParsedTab(parsed, 0);
+const prepared = prepareSongFromParsedTab(transposed, {
+  viewMode: "e", // "o" = compact newline suffix, "e" = ". . "
+});
+// prepared.sections[].barList — lyric fragments, chords, decoration markers
+```
+
+### Legacy styled pipeline (pairer-based)
 
 ```ts
 import { prepareSong } from "tab-renderer";
 
-const prepared = prepareSong({
-  body,
-  transposeNumber: 0,
-  viewMode: "e", // "o" = original (compact), "e" = extended
-  beat: 4,
-});
-// prepared.sections[].barList — lyric fragments + chord items for render
+const prepared = prepareSong({ body, transposeNumber: 0, viewMode: "e", beat: 4 });
 ```
 
 ### Headless AST (per-line tokens)
@@ -81,11 +90,10 @@ const prepared = prepareSong({
 import { parseTab } from "tab-renderer";
 
 const song = parseTab(body);
-// song.sections[].lines[].tokens
+// song.sections[].lines[].tokens — ChordToken | LyricToken | DecorationToken | SpaceToken
 ```
 
-Exported types include `ParsedTab`, `ParsedTabSection`, `ParsedTabLine`, `ParsedTabToken`, `PreparedSong`, `TabStyleConfig`, `DEFAULT_TAB_STYLE`, and `BarsListItem`.
-The shared parser and AST contracts come from `achorde-musical-domain`.
+Exported: `ParsedTab`, `PreparedSong`, `TabStyleConfig`, `ChordLineMarker`, `BarsListItem`, `prepareSongFromParsedTab`, `transposeParsedTab`. Contracts from `achorde-musical-domain` 0.3.1+ (`DecorationToken`). See [`CONTEXT.md`](./CONTEXT.md).
 
 ## React usage
 
@@ -125,7 +133,7 @@ const song = parseTab(body);
 </Tab.Root>;
 ```
 
-Also exported: `Tab.Line`, `Tab.Chord`, `Tab.Lyric`.
+Also exported: `Tab.Line`, `Tab.Chord`, `Tab.Lyric`, `TabDecoration`.
 
 ### `TabStyleConfig`
 
@@ -133,7 +141,7 @@ Also exported: `Tab.Line`, `Tab.Chord`, `Tab.Lyric`.
 | --------------------------------------------- | -------------------------------------------- |
 | `transposeNumber`                             | Semitone shift (core transposer)             |
 | `fontSize`, `lineHeight`                      | Container typography                         |
-| `chordHeight`, `blockMarginRight`             | Chord offset above lyrics                    |
+| `chordHeight`, `blockMarginRight`             | Chord and decoration offset above lyrics     |
 | `contentMarginRightPx`                        | Container `margin-right` (200–1000 when set) |
 | `viewMode`                                    | `"o"` original \| `"e"` extended bar spacing |
 | `displayMode`                                 | `"chords"` \| `"lyrics"` \| `"both"`         |
