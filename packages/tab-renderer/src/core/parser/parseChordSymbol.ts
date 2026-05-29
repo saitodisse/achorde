@@ -5,6 +5,21 @@ const CHORD_BASS_RE = /^([A-G])([#b♯♭]?)$/;
 /** Slash followed by an alteration figure (e.g. D7/9), not a bass note. */
 const CHORD_SLASH_EXTENSION_RE = /^[#b♯♭]?\d[\w\-+°º♭♯#()]*$/;
 
+/**
+ * Conventional chord suffix after the root (m7, maj7, 7/9, (13-)).
+ * Rejects lyric tails such as the "u" in "Eu" or "e" in "De".
+ */
+const CHORD_SUFFIX_RE =
+  /^(?:\([^)]*\))*(?:\/[#b♯♭]?\d[\w\-+°º♭♯#()]*)?(?:m(?:aj|in|inor)?|M(?:aj|in)?|maj|min|major|minor|dim|aug|sus|add|[#b°º+\-]|\d)[\w\-+°º♭♯#()/]*$/;
+
+function isValidChordSuffix(suffix: string): boolean {
+  if (suffix.length === 0) {
+    return true;
+  }
+
+  return CHORD_SUFFIX_RE.test(suffix);
+}
+
 function normalizeNoteName(note: string): string {
   return note.replace("♯", "#").replace("♭", "b");
 }
@@ -55,6 +70,10 @@ export function parseChordSymbol(token: string): ParsedChordSymbol | null {
     } else {
       return null;
     }
+  }
+
+  if (!isValidChordSuffix(suffix)) {
+    return null;
   }
 
   return bass === undefined

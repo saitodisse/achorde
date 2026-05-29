@@ -46,4 +46,19 @@ describe("parseTab", () => {
     expect(result.sections[0]?.lines[2]?.text).toBe("Line");
     expect(result.chordsFound).toEqual(["C"]);
   });
+
+  it("does not list lyric words such as Eu in chordsFound (tua-flor opening)", () => {
+    const result = parseTab("       Em7\nEu sei");
+
+    expect(result.chordsFound).toEqual(["Em7"]);
+    expect(result.sections[0]?.lines[1]).toMatchObject({
+      kind: "lyrics",
+      text: "Eu sei",
+    });
+    expect(
+      result.sections[0]?.lines[1]?.tokens.every(
+        (token) => token.kind !== "ChordToken",
+      ),
+    ).toBe(true);
+  });
 });

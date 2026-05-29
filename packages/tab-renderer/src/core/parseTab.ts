@@ -5,6 +5,7 @@ import {
   measureTabRenderer,
   summarizeParsedTab,
 } from "./observe";
+import { parseChordSymbol } from "./parser/parseChordSymbol";
 import { tokenizeRawLine } from "./parser/tokenizeRawLine";
 import type {
   ParseDiagnostic,
@@ -22,7 +23,21 @@ const SECTION_LABEL_RE = /^\s*\[([^\]]+)\](.*)$/;
 const COMMENT_LINE_RE = /^\s*(#|\/\/)/;
 const COMMENT_PAREN_RE = /^\s*\([^)]*\)\s*$/;
 const TAB_LINE_RE = /^\s*[EADGBe]\|/;
-const CHORDISH_RE = /[A-G][#b♯♭]?|\/|[0-9]/;
+/** Lyric word that looks like a failed chord spelling (C/D/E), not a plain word (Eu). */
+function lyricTokenLooksLikeInvalidChord(text: string): boolean {
+  if (parseChordSymbol(text) !== null) {
+    return false;
+  }
+
+  if (!/^[A-G][#b♯♭]?/.test(text)) {
+    return false;
+  }
+
+  return (
+    /[0-9/()+#°º+\-]/.test(text) ||
+    /^[A-G][#b♯♭]?(?:m|M|maj|min|dim|aug|sus|add)/.test(text)
+  );
+}
 
 export const STRICT_LINE_DIAGNOSTIC_CODES = {
   invalidLine: "invalid-line",
@@ -150,7 +165,9 @@ function buildLineDiagnostic(
   if (
     lyricTokens.length > 0 &&
     contentTokens.some(
-      (token) => token.kind === "LyricToken" && CHORDISH_RE.test(token.text),
+      (token) =>
+        token.kind === "LyricToken" &&
+        lyricTokenLooksLikeInvalidChord(token.text),
     )
   ) {
     return {

@@ -2,6 +2,13 @@
 
 All notable changes to this project are documented in this file.
 
+## [0.7.1] - 2026-05-28
+
+### Fixed
+
+- `parseChordSymbol()` rejects lyric words that start with a note letter (e.g. `Eu`, `De`) so they are not listed in `chordsFound` or tokenized as chords.
+- Invalid-chord diagnostics on lyric lines use chord-shaped tokens only, not any word that begins with `A`–`G`.
+
 ## [0.7.0] - 2026-05-28
 
 ### Added

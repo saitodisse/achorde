@@ -31,4 +31,24 @@ describe("parseChordSymbol", () => {
   it("rejects multiple slashes", () => {
     expect(parseChordSymbol("C/D/E")).toBeNull();
   });
+
+  it("rejects lyric words that start with a note letter", () => {
+    expect(parseChordSymbol("Eu")).toBeNull();
+    expect(parseChordSymbol("De")).toBeNull();
+  });
+
+  it("still accepts minor and major spellings that share a note prefix", () => {
+    expect(parseChordSymbol("Em")).toEqual({
+      kind: "chord",
+      text: "Em",
+      root: "E",
+      suffix: "m",
+    });
+    expect(parseChordSymbol("E")).toEqual({
+      kind: "chord",
+      text: "E",
+      root: "E",
+      suffix: "",
+    });
+  });
 });
