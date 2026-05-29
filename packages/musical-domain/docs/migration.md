@@ -19,21 +19,21 @@
 
 `ParsedTab` is the **canonical chart AST**. Parsers must classify every line as one of four kinds:
 
-| `ParsedTabLineKind` | Meaning                                  |
-| ------------------- | ---------------------------------------- |
-| `section-header`    | Line contains only `[Title]` markup      |
+| `ParsedTabLineKind` | Meaning                                                           |
+| ------------------- | ----------------------------------------------------------------- |
+| `section-header`    | Line contains only `[Title]` markup                               |
 | `chords`            | Chord-line majority; may include `DecorationToken` (stage parens) |
 | `lyrics`            | Lyric tokens only                                                 |
 | `blank`             | Empty or whitespace-only line                                     |
 
 ### Token kinds (`ParsedTabTokenKind`, 0.3.1+)
 
-| Kind               | Role                                                                 |
-| ------------------ | -------------------------------------------------------------------- |
-| `ChordToken`       | Parsed chord or repeat `/`                                           |
-| `LyricToken`       | Lyric word                                                           |
-| `DecorationToken`  | Parenthesis not part of chord spelling (e.g. before `( C7`)          |
-| `SpaceToken`       | Whitespace preserved for column layout                               |
+| Kind              | Role                                                        |
+| ----------------- | ----------------------------------------------------------- |
+| `ChordToken`      | Parsed chord or repeat `/`                                  |
+| `LyricToken`      | Lyric word                                                  |
+| `DecorationToken` | Parenthesis not part of chord spelling (e.g. before `( C7`) |
+| `SpaceToken`      | Whitespace preserved for column layout                      |
 
 Extensions inside the symbol (`C7(13)`, `D7/9`) stay inside a single `ChordToken`; see `tab-renderer` `CONTEXT.md`.
 

@@ -27,7 +27,7 @@ Bootstrap docs (v0.1):
 
 ## Decoration markers and ParsedTab bridge (v0.7.0)
 
-| Document                                                                                                      | Description                                                                |
-| ------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------- |
-| [Plan — Decoration markers](./plans/2026-05-28-decoration-markers-parsed-tab-bridge.md)                       | `DecorationToken`, `prepareSongFromParsedTab`, interleaved marker rendering |
-| [CONTEXT.md](../CONTEXT.md)                                                                                   | Domain glossary (chord line, slash alteration, decoration vs extension)    |
+| Document                                                                                | Description                                                                 |
+| --------------------------------------------------------------------------------------- | --------------------------------------------------------------------------- |
+| [Plan — Decoration markers](./plans/2026-05-28-decoration-markers-parsed-tab-bridge.md) | `DecorationToken`, `prepareSongFromParsedTab`, interleaved marker rendering |
+| [CONTEXT.md](../CONTEXT.md)                                                             | Domain glossary (chord line, slash alteration, decoration vs extension)     |

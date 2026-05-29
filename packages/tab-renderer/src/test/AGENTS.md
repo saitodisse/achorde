@@ -14,4 +14,3 @@ This folder contains shared test infrastructure.
 - Use `tua-flor.txt` for core tests, React tests, and Storybook stories unless a new case requires a distinct fixture.
 - Use `so-quero-esse-amor.txt` for parenthesized chord rows, `F7(9)` / `D7/9`-style symbols, and section headers (`import` from `so-quero-esse-amor.ts`).
 - Avoid adding production code here.
-

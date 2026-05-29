@@ -15,13 +15,13 @@ Keep RFC 0002 interleaved rendering (`blockMarginRight`, `chordHeight`) while fi
 
 ## Parser decisions (`parseTab` 2.2.0)
 
-| Input        | Tokenization                                      |
-| ------------ | ------------------------------------------------- |
-| `( C7`       | `DecorationToken` `(` + `ChordToken` `C7`         |
-| `C7(13)`     | single `ChordToken` `C7(13)`                      |
-| `D7/9`       | single `ChordToken` `D7/9` (suffix `7/9`)         |
-| `E7/G#`      | single `ChordToken` with `bass`                   |
-| `C letra …`  | `kind: "lyrics"` (majority rule)                  |
+| Input       | Tokenization                              |
+| ----------- | ----------------------------------------- |
+| `( C7`      | `DecorationToken` `(` + `ChordToken` `C7` |
+| `C7(13)`    | single `ChordToken` `C7(13)`              |
+| `D7/9`      | single `ChordToken` `D7/9` (suffix `7/9`) |
+| `E7/G#`     | single `ChordToken` with `bass`           |
+| `C letra …` | `kind: "lyrics"` (majority rule)          |
 
 Glossary: [`CONTEXT.md`](../../CONTEXT.md) at package root.
 
@@ -53,9 +53,9 @@ Emits ordered markers at `startColumn`:
 
 ## Fixtures
 
-| File | Role |
-| ---- | ---- |
-| `src/test/stubs/tua-flor.txt` | Parens, `D7/9`, extensions |
+| File                                    | Role                                              |
+| --------------------------------------- | ------------------------------------------------- |
+| `src/test/stubs/tua-flor.txt`           | Parens, `D7/9`, extensions                        |
 | `src/test/stubs/so-quero-esse-amor.txt` | Section headers, `F7(9)`, parenthesized intro row |
 
 ## Validation

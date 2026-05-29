@@ -66,7 +66,11 @@ Peer dependencies: `react` and `react-dom` (^18 or ^19).
 ### Styled pipeline (used by `Tab`)
 
 ```ts
-import { parseTab, prepareSongFromParsedTab, transposeParsedTab } from "tab-renderer";
+import {
+  parseTab,
+  prepareSongFromParsedTab,
+  transposeParsedTab,
+} from "tab-renderer";
 
 const parsed = parseTab(body);
 const transposed = transposeParsedTab(parsed, 0);
@@ -81,7 +85,12 @@ const prepared = prepareSongFromParsedTab(transposed, {
 ```ts
 import { prepareSong } from "tab-renderer";
 
-const prepared = prepareSong({ body, transposeNumber: 0, viewMode: "e", beat: 4 });
+const prepared = prepareSong({
+  body,
+  transposeNumber: 0,
+  viewMode: "e",
+  beat: 4,
+});
 ```
 
 ### Headless AST (per-line tokens)

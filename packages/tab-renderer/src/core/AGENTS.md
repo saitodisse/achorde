@@ -17,6 +17,7 @@ The core is the framework-agnostic heart of the library.
 - `src/core/renderer/` — `generateBarList` (markers + legacy chord list)
 - `src/core/prepareSongFromParsedTab.ts` — orchestrator for `Tab`
 - `src/core/prepareSong.ts` — legacy orchestrator
+
 ## Constraints
 
 - No React imports.
