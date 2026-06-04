@@ -39,6 +39,8 @@ This repository publishes `tab-renderer`, an open-source library for chord sheet
 
 ## Downstream Consumers
 
+Primary integration app: [`ac15`](../../../ac15) (`apps/web` imports `tab-renderer/core` directly; `packages/ui` uses `tab-renderer/react`).
+
 Published npm releases are consumed by external applications. After publishing a new version:
 
 1. Update the dependency version in each consumer project's `package.json`.

@@ -6,7 +6,12 @@ This repository is the public monorepo root for the shared music ecosystem.
 
 ## Layout
 
-- `packages/` contains the public libraries.
+- `packages/musical-domain` — shared contracts and headless helpers (normalization, voicing selection).
+- `packages/tab-renderer` — parse, transpose, React chord-sheet rendering.
+- `packages/svguitar-react` — SVG fretboard diagrams.
+- `packages/storybook-config` — shared Storybook tooling (not published as app dependency).
+
+The private product app [`ac15`](../ac15) consumes these packages from npm; coordinate breaking changes with bumps there (`@ac15/contracts`, `@ac15/ui`, `apps/web`).
 
 ## Rules
 

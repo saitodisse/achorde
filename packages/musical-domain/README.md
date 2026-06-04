@@ -11,6 +11,9 @@ The package is intentionally small and runtime-light. It defines stable data sha
 - textual tab AST contracts (`ParsedTab` with strict line kinds)
 - legacy chord-chart segment AST (deprecated; use `ParsedTab`)
 - fretted-instrument voicing contracts
+- chord label lookup normalization (`normalizeChordSymbolLabel`, since 0.3.2)
+- fretted voicing ranking (`compareFrettedVoicings`, `selectPreferredFrettedVoicing`, since 0.3.3)
+- chord spelling metadata (`ChordSpellingMetadata`, `spellingFromParsedChordSymbol`, since 0.3.3)
 - an explicit adapter interface for external music-theory engines
 
 ## Installation
@@ -25,6 +28,10 @@ pnpm add achorde-musical-domain
 import type {
   FrettedInstrumentVoicing,
   ParsedTab,
+} from "achorde-musical-domain";
+import {
+  normalizeChordSymbolLabel,
+  selectPreferredFrettedVoicing,
 } from "achorde-musical-domain";
 
 const voicing: FrettedInstrumentVoicing = {
@@ -52,6 +59,9 @@ const tab: ParsedTab = {
   astVersion: "1.0.0",
   chordsFound: ["C"],
 };
+
+normalizeChordSymbolLabel("C♯maj7"); // "C#maj7"
+selectPreferredFrettedVoicing([voicing /* ... */]);
 ```
 
 ## Design Goals
