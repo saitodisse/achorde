@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.5.0 - 2026-06-04
+
+### Changed
+
+- **BREAKING:** npm package renamed from `achorde-musical-domain` to `@achorde/musical-domain`. Update `package.json` and import paths; no API changes from 0.4.0.
+
 ## 0.4.0 - 2026-06-04
 
 ### Added

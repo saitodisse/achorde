@@ -1,4 +1,4 @@
-# achorde-musical-domain
+# @achorde/musical-domain
 
 Shared TypeScript contracts for musical applications that need a common language for chord charts, parsed tabs, parser diagnostics, and fretted-instrument voicings.
 
@@ -19,7 +19,7 @@ The package is intentionally small and runtime-light. It defines stable data sha
 ## Installation
 
 ```bash
-pnpm add achorde-musical-domain
+pnpm add @achorde/musical-domain
 ```
 
 ## Usage
@@ -28,11 +28,11 @@ pnpm add achorde-musical-domain
 import type {
   FrettedInstrumentVoicing,
   ParsedTab,
-} from "achorde-musical-domain";
+} from "@achorde/musical-domain";
 import {
   normalizeChordSymbolLabel,
   selectPreferredFrettedVoicing,
-} from "achorde-musical-domain";
+} from "@achorde/musical-domain";
 
 const voicing: FrettedInstrumentVoicing = {
   id: "voicing-c-major",
