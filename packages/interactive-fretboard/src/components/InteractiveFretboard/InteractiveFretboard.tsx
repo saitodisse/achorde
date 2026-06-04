@@ -15,7 +15,13 @@ import { hitTestFretCell } from "../../interaction/hitTestFretCell.js";
 import { screenToSvgPoint } from "../../interaction/screenToSvgPoint.js";
 import { computeFretboardFrame } from "../../layout/computeFretboardFrame.js";
 import { noteAtFret } from "../../utils/noteAtFret.js";
-import { DEFAULT_GUITAR_TUNING, STANDARD_INLAY_FRETS } from "./constants.js";
+import {
+	DEFAULT_GUITAR_TUNING,
+	FRET_DOT_RADIUS,
+	STANDARD_INLAY_FRETS,
+	TUNING_LABEL_GAP,
+	TUNING_NUT_INSET,
+} from "./constants.js";
 import type { InteractiveFretboardProps } from "./types.js";
 import { useOpenNotesMap } from "./useOpenNotesMap.js";
 import "./interactive-fretboard.css";
@@ -106,8 +112,18 @@ export const InteractiveFretboard = forwardRef<SVGSVGElement, InteractiveFretboa
 					viewBoxWidth,
 					viewBoxHeight,
 					minHitSize,
+					nutInset: showTuning ? TUNING_NUT_INSET : 0,
 				}),
-			[orientation, handedness, fretCount, stringCount, viewBoxWidth, viewBoxHeight, minHitSize],
+			[
+				orientation,
+				handedness,
+				fretCount,
+				stringCount,
+				viewBoxWidth,
+				viewBoxHeight,
+				minHitSize,
+				showTuning,
+			],
 		);
 
 		const hitAreas = useMemo(() => buildHitAreas(frame), [frame]);
@@ -338,15 +354,20 @@ export const InteractiveFretboard = forwardRef<SVGSVGElement, InteractiveFretboa
 					{showTuning &&
 						frame.strings.map((string) => {
 							const openNote = openNotesByString.get(string.stringIndex) ?? "";
-							const x = isHorizontal ? frame.grid.x - 14 : string.x1;
-							const y = isHorizontal ? string.y1 : frame.grid.y - 8;
+							const nutAlongFretAxis = isHorizontal
+								? (frame.frets[0]?.x1 ?? frame.grid.x)
+								: (frame.frets[0]?.y1 ?? frame.grid.y);
+							const labelOffset = FRET_DOT_RADIUS + TUNING_LABEL_GAP;
+							const x = isHorizontal ? nutAlongFretAxis - labelOffset : string.x1;
+							const y = isHorizontal ? string.y1 : nutAlongFretAxis - labelOffset;
 							return (
 								<text
 									key={`tuning-${string.stringIndex}`}
 									x={x}
 									y={y}
 									className="ifret-tuning-label"
-									textAnchor="middle"
+									textAnchor={isHorizontal ? "end" : "middle"}
+									dominantBaseline={isHorizontal ? "middle" : "auto"}
 								>
 									{openNote.replace(/\d/g, "")}
 								</text>
@@ -375,14 +396,14 @@ export const InteractiveFretboard = forwardRef<SVGSVGElement, InteractiveFretboa
 						>
 							{dot.state === "muted" ? (
 								<>
-									<circle r={14} className="ifret-dot ifret-dot--muted" />
+									<circle r={FRET_DOT_RADIUS} className="ifret-dot ifret-dot--muted" />
 									<text className="ifret-dot-label" textAnchor="middle" dominantBaseline="middle">
 										×
 									</text>
 								</>
 							) : (
 								<>
-									<circle r={14} className="ifret-dot" />
+									<circle r={FRET_DOT_RADIUS} className="ifret-dot" />
 									<text className="ifret-dot-label" textAnchor="middle" dominantBaseline="middle">
 										{dot.label}
 									</text>

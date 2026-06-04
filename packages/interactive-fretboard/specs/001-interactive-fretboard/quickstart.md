@@ -13,30 +13,29 @@ pnpm add @achorde/interactive-fretboard @achorde/musical-domain react react-dom
 ```tsx
 import { useState } from "react";
 import {
-  InteractiveFretboard,
-  type InteractiveFretboardChangeDetails,
+	InteractiveFretboard,
+	type InteractiveFretboardChangeDetails,
 } from "@achorde/interactive-fretboard";
 import type { FrettedInstrumentVoicing } from "@achorde/musical-domain";
 import "@achorde/interactive-fretboard/style.css";
 
 export function ChordEditor() {
-  const [voicing, setVoicing] =
-    useState<FrettedInstrumentVoicing>(initialVoicing);
+	const [voicing, setVoicing] = useState<FrettedInstrumentVoicing>(initialVoicing);
 
-  return (
-    <div style={{ width: "100%", maxWidth: 1100 }}>
-      <InteractiveFretboard
-        value={voicing}
-        onChange={(details: InteractiveFretboardChangeDetails) => {
-          setVoicing(details.voicing);
-        }}
-        orientation="horizontal"
-        handedness="right"
-        fretCount={16}
-        detectChord
-      />
-    </div>
-  );
+	return (
+		<div style={{ width: "100%", maxWidth: 1100 }}>
+			<InteractiveFretboard
+				value={voicing}
+				onChange={(details: InteractiveFretboardChangeDetails) => {
+					setVoicing(details.voicing);
+				}}
+				orientation="horizontal"
+				handedness="right"
+				fretCount={16}
+				detectChord
+			/>
+		</div>
+	);
 }
 ```
 
@@ -44,12 +43,12 @@ export function ChordEditor() {
 
 ```tsx
 <InteractiveFretboard
-  valueMode="fretNotation"
-  fretNotation="x32010"
-  chordSymbol="C"
-  onChange={(details) => {
-    console.log(details.fretNotation, details.voicing);
-  }}
+	valueMode="fretNotation"
+	fretNotation="x32010"
+	chordSymbol="C"
+	onChange={(details) => {
+		console.log(details.fretNotation, details.voicing);
+	}}
 />
 ```
 
@@ -66,11 +65,11 @@ export function ChordEditor() {
 
 ```css
 .interactive-fretboard-theme {
-  --ifret-bg: #1a1a1a;
-  --ifret-fret-color: #444;
-  --ifret-string-color: #888;
-  --ifret-dot-fill: #f59e0b;
-  --ifret-dot-muted: #dc2626;
+	--ifret-bg: #1a1a1a;
+	--ifret-fret-color: #444;
+	--ifret-string-color: #888;
+	--ifret-dot-fill: #f59e0b;
+	--ifret-dot-muted: #dc2626;
 }
 ```
 
@@ -96,13 +95,13 @@ pnpm storybook   # port 6010
 
 ```css
 .fretboard-wrap {
-  width: 100%;
-  overflow-x: auto;
+	width: 100%;
+	overflow-x: auto;
 }
 .fretboard-wrap svg {
-  width: 100%;
-  height: auto;
-  display: block;
+	width: 100%;
+	height: auto;
+	display: block;
 }
 ```
 

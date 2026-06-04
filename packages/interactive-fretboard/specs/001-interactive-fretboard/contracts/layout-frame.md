@@ -15,6 +15,7 @@ type ComputeFretboardFrameInput = {
 	viewBoxHeight?: number;
 	padding?: number;
 	minHitSize?: number;
+	nutInset?: number; // extra space before the nut along the fret axis (tuning labels)
 };
 ```
 

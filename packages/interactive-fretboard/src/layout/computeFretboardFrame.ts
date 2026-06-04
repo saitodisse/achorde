@@ -42,6 +42,7 @@ function expandRect(
 export function computeFretboardFrame(input: ComputeFretboardFrameInput): FretboardFrame {
 	const resolved = resolveViewMode(input.viewMode.orientation, input.viewMode.handedness);
 	const padding = input.padding ?? 24;
+	const nutInset = input.nutInset ?? 0;
 	const minHitSize = input.minHitSize ?? 44;
 	const fretCount = input.fretCount;
 	const stringCount = input.stringCount;
@@ -49,14 +50,15 @@ export function computeFretboardFrame(input: ComputeFretboardFrameInput): Fretbo
 	const viewBoxHeight = input.viewBoxHeight ?? resolved.defaultViewBox.height;
 	const visualToStringIndex = createVisualToStringIndex(resolved, stringCount);
 
+	const isHorizontalLayout = resolved.orientation === "horizontal";
 	const grid = {
-		x: padding,
-		y: padding,
-		width: viewBoxWidth - padding * 2,
-		height: viewBoxHeight - padding * 2,
+		x: padding + (isHorizontalLayout ? nutInset : 0),
+		y: padding + (isHorizontalLayout ? 0 : nutInset),
+		width: viewBoxWidth - padding * 2 - (isHorizontalLayout ? nutInset : 0),
+		height: viewBoxHeight - padding * 2 - (isHorizontalLayout ? 0 : nutInset),
 	};
 
-	const isHorizontal = resolved.orientation === "horizontal";
+	const isHorizontal = isHorizontalLayout;
 	const fretAxisLength = isHorizontal ? grid.width : grid.height;
 	const stringAxisLength = isHorizontal ? grid.height : grid.width;
 

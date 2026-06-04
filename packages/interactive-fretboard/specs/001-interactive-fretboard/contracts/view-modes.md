@@ -7,8 +7,8 @@ export type FretboardOrientation = "horizontal" | "vertical";
 export type FretboardHandedness = "right" | "left";
 
 export type FretboardViewMode = {
-  orientation: FretboardOrientation;
-  handedness: FretboardHandedness;
+	orientation: FretboardOrientation;
+	handedness: FretboardHandedness;
 };
 ```
 

@@ -13,8 +13,8 @@ PointerEvent
 
 ```ts
 export function screenToSvgPoint(
-  svg: SVGSVGElement,
-  event: PointerEvent | MouseEvent,
+	svg: SVGSVGElement,
+	event: PointerEvent | MouseEvent,
 ): { x: number; y: number } | null;
 ```
 
@@ -34,8 +34,8 @@ export function screenToSvgPoint(
 
 ```ts
 export function hitTestFretCell(
-  frame: FretboardFrame,
-  point: { x: number; y: number },
+	frame: FretboardFrame,
+	point: { x: number; y: number },
 ): { stringIndex: number; fret: number } | null;
 ```
 
@@ -55,9 +55,9 @@ Render invisible `<rect>` elements from `frame.cells` with `data-string-index` a
 
 ```ts
 export function buildHitAreas(frame: FretboardFrame): Array<{
-  stringIndex: number;
-  fret: number;
-  hitRect: { x: number; y: number; width: number; height: number };
+	stringIndex: number;
+	fret: number;
+	hitRect: { x: number; y: number; width: number; height: number };
 }>;
 ```
 

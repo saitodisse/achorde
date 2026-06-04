@@ -11,11 +11,11 @@ Ship the open-source interactive fretboard editor as the fourth published achord
 
 ## Dependencies
 
-| Package                  | Relationship                          |
-| ------------------------ | ------------------------------------- |
-| `@achorde/musical-domain@^0.5.1` | Voicing types, parse, barre inference |
-| `@achorde/svguitar-react`         | None (diagram preview stays separate; Storybook dev only) |
-| `ac15`                   | Consumer via `@ac15/ui`               |
+| Package                          | Relationship                                              |
+| -------------------------------- | --------------------------------------------------------- |
+| `@achorde/musical-domain@^0.5.1` | Voicing types, parse, barre inference                     |
+| `@achorde/svguitar-react`        | None (diagram preview stays separate; Storybook dev only) |
+| `ac15`                           | Consumer via `@ac15/ui`                                   |
 
 ## npm organization
 

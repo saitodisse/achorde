@@ -3,9 +3,7 @@
 ## Component
 
 ```ts
-export function InteractiveFretboard(
-  props: InteractiveFretboardProps,
-): JSX.Element;
+export function InteractiveFretboard(props: InteractiveFretboardProps): JSX.Element;
 ```
 
 ## Props
@@ -40,10 +38,10 @@ export function InteractiveFretboard(
 
 ```ts
 export type InteractiveFretboardChangeDetails = {
-  voicing: FrettedInstrumentVoicing;
-  fretNotation?: string;
-  pressedNotes: string[];
-  detectedChord?: string;
+	voicing: FrettedInstrumentVoicing;
+	fretNotation?: string;
+	pressedNotes: string[];
+	detectedChord?: string;
 };
 ```
 
@@ -64,10 +62,7 @@ export { screenToSvgPoint } from "../interaction/screenToSvgPoint";
 export { hitTestFretCell } from "../interaction/hitTestFretCell";
 export { computeFretboardFrame } from "../layout/computeFretboardFrame";
 export type { FretboardFrame, FretboardViewMode } from "../layout/types";
-export {
-  voicingToEditorState,
-  editorStateToVoicing,
-} from "../adapters/voicingEditorState";
+export { voicingToEditorState, editorStateToVoicing } from "../adapters/voicingEditorState";
 ```
 
 ## Peer dependencies

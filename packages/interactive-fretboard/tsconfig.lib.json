@@ -11,6 +11,13 @@
 		"target": "ES2022",
 		"moduleResolution": "bundler"
 	},
-	"include": ["src/index.ts", "src/layout/**/*", "src/interaction/**/*", "src/adapters/**/*", "src/components/**/*", "src/utils/**/*"],
+	"include": [
+		"src/index.ts",
+		"src/layout/**/*",
+		"src/interaction/**/*",
+		"src/adapters/**/*",
+		"src/components/**/*",
+		"src/utils/**/*"
+	],
 	"exclude": ["src/**/*.test.*", "src/**/*.spec.*", "src/stories/**/*"]
 }

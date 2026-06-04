@@ -2,6 +2,22 @@
 
 All notable changes to `@achorde/interactive-fretboard` are documented in this file.
 
+## [0.1.6] - 2026-06-04
+
+### Fixed
+
+- `showTuning`: `nutInset` layout and label placement so open-string dots no longer overlap tuning names.
+
+### Changed
+
+- Storybook: full Controls panel (`argTypes` / `args`), `Playground` story, fullscreen horizontal presets.
+
+## [0.1.5] - 2026-06-04
+
+### Fixed
+
+- Fret dot labels and chord detection: transpose by semitone count (`Interval.fromSemitones`) instead of `${fret}m` (Tonal v6 treats `1m` as unison, so fret 1 showed open-string names).
+
 ## [0.1.4] - 2026-06-04
 
 ### Fixed

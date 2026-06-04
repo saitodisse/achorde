@@ -67,10 +67,10 @@ CI should use a restricted `NPM_TOKEN` with publish access to `@achorde/*` only.
 
 ## Related packages
 
-| Package                                        | Role                                                                             |
-| ---------------------------------------------- | -------------------------------------------------------------------------------- |
+| Package                                         | Role                                                                             |
+| ----------------------------------------------- | -------------------------------------------------------------------------------- |
 | [`@achorde/musical-domain`](../musical-domain/) | Voicing contracts, `parseFretNotationToVoicing`, `inferBarresFromFrettedVoicing` |
-| [`@achorde/svguitar-react`](../svguitar-react/)         | Compact **chord diagram** renderer (not the interactive neck editor)             |
+| [`@achorde/svguitar-react`](../svguitar-react/) | Compact **chord diagram** renderer (not the interactive neck editor)             |
 
 ## Documentation
 

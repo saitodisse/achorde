@@ -37,6 +37,13 @@ describe("computeFretboardFrame", () => {
 		expect(editorFret).toBe(1);
 	});
 
+	it("shifts the nut along the fret axis when nutInset is set", () => {
+		const base = computeFretboardFrame(frameDefaults);
+		const inset = computeFretboardFrame({ ...frameDefaults, nutInset: 40 });
+		expect(inset.grid.x).toBe(base.grid.x + 40);
+		expect(inset.frets[0]!.x1).toBe(base.frets[0]!.x1 + 40);
+	});
+
 	it("keeps fret 0 hit region at the nut, not over the first fret space", () => {
 		const frame = computeFretboardFrame(frameDefaults);
 		const nutX = frame.frets[0]!.x1;

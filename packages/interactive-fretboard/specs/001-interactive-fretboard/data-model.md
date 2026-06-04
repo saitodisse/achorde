@@ -22,13 +22,13 @@ When `valueMode: "fretNotation"`:
 
 ```ts
 type FretEditorCell = {
-  stringIndex: number;
-  fret: number; // 0 = nut region
-  state: "empty" | "open" | "muted" | "fretted";
+	stringIndex: number;
+	fret: number; // 0 = nut region
+	state: "empty" | "open" | "muted" | "fretted";
 };
 
 type FretboardEditorState = {
-  cells: Map<number, FretEditorCell>; // keyed by stringIndex
+	cells: Map<number, FretEditorCell>; // keyed by stringIndex
 };
 ```
 
@@ -36,10 +36,10 @@ type FretboardEditorState = {
 
 ```ts
 type InteractiveFretboardChangeDetails = {
-  voicing: FrettedInstrumentVoicing;
-  fretNotation?: string;
-  pressedNotes: string[];
-  detectedChord?: string;
+	voicing: FrettedInstrumentVoicing;
+	fretNotation?: string;
+	pressedNotes: string[];
+	detectedChord?: string;
 };
 ```
 
@@ -47,35 +47,35 @@ type InteractiveFretboardChangeDetails = {
 
 ```ts
 type FretboardViewMode = {
-  orientation: "horizontal" | "vertical";
-  handedness: "right" | "left";
+	orientation: "horizontal" | "vertical";
+	handedness: "right" | "left";
 };
 
 type FretboardFrame = {
-  viewBox: { width: number; height: number };
-  fretCount: number;
-  stringCount: number;
-  /** Maps visual row/column index → canonical stringIndex */
-  visualToStringIndex: (visualStringIndex: number) => number;
-  frets: Array<{
-    index: number;
-    x1: number;
-    y1: number;
-    x2: number;
-    y2: number;
-  }>;
-  strings: Array<{
-    stringIndex: number;
-    x1: number;
-    y1: number;
-    x2: number;
-    y2: number;
-  }>;
-  cells: Array<{
-    stringIndex: number;
-    fret: number;
-    hitRect: { x: number; y: number; width: number; height: number };
-  }>;
+	viewBox: { width: number; height: number };
+	fretCount: number;
+	stringCount: number;
+	/** Maps visual row/column index → canonical stringIndex */
+	visualToStringIndex: (visualStringIndex: number) => number;
+	frets: Array<{
+		index: number;
+		x1: number;
+		y1: number;
+		x2: number;
+		y2: number;
+	}>;
+	strings: Array<{
+		stringIndex: number;
+		x1: number;
+		y1: number;
+		x2: number;
+		y2: number;
+	}>;
+	cells: Array<{
+		stringIndex: number;
+		fret: number;
+		hitRect: { x: number; y: number; width: number; height: number };
+	}>;
 };
 ```
 
