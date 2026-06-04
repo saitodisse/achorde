@@ -4,7 +4,7 @@
  * @version 1.0.0
  */
 
-import type { FrettedInstrumentVoicing } from "achorde-musical-domain";
+import type { FrettedInstrumentVoicing } from "@achorde/musical-domain";
 
 /**
  * Represents a finger positioned on the guitar fretboard

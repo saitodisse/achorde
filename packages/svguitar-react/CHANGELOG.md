@@ -1,5 +1,11 @@
 # Changelog
 
+## 2.5.0 (2026-06-04)
+
+### Changed
+
+- **BREAKING:** npm package renamed from `svguitar-react` to `@achorde/svguitar-react`. Depends on `@achorde/musical-domain`. Update `package.json` and import paths; no functional changes from 2.4.0.
+
 ## 2.4.0 (2026-05-24)
 
 ### Features

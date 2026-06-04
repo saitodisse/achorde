@@ -47,4 +47,4 @@ export type {
 	ParseDiagnostic,
 	ChordChartAst,
 	ParsedChordChart,
-} from "achorde-musical-domain";
+} from "@achorde/musical-domain";
