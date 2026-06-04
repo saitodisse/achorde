@@ -1,4 +1,4 @@
-# tab-renderer
+# @achorde/tab-renderer
 
 **Live demo:** [tab-renderer-react.vercel.app](https://tab-renderer-react.vercel.app/)
 

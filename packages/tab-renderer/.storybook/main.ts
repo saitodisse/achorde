@@ -1,5 +1,5 @@
 import type { StorybookConfig } from "@storybook/react-vite";
-import { createStorybookMain } from "achorde-storybook-config/vite";
+import { createStorybookMain } from "@achorde/storybook-config/vite";
 
 const config: StorybookConfig = createStorybookMain({
   stories: ["../src/react/**/*.stories.@(js|jsx|mjs|ts|tsx)"],

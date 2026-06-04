@@ -2,7 +2,7 @@ import { useEffect, useState, type ReactNode } from "react";
 import {
   collectStorybookRuntimeHealth,
   type StorybookRuntimeHealth,
-} from "achorde-storybook-config";
+} from "@achorde/storybook-config";
 import type { ParseDiagnostic, ParsedTab, ParsedTabLineKind } from "../../core";
 import { logTabRendererGroup, summarizeParsedTab } from "../../core";
 import { countTokens } from "./story-tua-flor";

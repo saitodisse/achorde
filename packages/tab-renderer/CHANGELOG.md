@@ -2,6 +2,12 @@
 
 All notable changes to this project are documented in this file.
 
+## [0.8.0] - 2026-06-04
+
+### Changed
+
+- **BREAKING:** npm package renamed from `tab-renderer` to `@achorde/tab-renderer`. Depends on `@achorde/musical-domain` instead of `achorde-musical-domain`. Update `package.json` and import paths; no functional changes from 0.7.1.
+
 ## [0.7.1] - 2026-05-28
 
 ### Fixed

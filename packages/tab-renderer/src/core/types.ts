@@ -7,9 +7,9 @@ export type {
   ParsedTabSection,
   ParsedTabToken,
   ParsedTabTokenKind,
-} from "achorde-musical-domain";
+} from "@achorde/musical-domain";
 
-import type { ParsedTab as DomainParsedTab } from "achorde-musical-domain";
+import type { ParsedTab as DomainParsedTab } from "@achorde/musical-domain";
 
 export type ParsedTab = DomainParsedTab & {
   chordsFound: ReadonlyArray<string>;

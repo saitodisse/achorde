@@ -4,7 +4,7 @@ import {
   basePreviewParameters,
   createObservabilityDecorator,
   installStorybookPreviewObservability,
-} from "achorde-storybook-config/preview";
+} from "@achorde/storybook-config/preview";
 import { StoryTheme } from "./StoryTheme";
 import "../src/index.css";
 
