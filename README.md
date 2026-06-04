@@ -26,10 +26,19 @@ pnpm lint
 pnpm typecheck
 ```
 
+## Published versions (latest)
+
+| Package | npm `latest` |
+| ------- | ------------ |
+| `@achorde/musical-domain` | `0.5.1` |
+| `@achorde/tab-renderer` | `0.8.1` |
+| `@achorde/svguitar-react` | `2.5.1` |
+| `@achorde/interactive-fretboard` | `0.1.4` |
+
 ## Install (consumers)
 
 ```bash
-pnpm add @achorde/musical-domain @achorde/tab-renderer @achorde/svguitar-react
+pnpm add @achorde/musical-domain @achorde/tab-renderer @achorde/svguitar-react @achorde/interactive-fretboard
 ```
 
 Use the version ranges documented in each package `README.md` and `CHANGELOG.md`. After publishing, bump dependents (including `ac15`) and run their install + test + build.

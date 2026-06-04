@@ -8,13 +8,13 @@ Single source of truth for **drawing** and **hit-testing** in SVG user space (vi
 
 ```ts
 type ComputeFretboardFrameInput = {
-  viewMode: FretboardViewMode;
-  fretCount: number;
-  stringCount: number;
-  viewBoxWidth?: number;
-  viewBoxHeight?: number;
-  padding?: number;
-  minHitSize?: number;
+	viewMode: FretboardViewMode;
+	fretCount: number;
+	stringCount: number;
+	viewBoxWidth?: number;
+	viewBoxHeight?: number;
+	padding?: number;
+	minHitSize?: number;
 };
 ```
 
@@ -32,12 +32,12 @@ See [`data-model.md`](../data-model.md).
 
 ## Nut region
 
-- Fret `0` hit region spans from SVG origin edge to first fret line (horizontal: left of fret 1; vertical: above fret 1).
+- Fret `0` hit region is a narrow strip centered on the nut line (open/muted only).
 - Open/muted toggles only apply in fret `0` regions.
 
 ## Fretted regions
 
-- For fret `n ≥ 1`, hit region is the cell between fret lines `n-1` and `n` (midpoint dot placement matches AC12 geometry intent, computed in frame space not DOM).
+- For fret `n ≥ 1`, hit region is the cell **between** fret lines `n-1` and `n`; dot and label centers sit at the midpoint of that space (not on the metal fret wire).
 
 ## CSS display vs viewBox
 

@@ -1,10 +1,10 @@
-# svguitar-react
+# @achorde/svguitar-react
 
 A React component for rendering guitar chord diagrams in SVG format with high performance and full customization.
 
 - 🌐 **Storybook**: [https://storybook-svguitar-react.vercel.app/](https://storybook-svguitar-react.vercel.app/?path=/docs/components-chorddiagram--docs)
 - 🌐 **Live Demo**: [https://svguitar-react.vercel.app/](https://svguitar-react.vercel.app/)
-- 🔗 **NPM Package**: [https://www.npmjs.com/package/svguitar-react](https://www.npmjs.com/package/svguitar-react)
+- 🔗 **NPM Package**: [https://www.npmjs.com/package/@achorde/svguitar-react](https://www.npmjs.com/package/@achorde/svguitar-react) (`latest`: **2.5.1**)
 
 ## Features
 
@@ -21,15 +21,15 @@ A React component for rendering guitar chord diagrams in SVG format with high pe
 ## Installation
 
 ```bash
-pnpm add svguitar-react achorde-musical-domain
+pnpm add @achorde/svguitar-react @achorde/musical-domain
 ```
 
 ## Quick Start
 
 ```tsx
 import React from "react";
-import { ChordDiagram } from "svguitar-react";
-import type { FrettedInstrumentVoicing } from "achorde-musical-domain";
+import { ChordDiagram } from "@achorde/svguitar-react";
+import type { FrettedInstrumentVoicing } from "@achorde/musical-domain";
 
 const App = () => {
 	const cMajorVoicing: FrettedInstrumentVoicing = {

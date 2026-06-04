@@ -1,5 +1,7 @@
 # @achorde/musical-domain
 
+**npm `latest`:** `0.5.1` — [package page](https://www.npmjs.com/package/@achorde/musical-domain)
+
 Shared TypeScript contracts for musical applications that need a common language for chord charts, parsed tabs, parser diagnostics, and fretted-instrument voicings.
 
 The package is intentionally small and runtime-light. It defines stable data shapes that parsers, renderers, editors, and storage layers can agree on without depending on React, browser APIs, SVG rendering, or a specific music-theory engine.

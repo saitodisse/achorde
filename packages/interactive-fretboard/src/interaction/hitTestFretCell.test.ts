@@ -23,6 +23,19 @@ describe("hitTestFretCell", () => {
 		expect(hit).toEqual({ stringIndex: 3, fret: 5 });
 	});
 
+	it("hits fret 1 in the space between nut and first fret wire", () => {
+		const nutX = frame.frets[0]!.x1;
+		const firstWireX = frame.frets[1]!.x1;
+		const string2 = frame.cells.find((c) => c.stringIndex === 2 && c.fret === 1);
+		expect(string2).toBeDefined();
+
+		const hit = hitTestFretCell(frame, {
+			x: (nutX + firstWireX) / 2,
+			y: string2!.center.y,
+		});
+		expect(hit).toEqual({ stringIndex: 2, fret: 1 });
+	});
+
 	it("returns null outside the grid", () => {
 		expect(hitTestFretCell(frame, { x: 0, y: 0 })).toBeNull();
 	});

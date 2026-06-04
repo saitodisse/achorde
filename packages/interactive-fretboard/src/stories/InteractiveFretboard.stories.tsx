@@ -15,11 +15,17 @@ function ControlledBoard(props: {
 	initial: FrettedInstrumentVoicing;
 	orientation?: "horizontal" | "vertical";
 	handedness?: "right" | "left";
+	fullWidth?: boolean;
 }) {
 	const [voicing, setVoicing] = useState(props.initial);
 
 	return (
-		<div style={{ width: "100%", maxWidth: 720 }}>
+		<div
+			style={{
+				width: "100%",
+				...(props.fullWidth ? { boxSizing: "border-box" } : { maxWidth: 720 }),
+			}}
+		>
 			<InteractiveFretboard
 				value={voicing}
 				orientation={props.orientation}
@@ -46,7 +52,10 @@ export default meta;
 type Story = StoryObj<typeof InteractiveFretboard>;
 
 export const HorizontalRight: Story = {
-	render: () => (cMajor ? <ControlledBoard initial={cMajor} /> : null),
+	parameters: {
+		layout: "fullscreen",
+	},
+	render: () => (cMajor ? <ControlledBoard initial={cMajor} fullWidth /> : null),
 };
 
 export const HorizontalLeft: Story = {
@@ -76,12 +85,7 @@ export const ResponsiveContainer: Story = {
 export const FretNotationMode: Story = {
 	render: () => (
 		<div style={{ width: "100%", maxWidth: 720 }}>
-			<InteractiveFretboard
-				valueMode="fretNotation"
-				fretNotation="x32010"
-				chordSymbol="C"
-				onChange={() => undefined}
-			/>
+			<InteractiveFretboard valueMode="fretNotation" fretNotation="x32010" chordSymbol="C" />
 		</div>
 	),
 };

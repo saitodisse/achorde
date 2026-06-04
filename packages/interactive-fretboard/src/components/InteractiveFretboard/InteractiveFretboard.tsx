@@ -64,27 +64,36 @@ export const InteractiveFretboard = forwardRef<SVGSVGElement, InteractiveFretboa
 		const svgRef = useRef<SVGSVGElement>(null);
 		useImperativeHandle(ref, () => svgRef.current as SVGSVGElement);
 
-		const baseVoicing = resolveVoicing(props);
+		const voicingKey = useMemo(() => {
+			if (valueMode === "fretNotation") {
+				if (!props.fretNotation) {
+					return "empty";
+				}
+				return `fretNotation:${props.fretNotation}:${props.chordSymbol ?? ""}`;
+			}
+			const value = props.value;
+			if (!value) {
+				return "empty";
+			}
+			return `voicing:${value.strings.map((s) => `${s.stringIndex}${s.state}${s.fret ?? ""}`).join(",")}`;
+		}, [valueMode, props.fretNotation, props.chordSymbol, props.value]);
+
+		const baseVoicing = useMemo(() => resolveVoicing(props), [voicingKey]);
+
 		const openNotesByString = useOpenNotesMap(tuning, stringCount);
-
-		const [editorState, setEditorState] = useState(() =>
-			baseVoicing ? voicingToEditorState(baseVoicing) : { cells: new Map() },
-		);
-
-		const voicingKey = baseVoicing
-			? `${valueMode}:${props.fretNotation ?? ""}:${baseVoicing.strings.map((s) => `${s.stringIndex}${s.state}${s.fret}`).join(",")}`
-			: "empty";
 
 		const syncedState = useMemo(() => {
 			if (!baseVoicing) {
 				return { cells: new Map() };
 			}
 			return voicingToEditorState(baseVoicing);
-		}, [baseVoicing]);
+		}, [voicingKey, baseVoicing]);
+
+		const [editorState, setEditorState] = useState(syncedState);
 
 		useEffect(() => {
 			setEditorState(syncedState);
-		}, [syncedState]);
+		}, [voicingKey, syncedState]);
 
 		const activeState = onChange ? editorState : syncedState;
 
@@ -309,9 +318,10 @@ export const InteractiveFretboard = forwardRef<SVGSVGElement, InteractiveFretboa
 
 					{showFretNumbers &&
 						frame.frets.slice(1).map((fret) => {
+							const prev = frame.frets[fret.index - 1];
 							const label = String(fret.index);
-							const x = isHorizontal ? fret.x1 : frame.grid.x - 12;
-							const y = isHorizontal ? frame.viewBox.height - 8 : fret.y1;
+							const x = isHorizontal ? (prev.x1 + fret.x1) / 2 : frame.grid.x - 12;
+							const y = isHorizontal ? frame.viewBox.height - 8 : (prev.y1 + fret.y1) / 2;
 							return (
 								<text
 									key={`fret-label-${fret.index}`}

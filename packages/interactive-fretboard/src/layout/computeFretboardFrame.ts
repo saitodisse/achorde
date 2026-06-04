@@ -117,30 +117,53 @@ export function computeFretboardFrame(input: ComputeFretboardFrameInput): Fretbo
 		const stringHalf =
 			stringCount === 1 ? stringAxisLength / 2 : stringAxisLength / (stringCount - 1) / 2;
 
-		for (let fret = 0; fret <= fretCount; fret += 1) {
-			const start = fretPositions[fret] ?? 0;
-			const end = fretPositions[fret + 1] ?? start;
-			const centerAlongFret = fret === 0 ? start : start + (end - start) / 2;
+		const nutPosition = fretPositions[0] ?? 0;
 
+		for (let fret = 0; fret <= fretCount; fret += 1) {
 			let hitRect: { x: number; y: number; width: number; height: number };
 			let center: { x: number; y: number };
 
-			if (isHorizontal) {
-				hitRect = {
-					x: fret === 0 ? grid.x : start,
-					y: stringPos - stringHalf,
-					width: fret === 0 ? (fretPositions[1] ?? grid.x) - grid.x : end - start,
-					height: stringHalf * 2,
-				};
-				center = { x: centerAlongFret, y: stringPos };
+			if (fret === 0) {
+				// Nut only — open/muted; must not cover the first playable fret space.
+				if (isHorizontal) {
+					hitRect = {
+						x: nutPosition - minHitSize / 2,
+						y: stringPos - stringHalf,
+						width: minHitSize,
+						height: stringHalf * 2,
+					};
+					center = { x: nutPosition, y: stringPos };
+				} else {
+					hitRect = {
+						x: stringPos - stringHalf,
+						y: nutPosition - minHitSize / 2,
+						width: stringHalf * 2,
+						height: minHitSize,
+					};
+					center = { x: stringPos, y: nutPosition };
+				}
 			} else {
-				hitRect = {
-					x: stringPos - stringHalf,
-					y: fret === 0 ? grid.y : start,
-					width: stringHalf * 2,
-					height: fret === 0 ? (fretPositions[1] ?? grid.y) - grid.y : end - start,
-				};
-				center = { x: stringPos, y: centerAlongFret };
+				const start = fretPositions[fret - 1] ?? nutPosition;
+				const end = fretPositions[fret] ?? start;
+				const centerAlongFret = start + (end - start) / 2;
+
+				if (isHorizontal) {
+					hitRect = {
+						x: start,
+						y: stringPos - stringHalf,
+						width: end - start,
+						height: stringHalf * 2,
+					};
+					center = { x: centerAlongFret, y: stringPos };
+				} else {
+					hitRect = {
+						x: stringPos - stringHalf,
+						y: start,
+						width: stringHalf * 2,
+						height: end - start,
+					};
+					center = { x: stringPos, y: centerAlongFret };
+				}
 			}
 
 			hitRect = expandRect(hitRect, minHitSize, grid);

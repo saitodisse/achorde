@@ -2,6 +2,20 @@
 
 All notable changes to `@achorde/interactive-fretboard` are documented in this file.
 
+## [0.1.4] - 2026-06-04
+
+### Fixed
+
+- Fret cell geometry: fret `n ≥ 1` is the space between wires `n-1` and `n` (fixes C major `x32010` dots one fret too high and unclickable first-fret space).
+- Fret `0` hit target is nut-only; open/muted no longer blocks the first fret cell.
+- Fret number labels centered in each fret space (horizontal layout).
+
+## [0.1.3] - 2026-06-04
+
+### Fixed
+
+- `valueMode="fretNotation"`: stop infinite `useEffect` → `setEditorState` loop when props are stable (Storybook `FretNotationMode` froze the tab).
+
 ## [0.1.2] - 2026-06-04
 
 ### Fixed

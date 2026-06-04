@@ -14,10 +14,10 @@ Open-source chord sheet rendering library with:
 
 The package exposes two public entrypoints:
 
-| Entrypoint           | Role          |
-| -------------------- | ------------- |
-| `tab-renderer`       | Headless core |
-| `tab-renderer/react` | React adapter |
+| Entrypoint                    | Role          |
+| ----------------------------- | ------------- |
+| `@achorde/tab-renderer`       | Headless core |
+| `@achorde/tab-renderer/react` | React adapter |
 
 ### Rendering model
 
@@ -40,26 +40,22 @@ Repository guidance: [`AGENTS.md`](./AGENTS.md), [`docs/AGENTS.md`](./docs/AGENT
 
 ## Install
 
-Not published to npm yet. From the [achorde](https://github.com/achorde/achorde) monorepo:
+**npm (recommended):**
 
 ```bash
-pnpm add tab-renderer@git+https://github.com/achorde/achorde.git#main:packages/tab-renderer
+pnpm add @achorde/tab-renderer @achorde/musical-domain
 ```
 
-Or clone and use the workspace:
+Current release: **`@achorde/tab-renderer@0.8.1`** (depends on `@achorde/musical-domain@^0.5.1`). Legacy unscoped `tab-renderer` remains on npm for older consumers.
+
+**Monorepo / git:**
 
 ```bash
 git clone https://github.com/achorde/achorde.git
 cd achorde && pnpm install
 ```
 
-After the first npm release:
-
-```bash
-npm install tab-renderer
-```
-
-Peer dependencies: `react` and `react-dom` (^18 or ^19).
+Peer dependencies: `react` and `react-dom` (^18 or ^19) for the `./react` entrypoint.
 
 ## Core usage
 
@@ -70,7 +66,7 @@ import {
   parseTab,
   prepareSongFromParsedTab,
   transposeParsedTab,
-} from "tab-renderer";
+} from "@achorde/tab-renderer";
 
 const parsed = parseTab(body);
 const transposed = transposeParsedTab(parsed, 0);
@@ -83,7 +79,7 @@ const prepared = prepareSongFromParsedTab(transposed, {
 ### Legacy styled pipeline (pairer-based)
 
 ```ts
-import { prepareSong } from "tab-renderer";
+import { prepareSong } from "@achorde/tab-renderer";
 
 const prepared = prepareSong({
   body,
@@ -96,20 +92,20 @@ const prepared = prepareSong({
 ### Headless AST (per-line tokens)
 
 ```ts
-import { parseTab } from "tab-renderer";
+import { parseTab } from "@achorde/tab-renderer";
 
 const song = parseTab(body);
 // song.sections[].lines[].tokens — ChordToken | LyricToken | DecorationToken | SpaceToken
 ```
 
-Exported: `ParsedTab`, `PreparedSong`, `TabStyleConfig`, `ChordLineMarker`, `BarsListItem`, `prepareSongFromParsedTab`, `transposeParsedTab`. Contracts from `achorde-musical-domain` 0.3.1+ (`DecorationToken`). See [`CONTEXT.md`](./CONTEXT.md).
+Exported: `ParsedTab`, `PreparedSong`, `TabStyleConfig`, `ChordLineMarker`, `BarsListItem`, `prepareSongFromParsedTab`, `transposeParsedTab`. Contracts from `@achorde/musical-domain` `^0.5.1` (`DecorationToken` and later APIs). See [`CONTEXT.md`](./CONTEXT.md).
 
 ## React usage
 
 ### Styled `Tab` (default)
 
 ```tsx
-import { Tab, DEFAULT_TAB_STYLE } from "tab-renderer/react";
+import { Tab, DEFAULT_TAB_STYLE } from "@achorde/tab-renderer/react";
 
 export function Example() {
   return (
@@ -130,8 +126,8 @@ export function Example() {
 ### Composable primitives (headless AST)
 
 ```tsx
-import { parseTab } from "tab-renderer";
-import { Tab } from "tab-renderer/react";
+import { parseTab } from "@achorde/tab-renderer";
+import { Tab } from "@achorde/tab-renderer/react";
 
 const song = parseTab(body);
 
