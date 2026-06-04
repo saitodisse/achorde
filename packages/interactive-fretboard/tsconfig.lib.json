@@ -1,0 +1,16 @@
+{
+	"extends": "./tsconfig.app.json",
+	"compilerOptions": {
+		"noEmit": false,
+		"declaration": true,
+		"declarationMap": true,
+		"outDir": "./dist",
+		"allowImportingTsExtensions": false,
+		"verbatimModuleSyntax": false,
+		"module": "ESNext",
+		"target": "ES2022",
+		"moduleResolution": "bundler"
+	},
+	"include": ["src/index.ts", "src/layout/**/*", "src/interaction/**/*", "src/adapters/**/*", "src/components/**/*", "src/utils/**/*"],
+	"exclude": ["src/**/*.test.*", "src/**/*.spec.*", "src/stories/**/*"]
+}

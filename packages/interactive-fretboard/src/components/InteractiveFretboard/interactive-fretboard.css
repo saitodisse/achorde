@@ -1,0 +1,80 @@
+.ifret-root {
+	--ifret-bg: #1a1a1a;
+	--ifret-fret-color: rgba(255, 255, 255, 0.35);
+	--ifret-string-color: rgba(255, 255, 255, 0.7);
+	--ifret-dot-fill: #3b82f6;
+	--ifret-dot-muted: #ef4444;
+	--ifret-hover-fill: rgba(59, 130, 246, 0.35);
+	--ifret-inlay-fill: rgba(255, 255, 255, 0.15);
+	--ifret-label-color: rgba(255, 255, 255, 0.55);
+	--ifret-nut-stroke: rgba(255, 255, 255, 0.9);
+	display: inline-block;
+	width: 100%;
+	max-width: 100%;
+}
+
+.ifret-root svg {
+	width: 100%;
+	height: auto;
+	display: block;
+	touch-action: none;
+	user-select: none;
+}
+
+.ifret-root--disabled {
+	opacity: 0.5;
+	pointer-events: none;
+}
+
+.ifret-hit-area {
+	cursor: pointer;
+	pointer-events: all;
+}
+
+.ifret-grid-fret {
+	stroke: var(--ifret-fret-color);
+}
+
+.ifret-grid-fret--nut {
+	stroke: var(--ifret-nut-stroke);
+	stroke-width: 3;
+}
+
+.ifret-grid-string {
+	stroke: var(--ifret-string-color);
+}
+
+.ifret-inlay {
+	fill: var(--ifret-inlay-fill);
+}
+
+.ifret-dot {
+	fill: var(--ifret-dot-fill);
+}
+
+.ifret-dot--muted {
+	fill: var(--ifret-dot-muted);
+}
+
+.ifret-dot-label {
+	fill: white;
+	font-size: 11px;
+	font-family: system-ui, sans-serif;
+}
+
+.ifret-hover {
+	fill: var(--ifret-hover-fill);
+	pointer-events: none;
+}
+
+.ifret-fret-label {
+	fill: var(--ifret-label-color);
+	font-size: 10px;
+	font-family: system-ui, sans-serif;
+}
+
+.ifret-tuning-label {
+	fill: var(--ifret-label-color);
+	font-size: 10px;
+	font-family: system-ui, sans-serif;
+}

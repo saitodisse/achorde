@@ -1,0 +1,89 @@
+{
+	"name": "@achorde/interactive-fretboard",
+	"private": false,
+	"version": "0.1.0",
+	"type": "module",
+	"description": "Responsive SVG interactive fretboard editor for fretted instruments (React)",
+	"keywords": [
+		"react",
+		"guitar",
+		"fretboard",
+		"chord",
+		"editor",
+		"svg",
+		"music",
+		"interactive"
+	],
+	"license": "MIT",
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/achorde/achorde.git",
+		"directory": "packages/interactive-fretboard"
+	},
+	"homepage": "https://github.com/achorde/achorde/tree/main/packages/interactive-fretboard#readme",
+	"bugs": {
+		"url": "https://github.com/achorde/achorde/issues"
+	},
+	"main": "./dist/index.js",
+	"module": "./dist/index.es.js",
+	"types": "./dist/index.d.ts",
+	"exports": {
+		".": {
+			"types": "./dist/index.d.ts",
+			"import": "./dist/index.es.js",
+			"require": "./dist/index.js"
+		},
+		"./style.css": "./dist/interactive-fretboard.css"
+	},
+	"files": [
+		"dist"
+	],
+	"publishConfig": {
+		"access": "public"
+	},
+	"scripts": {
+		"build": "tsc -p tsconfig.lib.json && vite build",
+		"lint": "eslint .",
+		"format": "prettier --write .",
+		"format:check": "prettier --check .",
+		"storybook": "storybook dev -p 6010",
+		"storybook:ci": "storybook dev -p 6010 --ci",
+		"build-storybook": "storybook build",
+		"test": "vitest",
+		"test:run": "vitest run"
+	},
+	"peerDependencies": {
+		"react": ">=18.0.0",
+		"react-dom": ">=18.0.0"
+	},
+	"dependencies": {
+		"@tonaljs/chord-detect": "^4.9.1",
+		"achorde-musical-domain": "workspace:*",
+		"tonal": "^6.4.2"
+	},
+	"devDependencies": {
+		"@eslint/js": "^9.38.0",
+		"@storybook/addon-a11y": "9.1.10",
+		"@storybook/addon-docs": "9.1.10",
+		"@storybook/react-vite": "9.1.10",
+		"@testing-library/jest-dom": "^6.9.1",
+		"@testing-library/react": "^16.3.0",
+		"@types/react": "^19.2.2",
+		"@types/react-dom": "^19.2.2",
+		"@vitejs/plugin-react": "^5.1.0",
+		"eslint": "^9.38.0",
+		"eslint-plugin-react-hooks": "^5.2.0",
+		"eslint-plugin-react-refresh": "^0.4.24",
+		"globals": "^16.4.0",
+		"jsdom": "^27.0.1",
+		"prettier": "^3.6.2",
+		"react": "^19.2.0",
+		"react-dom": "^19.2.0",
+		"storybook": "9.1.10",
+		"svguitar-react": "workspace:*",
+		"typescript": "~5.8.3",
+		"typescript-eslint": "^8.46.2",
+		"vite": "^7.1.12",
+		"vitest": "^3.2.4"
+	}
+}
