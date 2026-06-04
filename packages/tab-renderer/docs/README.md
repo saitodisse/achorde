@@ -31,3 +31,10 @@ Bootstrap docs (v0.1):
 | --------------------------------------------------------------------------------------- | --------------------------------------------------------------------------- |
 | [Plan — Decoration markers](./plans/2026-05-28-decoration-markers-parsed-tab-bridge.md) | `DecorationToken`, `prepareSongFromParsedTab`, interleaved marker rendering |
 | [CONTEXT.md](../CONTEXT.md)                                                             | Domain glossary (chord line, slash alteration, decoration vs extension)     |
+
+## Chord symbols and diagram miss (AC15 integration)
+
+| Document                                                                                                            | Description                                                           |
+| ------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------- |
+| [Plan — Chord symbols and diagrammable boundaries](./plans/2026-06-03-chord-symbols-and-diagrammable-boundaries.md) | `parseChordSymbol`, `chordsFound` contract                            |
+| [Plan — Chord symbol miss boundaries](./plans/2026-06-04-chord-symbol-miss-boundaries.md)                           | No API changes; `chordsFound` feeds viewer miss state (AC15 PRD 0016) |
