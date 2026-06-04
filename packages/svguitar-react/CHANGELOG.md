@@ -1,5 +1,11 @@
 # Changelog
 
+## 2.5.1 (2026-06-04)
+
+### Changed
+
+- Republish to fix npm registry read index (same API as 2.5.0).
+
 ## 2.5.0 (2026-06-04)
 
 ### Changed

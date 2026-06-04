@@ -2,6 +2,12 @@
 
 All notable changes to this project are documented in this file.
 
+## [0.8.1] - 2026-06-04
+
+### Changed
+
+- Republish to fix npm registry read index (same API as 0.8.0).
+
 ## [0.8.0] - 2026-06-04
 
 ### Changed

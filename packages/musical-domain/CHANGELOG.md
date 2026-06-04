@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.5.1 - 2026-06-04
+
+### Changed
+
+- Republish to fix npm registry read index after scoped rename (same API as 0.5.0).
+
 ## 0.5.0 - 2026-06-04
 
 ### Changed
