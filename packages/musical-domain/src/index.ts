@@ -8,6 +8,18 @@ export {
   spellingFromParsedChordSymbol,
   type ChordSpellingMetadata,
 } from "./chord-spelling.js";
+export { inferBarresFromFrettedVoicing } from "./fretted-barre-inference.js";
+export {
+  formatVoicingToFretNotation,
+  parseFretNotationToVoicing,
+  type ParseFretNotationInput,
+} from "./fret-notation-parse.js";
+export { applyVoicingEditorPipeline } from "./voicing-editor-pipeline.js";
+export {
+  GUITAR_STANDARD_EADGBE_OPEN_NOTES,
+  GUITAR_STANDARD_INSTRUMENT_ID,
+  GUITAR_STANDARD_TUNING_ID,
+} from "./guitar-standard-tuning.js";
 export type {
   ParseDiagnostic,
   ParseDiagnosticSeverity,

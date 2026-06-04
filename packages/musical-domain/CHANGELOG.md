@@ -1,5 +1,14 @@
 # Changelog
 
+## 0.4.0 - 2026-06-04
+
+### Added
+
+- `inferBarresFromFrettedVoicing` — headless barre inference aligned with svguitar `detectAutoBarre`.
+- `parseFretNotationToVoicing` and `formatVoicingToFretNotation` for 6-string guitar notation (low E first, e.g. `x32100`).
+- `applyVoicingEditorPipeline` convenience wrapper.
+- `GUITAR_STANDARD_EADGBE_OPEN_NOTES` tuning constants.
+
 ## 0.3.3 - 2026-06-03
 
 ### Added

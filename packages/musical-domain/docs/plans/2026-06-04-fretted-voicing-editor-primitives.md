@@ -1,6 +1,6 @@
 # Fretted voicing editor primitives (parse + barre inference)
 
-**Status:** planning  
+**Status:** implemented  
 **Date:** 2026-06-04  
 **Ecosystem plan (AC15):** [`ac15/docs/plans/2026-06-04-fallback-acorde-ausente-viewer.md`](../../../../ac15/docs/plans/2026-06-04-fallback-acorde-ausente-viewer.md)  
 **PRD (AC15):** [`ac15/docs/prd/0016-fallback-acorde-ausente-no-viewer.md`](../../../../ac15/docs/prd/0016-fallback-acorde-ausente-no-viewer.md)  
@@ -101,11 +101,11 @@ Convenience: `inferBarresFromFrettedVoicing` after parse or manual string grid e
 
 ## Tasks
 
-- [ ] **Task 1:** Implement `inferBarresFromFrettedVoicing` + tests (parity with svguitar unit cases).
-- [ ] **Task 2:** Implement `parseFretNotationToVoicing` + tests for common chords.
-- [ ] **Task 3:** Export from package index; update `docs/architecture.md`.
-- [ ] **Task 4:** `pnpm test:run` + changelog entry (English).
-- [ ] **Task 5:** AC15 bumps dependency (tracked in AC15 plan Task 13).
+- [x] **Task 1:** Implement `inferBarresFromFrettedVoicing` + tests (parity with svguitar unit cases).
+- [x] **Task 2:** Implement `parseFretNotationToVoicing` + tests for common chords.
+- [x] **Task 3:** Export from package index; update `docs/architecture.md`.
+- [x] **Task 4:** `pnpm test:run` + changelog entry (English).
+- [x] **Task 5:** AC15 bumps dependency (tracked in AC15 plan Task 13).
 
 ---
 
