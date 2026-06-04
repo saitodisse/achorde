@@ -33,7 +33,7 @@ export default defineConfig({
 				},
 			},
 		},
-		emptyOutDir: true,
+		emptyOutDir: false,
 	},
 	test: {
 		environment: "jsdom",

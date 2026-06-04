@@ -2,6 +2,12 @@
 
 All notable changes to `@achorde/interactive-fretboard` are documented in this file.
 
+## [0.1.7] - 2026-06-04
+
+### Fixed
+
+- Published tarball now includes `dist/index.d.ts` (Vite `emptyOutDir` no longer wipes declarations emitted by `tsc`).
+
 ## [0.1.6] - 2026-06-04
 
 ### Fixed
