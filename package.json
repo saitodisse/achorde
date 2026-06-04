@@ -9,8 +9,8 @@
     "test": "turbo run test",
     "typecheck": "turbo run typecheck",
     "lint": "turbo run lint",
-    "storybook:tab-renderer": "pnpm --filter tab-renderer storybook",
-    "storybook:svguitar": "pnpm --filter svguitar-react storybook",
+    "storybook:tab-renderer": "pnpm --filter @achorde/tab-renderer storybook",
+    "storybook:svguitar": "pnpm --filter @achorde/svguitar-react storybook",
     "storybook:interactive-fretboard": "pnpm --filter @achorde/interactive-fretboard storybook"
   },
   "devDependencies": {
