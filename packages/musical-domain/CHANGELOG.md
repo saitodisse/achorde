@@ -1,5 +1,18 @@
 # Changelog
 
+## 0.3.3 - 2026-06-03
+
+### Added
+
+- `compareFrettedVoicings` and `selectPreferredFrettedVoicing` for ranking playable shapes.
+- `ChordSpellingMetadata` and `spellingFromParsedChordSymbol` for catalog spelling fields (distinct from `VoicingQuality`).
+
+## 0.3.2 - 2026-06-03
+
+### Added
+
+- `normalizeChordSymbolLabel` for chord label lookup equality (unicode accidentals, NFKC; case preserved).
+
 ## 0.3.1 - 2026-05-28
 
 ### Added

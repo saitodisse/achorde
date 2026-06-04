@@ -1,5 +1,15 @@
 # Migration
 
+## Chord lookup helpers (0.3.2+)
+
+| Former local helper (e.g. AC15 `@ac15/domain`) | Import from `achorde-musical-domain` |
+| ---------------------------------------------- | ------------------------------------ |
+| `normalizeChordLookupLabel`                    | `normalizeChordSymbolLabel`          |
+| `selectPreferredVoicing`                       | `selectPreferredFrettedVoicing`      |
+| `compareVoicings` (internal)                   | `compareFrettedVoicings`             |
+
+`ChordSpellingMetadata.chordQuality` is the musical suffix (e.g. `maj7`, `aug9`), not `VoicingQuality` on `FrettedInstrumentVoicing`.
+
 ## Recommended Order
 
 1. Add `achorde-musical-domain` as a dependency.

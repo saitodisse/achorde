@@ -9,6 +9,9 @@
 - textual tab AST contracts (`ParsedTab` — four strict line kinds; `ParsedTabTokenKind` includes `DecorationToken` since 0.3.1)
 - legacy chord-chart AST contracts with sections, lines, and segments (`ChordChartAst`, deprecated)
 - fretted-instrument voicing contracts
+- chord label lookup normalization (`normalizeChordSymbolLabel`)
+- fretted voicing ranking helpers (`compareFrettedVoicings`, `selectPreferredFrettedVoicing`)
+- chord spelling metadata (`ChordSpellingMetadata`, `spellingFromParsedChordSymbol`)
 - an explicit port for external music-theory adapters
 
 ## Excluded Scope

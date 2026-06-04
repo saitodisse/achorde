@@ -1,5 +1,17 @@
 export { ACHORDE_MUSICAL_DOMAIN_CONTRACT_VERSION } from "./versions.js";
-export type { ParseDiagnostic, ParseDiagnosticSeverity } from "./diagnostics.js";
+export { normalizeChordSymbolLabel } from "./chord-label.js";
+export {
+  compareFrettedVoicings,
+  selectPreferredFrettedVoicing,
+} from "./fretted-voicing-selection.js";
+export {
+  spellingFromParsedChordSymbol,
+  type ChordSpellingMetadata,
+} from "./chord-spelling.js";
+export type {
+  ParseDiagnostic,
+  ParseDiagnosticSeverity,
+} from "./diagnostics.js";
 export type { ParsedChordSymbol } from "./chord-symbol.js";
 export type {
   ParsedTab,
