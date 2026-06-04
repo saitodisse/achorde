@@ -2,6 +2,12 @@
 
 All notable changes to `@achorde/interactive-fretboard` are documented in this file.
 
+## [0.1.1] - 2026-06-04
+
+### Changed
+
+- Workspace dependencies use `@achorde/musical-domain` and `@achorde/svguitar-react` scoped names.
+
 ## [0.1.0] - 2026-06-04
 
 ### Added

@@ -1,5 +1,5 @@
 import type { CSSProperties } from "react";
-import type { FrettedInstrumentVoicing } from "achorde-musical-domain";
+import type { FrettedInstrumentVoicing } from "@achorde/musical-domain";
 import type { FretboardHandedness, FretboardOrientation } from "../../layout/types.js";
 import type { InteractiveFretboardChangeDetails } from "../../adapters/applyChangePipeline.js";
 

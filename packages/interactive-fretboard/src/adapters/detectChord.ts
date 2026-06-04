@@ -1,5 +1,5 @@
 import { detect } from "@tonaljs/chord-detect";
-import type { FrettedInstrumentVoicing } from "achorde-musical-domain";
+import type { FrettedInstrumentVoicing } from "@achorde/musical-domain";
 import { noteAtFret } from "../utils/noteAtFret.js";
 
 export function pressedNotesFromVoicing(

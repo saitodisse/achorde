@@ -23,13 +23,13 @@ export default defineConfig({
 			formats: ["es", "cjs"],
 		},
 		rollupOptions: {
-			external: ["react", "react-dom", "react/jsx-runtime", "achorde-musical-domain"],
+			external: ["react", "react-dom", "react/jsx-runtime", "@achorde/musical-domain"],
 			output: {
 				globals: {
 					react: "React",
 					"react-dom": "ReactDOM",
 					"react/jsx-runtime": "jsxRuntime",
-					"achorde-musical-domain": "AchordeMusicalDomain",
+					"@achorde/musical-domain": "AchordeMusicalDomain",
 				},
 			},
 		},

@@ -2,7 +2,7 @@ import {
 	formatVoicingToFretNotation,
 	inferBarresFromFrettedVoicing,
 	type FrettedInstrumentVoicing,
-} from "achorde-musical-domain";
+} from "@achorde/musical-domain";
 import { applyTapToEditorState } from "./applyTap.js";
 import { detectChordFromVoicing, pressedNotesFromVoicing } from "./detectChord.js";
 import {

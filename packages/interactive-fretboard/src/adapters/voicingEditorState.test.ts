@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { parseFretNotationToVoicing } from "achorde-musical-domain";
+import { parseFretNotationToVoicing } from "@achorde/musical-domain";
 import { editorStateToVoicing, voicingToEditorState } from "./voicingEditorState.js";
 
 describe("voicing round-trip", () => {

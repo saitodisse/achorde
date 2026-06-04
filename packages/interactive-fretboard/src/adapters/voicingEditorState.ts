@@ -1,4 +1,4 @@
-import type { FrettedInstrumentString, FrettedInstrumentVoicing } from "achorde-musical-domain";
+import type { FrettedInstrumentString, FrettedInstrumentVoicing } from "@achorde/musical-domain";
 
 export type FretEditorCellState = "empty" | "open" | "muted" | "fretted";
 

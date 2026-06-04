@@ -13,14 +13,14 @@ Responsive SVG **interactive fretboard** editor for React. Build chord fingering
 ## Install
 
 ```bash
-npm install @achorde/interactive-fretboard achorde-musical-domain react react-dom
+npm install @achorde/interactive-fretboard @achorde/musical-domain react react-dom
 ```
 
 ## Quick usage
 
 ```tsx
 import { InteractiveFretboard } from "@achorde/interactive-fretboard";
-import { parseFretNotationToVoicing } from "achorde-musical-domain";
+import { parseFretNotationToVoicing } from "@achorde/musical-domain";
 
 const voicing = parseFretNotationToVoicing({
 	fretNotation: "x32010",
@@ -67,8 +67,8 @@ CI should use a restricted `NPM_TOKEN` with publish access to `@achorde/*` only.
 
 | Package                                        | Role                                                                             |
 | ---------------------------------------------- | -------------------------------------------------------------------------------- |
-| [`achorde-musical-domain`](../musical-domain/) | Voicing contracts, `parseFretNotationToVoicing`, `inferBarresFromFrettedVoicing` |
-| [`svguitar-react`](../svguitar-react/)         | Compact **chord diagram** renderer (not the interactive neck editor)             |
+| [`@achorde/musical-domain`](../musical-domain/) | Voicing contracts, `parseFretNotationToVoicing`, `inferBarresFromFrettedVoicing` |
+| [`@achorde/svguitar-react`](../svguitar-react/)         | Compact **chord diagram** renderer (not the interactive neck editor)             |
 
 ## Documentation
 

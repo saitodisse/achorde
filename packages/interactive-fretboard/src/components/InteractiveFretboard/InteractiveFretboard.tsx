@@ -8,7 +8,7 @@ import {
 	useState,
 	type PointerEvent as ReactPointerEvent,
 } from "react";
-import { parseFretNotationToVoicing, type FrettedInstrumentVoicing } from "achorde-musical-domain";
+import { parseFretNotationToVoicing, type FrettedInstrumentVoicing } from "@achorde/musical-domain";
 import { applyChangePipeline, voicingToEditorState } from "../../adapters/applyChangePipeline.js";
 import { buildHitAreas } from "../../interaction/buildHitAreas.js";
 import { hitTestFretCell } from "../../interaction/hitTestFretCell.js";

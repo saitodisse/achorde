@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/react";
-import { parseFretNotationToVoicing } from "achorde-musical-domain";
-import { ChordDiagram } from "svguitar-react";
+import { parseFretNotationToVoicing } from "@achorde/musical-domain";
+import { ChordDiagram } from "@achorde/svguitar-react";
 import { InteractiveFretboard } from "../components/InteractiveFretboard/InteractiveFretboard.js";
 
 const voicing =

@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/react";
 import { useState } from "react";
-import { parseFretNotationToVoicing, type FrettedInstrumentVoicing } from "achorde-musical-domain";
+import { parseFretNotationToVoicing, type FrettedInstrumentVoicing } from "@achorde/musical-domain";
 import { InteractiveFretboard } from "../components/InteractiveFretboard/InteractiveFretboard.js";
 import type { InteractiveFretboardChangeDetails } from "../adapters/applyChangePipeline.js";
 

@@ -1,7 +1,7 @@
 {
 	"name": "@achorde/interactive-fretboard",
 	"private": false,
-	"version": "0.1.0",
+	"version": "0.1.1",
 	"type": "module",
 	"description": "Responsive SVG interactive fretboard editor for fretted instruments (React)",
 	"keywords": [
@@ -58,7 +58,7 @@
 	},
 	"dependencies": {
 		"@tonaljs/chord-detect": "^4.9.1",
-		"achorde-musical-domain": "workspace:*",
+		"@achorde/musical-domain": "workspace:*",
 		"tonal": "^6.4.2"
 	},
 	"devDependencies": {
@@ -80,7 +80,7 @@
 		"react": "^19.2.0",
 		"react-dom": "^19.2.0",
 		"storybook": "9.1.10",
-		"svguitar-react": "workspace:*",
+		"@achorde/svguitar-react": "workspace:*",
 		"typescript": "~5.8.3",
 		"typescript-eslint": "^8.46.2",
 		"vite": "^7.1.12",
