@@ -1,11 +1,11 @@
 # Quickstart: @achorde/interactive-fretboard
 
-> Implementation pending — API stable per contracts.
+**npm `latest`:** `0.1.1` — requires `@achorde/musical-domain@^0.5.1` and React 18+.
 
 ## Install
 
 ```bash
-pnpm add @achorde/interactive-fretboard achorde-musical-domain react react-dom
+pnpm add @achorde/interactive-fretboard @achorde/musical-domain react react-dom
 ```
 
 ## Controlled voicing (canonical)
@@ -16,7 +16,8 @@ import {
   InteractiveFretboard,
   type InteractiveFretboardChangeDetails,
 } from "@achorde/interactive-fretboard";
-import type { FrettedInstrumentVoicing } from "achorde-musical-domain";
+import type { FrettedInstrumentVoicing } from "@achorde/musical-domain";
+import "@achorde/interactive-fretboard/style.css";
 
 export function ChordEditor() {
   const [voicing, setVoicing] =
@@ -76,10 +77,19 @@ export function ChordEditor() {
 ## Pair with chord diagram (AC15 pattern)
 
 ```tsx
-import { ChordDiagram } from "@ac15/ui"; // or svguitar-react directly
+import { ChordDiagram, InteractiveFretboard } from "@ac15/ui";
 
 <InteractiveFretboard value={voicing} onChange={...} />
 <ChordDiagram voicing={voicing} />
+```
+
+## Local validation
+
+```bash
+cd packages/interactive-fretboard
+pnpm test:run
+pnpm build
+pnpm storybook   # port 6010
 ```
 
 ## Responsive container

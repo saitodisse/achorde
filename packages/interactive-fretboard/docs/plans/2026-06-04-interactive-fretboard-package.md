@@ -13,8 +13,8 @@ Ship the open-source interactive fretboard editor as the fourth published achord
 
 | Package                  | Relationship                          |
 | ------------------------ | ------------------------------------- |
-| `achorde-musical-domain` | Voicing types, parse, barre inference |
-| `svguitar-react`         | None (diagram preview stays separate) |
+| `@achorde/musical-domain@^0.5.1` | Voicing types, parse, barre inference |
+| `@achorde/svguitar-react`         | None (diagram preview stays separate; Storybook dev only) |
 | `ac15`                   | Consumer via `@ac15/ui`               |
 
 ## npm organization
@@ -22,7 +22,7 @@ Ship the open-source interactive fretboard editor as the fourth published achord
 1. npm org **`@achorde`** — [package settings](https://www.npmjs.com/settings/achorde/packages) (created).
 2. Add maintainers and publish token to CI.
 3. First publish: `@achorde/interactive-fretboard@0.1.0`.
-4. Document unscoped legacy packages remain as-is (`svguitar-react`, etc.).
+4. Document unscoped legacy packages remain on npm; new releases use `@achorde/*` (`musical-domain@0.5.1`, `interactive-fretboard@0.1.1`, etc.).
 
 ## Execution order
 

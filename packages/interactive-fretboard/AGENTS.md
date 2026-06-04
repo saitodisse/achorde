@@ -8,12 +8,12 @@ Publishable React library for **pointer-based fretboard editing**. Owns SVG layo
 
 | In scope                                                | Out of scope                      |
 | ------------------------------------------------------- | --------------------------------- |
-| `InteractiveFretboard` component                        | `ChordDiagram` / `svguitar-react` |
+| `InteractiveFretboard` component                        | `ChordDiagram` / `@achorde/svguitar-react` |
 | `screenToSvgPoint`, `hitTestFretCell`, `FretboardFrame` | Dexie, sync, `ChordIdentity`      |
 | Adapters: voicing ↔ editor state, fretNotation helpers  | Tab parse, `parseChordSymbol`     |
 | Storybook demos for OSS embeds                          | AC15 product copy / i18n          |
 
-**Contracts:** `achorde-musical-domain` for `FrettedInstrumentVoicing` and headless parse/barre pipeline.
+**Contracts:** `@achorde/musical-domain@^0.5.1` for `FrettedInstrumentVoicing` and headless parse/barre pipeline.
 
 ## Commands
 
@@ -30,7 +30,7 @@ Use **pnpm** only. Read `specs/001-interactive-fretboard/` before behavior chang
 
 - Public docs, changelog, comments, and commits: **English**.
 - Hit-testing must use **viewBox logical coordinates**, never `getBoundingClientRect` on rendered lines as the source of truth.
-- Canonical string indices: **1 = high E, 6 = low E** (`achorde-musical-domain`); view modes only change **visual axis order**.
+- Canonical string indices: **1 = high E, 6 = low E** (`@achorde/musical-domain`); view modes only change **visual axis order**.
 
 ## Downstream
 

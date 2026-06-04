@@ -2,6 +2,12 @@
 
 All notable changes to `@achorde/interactive-fretboard` are documented in this file.
 
+## [0.1.2] - 2026-06-04
+
+### Fixed
+
+- Library build externals: published bundle now imports `@achorde/musical-domain` (not legacy `achorde-musical-domain`).
+
 ## [0.1.1] - 2026-06-04
 
 ### Changed
