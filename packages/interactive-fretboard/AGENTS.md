@@ -13,7 +13,7 @@ Publishable React library for **pointer-based fretboard editing**. Owns SVG layo
 | Adapters: voicing ↔ editor state, fretNotation helpers  | Tab parse, `parseChordSymbol`              |
 | Storybook demos for OSS embeds                          | AC15 product copy / i18n                   |
 
-**Contracts:** `@achorde/musical-domain@^0.5.1` for `FrettedInstrumentVoicing` and headless parse/barre pipeline.
+**Contracts:** `@achorde/musical-domain@^0.5.2` for `FrettedInstrumentVoicing` and headless parse/barre pipeline.
 
 ## Commands
 

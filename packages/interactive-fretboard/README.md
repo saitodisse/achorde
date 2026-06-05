@@ -1,12 +1,12 @@
 # @achorde/interactive-fretboard
 
-**npm `latest`:** `0.1.2` — [package page](https://www.npmjs.com/package/@achorde/interactive-fretboard)
+**npm `latest`:** `0.1.8` — [package page](https://www.npmjs.com/package/@achorde/interactive-fretboard)
 
 Responsive SVG **interactive fretboard** editor for React. Build chord fingerings by pointer (mouse, touch, pen) on a full neck view—suitable for chord apps, education sites, and video embeds.
 
 ## Features
 
-- Controlled **`FrettedInstrumentVoicing`** value (from `@achorde/musical-domain@^0.5.1`) with optional **`fretNotation`** convenience mode
+- Controlled **`FrettedInstrumentVoicing`** value (from `@achorde/musical-domain@^0.5.2`) with optional **`fretNotation`** convenience mode
 - Four **view modes**: horizontal / vertical × right-handed / left-handed (inverted string axis)
 - Robust hit-testing: fixed **`viewBox`**, `DOMPoint` + `getScreenCTM().inverse()`, pure geometry + invisible hit areas
 - Optional chord detection on change (`tonal` + `@tonaljs/chord-detect`)

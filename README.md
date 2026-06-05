@@ -30,10 +30,10 @@ pnpm typecheck
 
 | Package                          | npm `latest` |
 | -------------------------------- | ------------ |
-| `@achorde/musical-domain`        | `0.5.1`      |
+| `@achorde/musical-domain`        | `0.5.2`      |
 | `@achorde/tab-renderer`          | `0.8.1`      |
-| `@achorde/svguitar-react`        | `2.5.1`      |
-| `@achorde/interactive-fretboard` | `0.1.7`      |
+| `@achorde/svguitar-react`        | `2.5.2`      |
+| `@achorde/interactive-fretboard` | `0.1.8`      |
 
 ## Install (consumers)
 
