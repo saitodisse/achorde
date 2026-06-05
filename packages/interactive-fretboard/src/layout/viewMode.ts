@@ -20,7 +20,7 @@ export function resolveViewMode(
 				: "vertical-left";
 
 	const defaultViewBox =
-		orientation === "horizontal" ? { width: 1100, height: 250 } : { width: 400, height: 900 };
+		orientation === "horizontal" ? { width: 1100, height: 250 } : { width: 400, height: 420 };
 
 	return { ...viewMode, id, defaultViewBox };
 }
@@ -46,4 +46,9 @@ export function createVisualToStringIndex(
 		return (visual) => stringCount - visual;
 	}
 	return (visual) => visual + 1;
+}
+
+/** Vertical viewBox height scaled to fret count (fits ~5 frets within a typical viewport). */
+export function defaultVerticalViewBoxHeight(fretCount: number, nutInset = 0): number {
+	return Math.round(72 + fretCount * 62 + nutInset);
 }

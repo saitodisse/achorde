@@ -2,6 +2,17 @@
 
 All notable changes to `@achorde/interactive-fretboard` are documented in this file.
 
+## [0.1.8] - 2026-06-04
+
+### Changed
+
+- Vertical default viewBox height scales with `fretCount` (`defaultVerticalViewBoxHeight`); compact default for typical 5-fret editors.
+- Storybook: shared `fretboardStoryHelpers`, `partitionStoryArgs`, and `WithChordDiagram` controls refactor.
+
+### Added
+
+- Handedness layout tests (`viewMode.handedness.test.ts`).
+
 ## [0.1.7] - 2026-06-04
 
 ### Fixed

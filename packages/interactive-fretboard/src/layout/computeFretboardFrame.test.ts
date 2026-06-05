@@ -44,6 +44,18 @@ describe("computeFretboardFrame", () => {
 		expect(inset.frets[0]!.x1).toBe(base.frets[0]!.x1 + 40);
 	});
 
+	it("uses a compact vertical viewBox height from fret count", () => {
+		const frame = computeFretboardFrame({
+			viewMode: { orientation: "vertical", handedness: "right" },
+			fretCount: 5,
+			stringCount: 6,
+			viewBoxWidth: 400,
+			padding: 24,
+		});
+		expect(frame.viewBox.height).toBeLessThan(500);
+		expect(frame.viewBox.height).toBeGreaterThan(300);
+	});
+
 	it("keeps fret 0 hit region at the nut, not over the first fret space", () => {
 		const frame = computeFretboardFrame(frameDefaults);
 		const nutX = frame.frets[0]!.x1;

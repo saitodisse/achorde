@@ -259,6 +259,24 @@ describe("shouldApplyAutoBarre", () => {
 		expect(result).toBe(false);
 	});
 
+	it("should return false when voicing includes barres", () => {
+		const props = {
+			autoBarreEnabled: true,
+			voicing: {
+				id: "v",
+				instrumentId: "guitar",
+				tuningId: "guitar-standard-eadgbe",
+				chordSymbol: "C",
+				source: "manual" as const,
+				quality: "unknown" as const,
+				strings: [],
+				barres: [{ fret: 3, fromStringIndex: 1, toStringIndex: 3 }],
+			},
+		} satisfies Partial<ChordDiagramProps>;
+
+		expect(shouldApplyAutoBarre(props as ChordDiagramProps)).toBe(false);
+	});
+
 	it("should return false when both autoBarreEnabled is false AND manual barres exist", () => {
 		const props: Partial<ChordDiagramProps> = {
 			autoBarreEnabled: false,

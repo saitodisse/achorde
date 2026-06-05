@@ -5,7 +5,7 @@
  */
 
 import { Note } from "tonal";
-import type { FrettedInstrumentVoicing } from "@achorde/musical-domain";
+import { formatVoicingToFretNotation, type FrettedInstrumentVoicing } from "@achorde/musical-domain";
 import type { Chord, Finger, Barre, Instrument, ViewId } from "./types";
 import { ChordDiagramError, ERROR_CODES } from "./types";
 import { DEFAULT_CHORD_STYLE, DEFAULT_INSTRUMENT, VALID_FRET_CHARS, DEFAULT_VIEW } from "./constants";
@@ -284,12 +284,38 @@ export function mergeInstrument(customInstrument?: Partial<Instrument>): Instrum
 	return merged;
 }
 
+/**
+ * Maps `achorde-musical-domain` stringIndex (1 = high E … 6 = low E) to the
+ * diagram string axis used by layout engines (1 = low E at bottom / left in
+ * default views).
+ */
+export function voicingStringToDiagramString(stringIndex: number, stringCount: number): number {
+	return stringCount + 1 - stringIndex;
+}
+
+/** Open-string labels ordered for diagram string numbers 1…n (1 = low E in default views). */
+export function voicingToDiagramTuning(voicing: FrettedInstrumentVoicing): string[] {
+	const stringCount = voicing.strings.length;
+	const tuning = new Array<string>(stringCount);
+
+	for (const string of voicing.strings) {
+		const diagramString = voicingStringToDiagramString(string.stringIndex, stringCount);
+		tuning[diagramString - 1] = string.openNote;
+	}
+
+	return tuning;
+}
+
 export function voicingToChord(voicing: FrettedInstrumentVoicing): Chord {
-	const fingers: Finger[] = voicing.strings.map((string) => {
+	const stringCount = voicing.strings.length;
+
+	const fingers: Finger[] = voicing.strings.map(string => {
+		const diagramString = voicingStringToDiagramString(string.stringIndex, stringCount);
+
 		if (string.state === "fretted") {
 			return {
 				fret: string.fret ?? 0,
-				string: string.stringIndex,
+				string: diagramString,
 				is_muted: false,
 				text: string.finger !== undefined ? String(string.finger) : undefined,
 			};
@@ -297,17 +323,22 @@ export function voicingToChord(voicing: FrettedInstrumentVoicing): Chord {
 
 		return {
 			fret: 0,
-			string: string.stringIndex,
+			string: diagramString,
 			is_muted: string.state === "muted",
 		};
 	});
 
-	const barres: Barre[] = (voicing.barres ?? []).map((barre) => ({
-		fret: barre.fret,
-		fromString: barre.fromStringIndex,
-		toString: barre.toStringIndex,
-		text: barre.finger !== undefined ? String(barre.finger) : undefined,
-	}));
+	const barres: Barre[] = (voicing.barres ?? []).map(barre => {
+		const fromString = voicingStringToDiagramString(barre.fromStringIndex, stringCount);
+		const toString = voicingStringToDiagramString(barre.toStringIndex, stringCount);
+
+		return {
+			fret: barre.fret,
+			fromString: Math.min(fromString, toString),
+			toString: Math.max(fromString, toString),
+			text: barre.finger !== undefined ? String(barre.finger) : undefined,
+		};
+	});
 
 	return {
 		fingers,
@@ -318,19 +349,10 @@ export function voicingToChord(voicing: FrettedInstrumentVoicing): Chord {
 }
 
 export function voicingToInstrument(voicing: FrettedInstrumentVoicing): Instrument {
-	const chordNotation = voicing.strings
-		.map((string) => {
-			if (string.state === "muted") return "x";
-			if (string.state === "open" || string.fret === 0) return "0";
-			if (string.fret === null || string.fret === undefined) return "x";
-			return string.fret > 9 ? `(${string.fret})` : String(string.fret);
-		})
-		.join("");
-
 	return mergeInstrument({
 		strings: voicing.strings.length,
-		tuning: voicing.strings.map((string) => string.openNote),
-		chord: chordNotation,
+		tuning: voicingToDiagramTuning(voicing),
+		chord: formatVoicingToFretNotation(voicing),
 		frets: voicing.baseFret ?? DEFAULT_INSTRUMENT.frets,
 	});
 }
@@ -440,8 +462,8 @@ export function processChordData(props: {
 	if (props.voicing) {
 		const chord = voicingToChord(props.voicing);
 		const stringCount = props.voicing.strings.length;
-		chord.fingers.forEach((finger) => validateFinger(finger, stringCount));
-		chord.barres.forEach((barre) => validateBarre(barre, stringCount));
+		chord.fingers.forEach(finger => validateFinger(finger, stringCount));
+		chord.barres.forEach(barre => validateBarre(barre, stringCount));
 		return chord;
 	}
 

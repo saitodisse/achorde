@@ -1,5 +1,16 @@
 # Changelog
 
+## 2.5.2 (2026-06-04)
+
+### Fixed
+
+- `voicingToChord` maps `achorde-musical-domain` string indices (1 = high E) to diagram string axes (1 = low E in default views); tuning order follows the same convention.
+- Auto-barre detection aligned with updated domain barre inference.
+
+### Added
+
+- `voicingStringToDiagramString`, `voicingToDiagramTuning` helpers; `voicingToChord` regression tests.
+
 ## 2.5.1 (2026-06-04)
 
 ### Changed

@@ -81,7 +81,10 @@ export const InteractiveFretboard = forwardRef<SVGSVGElement, InteractiveFretboa
 			if (!value) {
 				return "empty";
 			}
-			return `voicing:${value.strings.map((s) => `${s.stringIndex}${s.state}${s.fret ?? ""}`).join(",")}`;
+			const barreKey = (value.barres ?? [])
+				.map((b) => `${b.fret}:${b.fromStringIndex}-${b.toStringIndex}`)
+				.join("|");
+			return `voicing:${value.strings.map((s) => `${s.stringIndex}${s.state}${s.fret ?? ""}`).join(",")};b=${barreKey}`;
 		}, [valueMode, props.fretNotation, props.chordSymbol, props.value]);
 
 		const baseVoicing = useMemo(() => resolveVoicing(props), [voicingKey]);

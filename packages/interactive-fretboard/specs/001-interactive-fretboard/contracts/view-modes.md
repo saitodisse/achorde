@@ -23,12 +23,12 @@ export type FretboardViewMode = {
 
 | stringIndex | Open note (standard tuning) |
 | ----------- | --------------------------- |
-| 1           | E2 (low)                    |
-| 2           | A2                          |
-| 3           | D3                          |
-| 4           | G3                          |
-| 5           | B3                          |
-| 6           | E4 (high)                   |
+| 1           | E4 (high)                   |
+| 2           | B3                          |
+| 3           | G3                          |
+| 4           | D3                          |
+| 5           | A2                          |
+| 6           | E2 (low)                    |
 
 Persisted `FrettedInstrumentVoicing.strings[].stringIndex` always uses this table.
 
@@ -37,18 +37,18 @@ Persisted `FrettedInstrumentVoicing.strings[].stringIndex` always uses this tabl
 ### Horizontal + right-handed (default)
 
 - Frets increase along **+X** (left = nut, right = higher frets).
-- **High string (6)** at top visual row (−Y), **low string (1)** at bottom (+Y).
+- **High string (1)** at top visual row (−Y), **low string (6)** at bottom (+Y).
 - Matches AC12 edit-page mental model for right-handed players.
 
 ### Horizontal + left-handed
 
 - Same fret axis as horizontal-right.
-- **Mirror string axis**: low string (1) at top, high string (6) at bottom (or equivalent inversion documented in tests).
+- **Mirror string axis**: low string (6) at top, high string (1) at bottom (documented in tests).
 
 ### Vertical + right-handed
 
 - Frets increase along **+Y** (nut at top).
-- Strings spaced along **X**; low string (1) on the player’s left side of the diagram (screen −X).
+- Strings spaced along **X**; low string (6) on the player’s left side of the diagram (screen −X).
 
 ### Vertical + left-handed
 

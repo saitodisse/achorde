@@ -52,20 +52,17 @@ function detectBarreFromVoicing(
   };
 }
 
+/**
+ * Recomputes `barres` from current string states (does not keep stale inferred barres).
+ * When the pressed-string threshold is not met, returns an empty `barres` array.
+ */
 export function inferBarresFromFrettedVoicing(
   voicing: FrettedInstrumentVoicing,
 ): FrettedInstrumentVoicing {
-  if (voicing.barres && voicing.barres.length > 0) {
-    return voicing;
-  }
-
   const barre = detectBarreFromVoicing(voicing);
-  if (!barre) {
-    return { ...voicing, barres: [] };
-  }
 
   return {
     ...voicing,
-    barres: [barre],
+    barres: barre ? [barre] : [],
   };
 }

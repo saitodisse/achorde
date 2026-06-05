@@ -47,7 +47,26 @@ describe("inferBarresFromFrettedVoicing", () => {
     ]);
   });
 
-  it("keeps existing manual barres unchanged", () => {
+  it("clears stale barres when pressed strings drop to four or fewer", () => {
+    const voicing = createVoicing([
+      { stringIndex: 1, openNote: "E", fret: 3, state: "fretted" },
+      { stringIndex: 2, openNote: "B", fret: 3, state: "fretted" },
+      { stringIndex: 3, openNote: "G", fret: 3, state: "fretted" },
+      { stringIndex: 4, openNote: "D", fret: 2, state: "fretted" },
+      { stringIndex: 5, openNote: "A", fret: null, state: "muted" },
+      { stringIndex: 6, openNote: "E", fret: null, state: "muted" },
+    ]);
+
+    const withStaleBarre = {
+      ...voicing,
+      barres: [{ fret: 3, fromStringIndex: 1, toStringIndex: 5 }],
+    };
+
+    const result = inferBarresFromFrettedVoicing(withStaleBarre);
+    expect(result.barres).toEqual([]);
+  });
+
+  it("recomputes barres that still match the current finger pattern", () => {
     const voicing = createVoicing([
       { stringIndex: 1, openNote: "E", fret: 1, state: "fretted" },
       { stringIndex: 2, openNote: "A", fret: 1, state: "fretted" },
@@ -63,6 +82,8 @@ describe("inferBarresFromFrettedVoicing", () => {
     };
 
     const result = inferBarresFromFrettedVoicing(withManualBarre);
-    expect(result.barres).toEqual(withManualBarre.barres);
+    expect(result.barres).toEqual([
+      { fret: 1, fromStringIndex: 1, toStringIndex: 6 },
+    ]);
   });
 });

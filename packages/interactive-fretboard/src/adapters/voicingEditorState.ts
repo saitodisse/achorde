@@ -87,5 +87,7 @@ export function editorStateToVoicing(
 	return {
 		...base,
 		strings,
+		// Barres are recomputed in applyChangePipeline (never carried over from base).
+		barres: undefined,
 	};
 }

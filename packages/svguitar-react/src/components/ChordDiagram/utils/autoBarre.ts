@@ -7,7 +7,7 @@
  * a barre should be placed based on finger distribution across frets.
  */
 
-import type { Barre, Finger, ChordDiagramProps } from "../types";
+import type { Barre, Finger, ChordDiagramProps, Chord } from "../types";
 
 /**
  * Detects automatically if a barre should be added based on pressed fingers.
@@ -152,14 +152,17 @@ export function removeFingersCoveredByBarre(fingers: Finger[], barre: Barre): Fi
  * }); // false
  * ```
  */
-export function shouldApplyAutoBarre(props: ChordDiagramProps): boolean {
+export function shouldApplyAutoBarre(props: ChordDiagramProps, chord?: Chord): boolean {
 	// Check if auto barre is explicitly disabled
 	if (props.autoBarreEnabled === false) {
 		return false;
 	}
 
-	// Check if there are manual barres (manual barres have precedence)
-	const hasManualBarres = props.barres && props.barres.length > 0;
+	// Manual / voicing barres have precedence (including barres from voicingToChord)
+	const hasManualBarres =
+		(props.barres && props.barres.length > 0) ||
+		(props.voicing?.barres && props.voicing.barres.length > 0) ||
+		(chord?.barres && chord.barres.length > 0);
 	if (hasManualBarres) {
 		return false;
 	}

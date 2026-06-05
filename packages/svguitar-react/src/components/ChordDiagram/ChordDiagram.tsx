@@ -181,7 +181,7 @@ export const ChordDiagram: React.FC<ChordDiagramProps> = props => {
 
 	// Apply auto barre detection if enabled
 	let effectiveChord = chordData;
-	if (shouldApplyAutoBarre(props)) {
+	if (shouldApplyAutoBarre(props, chordData)) {
 		const autoBarre = detectAutoBarre(chordData.fingers);
 		if (autoBarre) {
 			// Add auto barre and remove covered fingers
@@ -196,8 +196,10 @@ export const ChordDiagram: React.FC<ChordDiagramProps> = props => {
 	// Merge custom styles with defaults
 	const style = React.useMemo(() => mergeStyles(styleProps), [styleProps]);
 
-	// Get instrument data for tuning labels
-	const instrumentData = mergeInstrument({ strings, frets, tuning, chord: fretNotation });
+	// Get instrument data for tuning labels (voicing uses diagram string order + domain fret notation)
+	const instrumentData = voicing
+		? voicingToInstrument(voicing)
+		: mergeInstrument({ strings, frets, tuning, chord: fretNotation });
 
 	// Apply auto firstFret calculation if enabled
 	let effectiveFirstFret = chordData.firstFret || 1;

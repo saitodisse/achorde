@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.5.2 - 2026-06-04
+
+### Changed
+
+- `inferBarresFromFrettedVoicing` always recomputes barres from current string states instead of preserving stale inferred barres when the pressed-string threshold is not met.
+
 ## 0.5.1 - 2026-06-04
 
 ### Changed

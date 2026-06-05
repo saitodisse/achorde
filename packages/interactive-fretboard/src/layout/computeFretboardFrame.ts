@@ -1,4 +1,8 @@
-import { createVisualToStringIndex, resolveViewMode } from "./viewMode.js";
+import {
+	createVisualToStringIndex,
+	defaultVerticalViewBoxHeight,
+	resolveViewMode,
+} from "./viewMode.js";
 import type { ComputeFretboardFrameInput, FretboardFrame } from "./types.js";
 
 function expandRect(
@@ -47,7 +51,11 @@ export function computeFretboardFrame(input: ComputeFretboardFrameInput): Fretbo
 	const fretCount = input.fretCount;
 	const stringCount = input.stringCount;
 	const viewBoxWidth = input.viewBoxWidth ?? resolved.defaultViewBox.width;
-	const viewBoxHeight = input.viewBoxHeight ?? resolved.defaultViewBox.height;
+	const viewBoxHeight =
+		input.viewBoxHeight ??
+		(resolved.orientation === "horizontal"
+			? resolved.defaultViewBox.height
+			: defaultVerticalViewBoxHeight(fretCount, nutInset));
 	const visualToStringIndex = createVisualToStringIndex(resolved, stringCount);
 
 	const isHorizontalLayout = resolved.orientation === "horizontal";
