@@ -30,7 +30,7 @@ pnpm typecheck
 
 | Package                          | npm `latest` |
 | -------------------------------- | ------------ |
-| `@achorde/musical-domain`        | `0.5.2`      |
+| `@achorde/musical-domain`        | `0.5.3`      |
 | `@achorde/tab-renderer`          | `0.8.1`      |
 | `@achorde/svguitar-react`        | `2.5.2`      |
 | `@achorde/interactive-fretboard` | `0.1.8`      |

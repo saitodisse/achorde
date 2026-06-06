@@ -1,6 +1,6 @@
 # @achorde/musical-domain
 
-**npm `latest`:** `0.5.2` — [package page](https://www.npmjs.com/package/@achorde/musical-domain)
+**npm `latest`:** `0.5.3` — [package page](https://www.npmjs.com/package/@achorde/musical-domain)
 
 Shared TypeScript contracts for musical applications that need a common language for chord charts, parsed tabs, parser diagnostics, and fretted-instrument voicings.
 
@@ -15,6 +15,7 @@ The package is intentionally small and runtime-light. It defines stable data sha
 - fretted-instrument voicing contracts
 - chord label lookup normalization (`normalizeChordSymbolLabel`, since 0.3.2)
 - fretted voicing ranking (`compareFrettedVoicings`, `selectPreferredFrettedVoicing`, since 0.3.3)
+- display base-fret normalization (`resolveVoicingDisplayBaseFret`, `normalizeVoicingDisplayBaseFret`, since 0.5.3)
 - chord spelling metadata (`ChordSpellingMetadata`, `spellingFromParsedChordSymbol`, since 0.3.3)
 - an explicit adapter interface for external music-theory engines
 

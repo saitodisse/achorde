@@ -11,6 +11,7 @@
 - fretted-instrument voicing contracts
 - chord label lookup normalization (`normalizeChordSymbolLabel`)
 - fretted voicing ranking helpers (`compareFrettedVoicings`, `selectPreferredFrettedVoicing`)
+- display base-fret normalization for compact diagrams (`resolveVoicingDisplayBaseFret`, `normalizeVoicingDisplayBaseFret`)
 - chord spelling metadata (`ChordSpellingMetadata`, `spellingFromParsedChordSymbol`)
 - an explicit port for external music-theory adapters
 

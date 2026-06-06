@@ -16,6 +16,10 @@ export {
 } from "./fret-notation-parse.js";
 export { applyVoicingEditorPipeline } from "./voicing-editor-pipeline.js";
 export {
+  normalizeVoicingDisplayBaseFret,
+  resolveVoicingDisplayBaseFret,
+} from "./fretted-voicing-display-base-fret.js";
+export {
   GUITAR_STANDARD_EADGBE_OPEN_NOTES,
   GUITAR_STANDARD_INSTRUMENT_ID,
   GUITAR_STANDARD_TUNING_ID,

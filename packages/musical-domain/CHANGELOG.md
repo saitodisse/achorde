@@ -1,5 +1,15 @@
 # Changelog
 
+## 0.5.3 - 2026-06-05
+
+### Added
+
+- `resolveVoicingDisplayBaseFret` and `normalizeVoicingDisplayBaseFret` — keep diagram window at fret 1 when all pressed frets fit within the visible fret count (default 5); otherwise set `baseFret` to the minimum pressed fret for high-position shapes.
+
+### Changed
+
+- `applyVoicingEditorPipeline` now normalizes display `baseFret` after barre inference.
+
 ## 0.5.2 - 2026-06-04
 
 ### Changed
