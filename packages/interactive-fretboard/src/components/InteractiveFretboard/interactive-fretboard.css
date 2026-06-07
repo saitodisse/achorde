@@ -59,8 +59,8 @@
 }
 
 .ifret-dot-label {
-	fill: white;
-	font-size: 11px;
+	fill: var(--ifret-dot-label-color, white);
+	font-size: var(--ifret-dot-label-size, 17px);
 	font-family: system-ui, sans-serif;
 }
 
@@ -71,12 +71,12 @@
 
 .ifret-fret-label {
 	fill: var(--ifret-label-color);
-	font-size: 10px;
+	font-size: var(--ifret-fret-label-size, 10px);
 	font-family: system-ui, sans-serif;
 }
 
 .ifret-tuning-label {
 	fill: var(--ifret-label-color);
-	font-size: 10px;
+	font-size: var(--ifret-tuning-label-size, 10px);
 	font-family: system-ui, sans-serif;
 }

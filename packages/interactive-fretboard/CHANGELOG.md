@@ -2,6 +2,15 @@
 
 All notable changes to `@achorde/interactive-fretboard` are documented in this file.
 
+## [0.1.11] - 2026-06-06
+
+### Added
+
+- Configurable appearance props: `dotRadius`, `dotHoverPadding`, `dotLabelFontSize`, fret/tuning label sizes, `inlayRadius`, `nutStrokeWidth`, and `colors` (CSS variables).
+- `resolveInteractiveFretboardAppearance`, `interactiveFretboardThemeStyle`, `DEFAULT_INTERACTIVE_FRETBOARD_APPEARANCE`, and related exports.
+- Storybook: Appearance and Colors control groups; **AppearancePlayground** story.
+- Unit tests for appearance resolution, component DOM application, story arg coverage, and `boardProps` forwarding.
+
 ## [0.1.10] - 2026-06-06
 
 ### Added

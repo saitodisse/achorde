@@ -17,14 +17,12 @@ import { screenToSvgPoint } from "../../interaction/screenToSvgPoint.js";
 import { resolvePointerButton } from "../../interaction/resolvePointerButton.js";
 import { computeFretboardFrame } from "../../layout/computeFretboardFrame.js";
 import { noteAtFret } from "../../utils/noteAtFret.js";
-import {
-	DEFAULT_GUITAR_TUNING,
-	FRET_DOT_RADIUS,
-	STANDARD_INLAY_FRETS,
-	TUNING_LABEL_GAP,
-	TUNING_NUT_INSET,
-} from "./constants.js";
+import { DEFAULT_GUITAR_TUNING, STANDARD_INLAY_FRETS } from "./constants.js";
 import type { InteractiveFretboardProps } from "./types.js";
+import {
+	interactiveFretboardThemeStyle,
+	resolveInteractiveFretboardAppearance,
+} from "./resolveAppearance.js";
 import { useOpenNotesMap } from "./useOpenNotesMap.js";
 import "./interactive-fretboard.css";
 
@@ -67,6 +65,17 @@ export const InteractiveFretboard = forwardRef<SVGSVGElement, InteractiveFretboa
 			style,
 			disabled = false,
 			"aria-label": ariaLabel = "Interactive fretboard",
+			appearance: appearanceGroup,
+			colors,
+			dotRadius,
+			dotHoverPadding,
+			dotHoverRadius,
+			dotLabelFontSize,
+			fretLabelFontSize,
+			tuningLabelFontSize,
+			inlayRadius,
+			tuningLabelGap,
+			nutStrokeWidth,
 		} = props;
 
 		const svgRef = useRef<SVGSVGElement>(null);
@@ -108,6 +117,44 @@ export const InteractiveFretboard = forwardRef<SVGSVGElement, InteractiveFretboa
 
 		const activeState = onChange ? editorState : syncedState;
 
+		const appearance = useMemo(
+			() =>
+				resolveInteractiveFretboardAppearance({
+					appearance: appearanceGroup,
+					colors,
+					dotRadius,
+					dotHoverPadding,
+					dotHoverRadius,
+					dotLabelFontSize,
+					fretLabelFontSize,
+					tuningLabelFontSize,
+					inlayRadius,
+					tuningLabelGap,
+					nutStrokeWidth,
+				}),
+			[
+				appearanceGroup,
+				colors,
+				dotRadius,
+				dotHoverPadding,
+				dotHoverRadius,
+				dotLabelFontSize,
+				fretLabelFontSize,
+				tuningLabelFontSize,
+				inlayRadius,
+				tuningLabelGap,
+				nutStrokeWidth,
+			],
+		);
+
+		const wrapperStyle = useMemo(
+			() => ({
+				...interactiveFretboardThemeStyle(appearance),
+				...style,
+			}),
+			[appearance, style],
+		);
+
 		const frame = useMemo(
 			() =>
 				computeFretboardFrame({
@@ -117,7 +164,7 @@ export const InteractiveFretboard = forwardRef<SVGSVGElement, InteractiveFretboa
 					viewBoxWidth,
 					viewBoxHeight,
 					minHitSize,
-					nutInset: showTuning ? TUNING_NUT_INSET : 0,
+					nutInset: showTuning ? appearance.tuningNutInset : 0,
 				}),
 			[
 				orientation,
@@ -128,6 +175,7 @@ export const InteractiveFretboard = forwardRef<SVGSVGElement, InteractiveFretboa
 				viewBoxHeight,
 				minHitSize,
 				showTuning,
+				appearance.tuningNutInset,
 			],
 		);
 
@@ -305,7 +353,7 @@ export const InteractiveFretboard = forwardRef<SVGSVGElement, InteractiveFretboa
 			.join(" ");
 
 		return (
-			<div className={wrapperClass} style={style}>
+			<div className={wrapperClass} style={wrapperStyle}>
 				<svg
 					ref={svgRef}
 					viewBox={`0 0 ${frame.viewBox.width} ${frame.viewBox.height}`}
@@ -334,7 +382,9 @@ export const InteractiveFretboard = forwardRef<SVGSVGElement, InteractiveFretboa
 							className={
 								fret.index === 0 ? "ifret-grid-fret ifret-grid-fret--nut" : "ifret-grid-fret"
 							}
-							strokeWidth={fret.index === 0 ? 3 : fret.index % 12 === 0 ? 2 : 1}
+							strokeWidth={
+								fret.index === 0 ? appearance.nutStrokeWidth : fret.index % 12 === 0 ? 2 : 1
+							}
 						/>
 					))}
 
@@ -355,7 +405,7 @@ export const InteractiveFretboard = forwardRef<SVGSVGElement, InteractiveFretboa
 							key={`inlay-${index}`}
 							cx={inlay.x}
 							cy={inlay.y}
-							r={6}
+							r={appearance.inlayRadius}
 							className="ifret-inlay"
 						/>
 					))}
@@ -385,7 +435,7 @@ export const InteractiveFretboard = forwardRef<SVGSVGElement, InteractiveFretboa
 							const nutAlongFretAxis = isHorizontal
 								? (frame.frets[0]?.x1 ?? frame.grid.x)
 								: (frame.frets[0]?.y1 ?? frame.grid.y);
-							const labelOffset = FRET_DOT_RADIUS + TUNING_LABEL_GAP;
+							const labelOffset = appearance.dotRadius + appearance.tuningLabelGap;
 							const x = isHorizontal ? nutAlongFretAxis - labelOffset : string.x1;
 							const y = isHorizontal ? string.y1 : nutAlongFretAxis - labelOffset;
 							return (
@@ -424,14 +474,14 @@ export const InteractiveFretboard = forwardRef<SVGSVGElement, InteractiveFretboa
 						>
 							{dot.state === "muted" ? (
 								<>
-									<circle r={FRET_DOT_RADIUS} className="ifret-dot ifret-dot--muted" />
+									<circle r={appearance.dotRadius} className="ifret-dot ifret-dot--muted" />
 									<text className="ifret-dot-label" textAnchor="middle" dominantBaseline="middle">
 										×
 									</text>
 								</>
 							) : (
 								<>
-									<circle r={FRET_DOT_RADIUS} className="ifret-dot" />
+									<circle r={appearance.dotRadius} className="ifret-dot" />
 									<text className="ifret-dot-label" textAnchor="middle" dominantBaseline="middle">
 										{dot.label}
 									</text>
@@ -449,7 +499,12 @@ export const InteractiveFretboard = forwardRef<SVGSVGElement, InteractiveFretboa
 								return null;
 							}
 							return (
-								<circle cx={cell.center.x} cy={cell.center.y} r={16} className="ifret-hover" />
+								<circle
+									cx={cell.center.x}
+									cy={cell.center.y}
+									r={appearance.dotHoverRadius}
+									className="ifret-hover"
+								/>
 							);
 						})()}
 				</svg>

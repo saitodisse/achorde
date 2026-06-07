@@ -29,6 +29,17 @@ export function InteractiveFretboard(props: InteractiveFretboardProps): JSX.Elem
 | `viewBoxWidth`        | `number`                                               | mode-dependent                      | Override logical width                          |
 | `viewBoxHeight`       | `number`                                               | mode-dependent                      | Override logical height                         |
 | `minHitSize`          | `number`                                               | `44`                                | Min hit rect dimension in viewBox units         |
+| `dotRadius`           | `number`                                               | `21`                                | Fret/open/muted marker radius (viewBox units)   |
+| `dotHoverPadding`     | `number`                                               | `3`                                 | Extra radius for hover ring                     |
+| `dotHoverRadius`      | `number`                                               | `dotRadius + padding`               | Override hover ring radius                      |
+| `dotLabelFontSize`    | `number` (px)                                          | `17`                                | Text inside markers                             |
+| `fretLabelFontSize`   | `number` (px)                                          | `10`                                | Fret number labels                              |
+| `tuningLabelFontSize` | `number` (px)                                          | `10`                                | Open-string tuning labels                       |
+| `inlayRadius`         | `number`                                               | `6`                                 | Fret inlay dots                                 |
+| `tuningLabelGap`      | `number`                                               | `10`                                | Gap between tuning label and nut dot            |
+| `nutStrokeWidth`      | `number`                                               | `3`                                 | Nut line stroke width                           |
+| `appearance`          | `InteractiveFretboardAppearance`                       | —                                   | Nested appearance overrides                     |
+| `colors`              | `InteractiveFretboardColors`                           | dark theme defaults                 | CSS variable overrides on wrapper               |
 | `className`           | `string`                                               | —                                   | Wrapper class                                   |
 | `style`               | `CSSProperties`                                        | —                                   | Wrapper style                                   |
 | `disabled`            | `boolean`                                              | `false`                             | Ignore pointer                                  |
@@ -75,9 +86,17 @@ Auxiliary mouse buttons are ignored. Context menu is suppressed while editing.
 ```ts
 export { screenToSvgPoint } from "../interaction/screenToSvgPoint";
 export { hitTestFretCell } from "../interaction/hitTestFretCell";
+export { resolvePointerButton } from "../interaction/resolvePointerButton";
 export { computeFretboardFrame } from "../layout/computeFretboardFrame";
 export type { FretboardFrame, FretboardViewMode } from "../layout/types";
 export { voicingToEditorState, editorStateToVoicing } from "../adapters/voicingEditorState";
+export { applyFingerCycle, applyFingerStick, cycleFingerIndex } from "../adapters/applyFinger";
+export {
+	resolveInteractiveFretboardAppearance,
+	interactiveFretboardThemeStyle,
+	DEFAULT_INTERACTIVE_FRETBOARD_APPEARANCE,
+	DEFAULT_INTERACTIVE_FRETBOARD_COLORS,
+} from "../components/InteractiveFretboard/resolveAppearance";
 ```
 
 ## Peer dependencies

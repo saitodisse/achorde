@@ -1,6 +1,6 @@
 # Quickstart: @achorde/interactive-fretboard
 
-**npm `latest`:** `0.1.9` — requires `@achorde/musical-domain@^0.5.2` and React 18+.
+**npm `latest`:** `0.1.11` — requires `@achorde/musical-domain@^0.5.2` and React 18+.
 
 ## Install
 
@@ -62,15 +62,65 @@ export function ChordEditor() {
 <InteractiveFretboard value={voicing} onChange={...} orientation="vertical" handedness="left" />
 ```
 
+## Appearance props
+
+Sizes are in viewBox units; font sizes become CSS variables on the wrapper (px).
+
+```tsx
+<InteractiveFretboard
+	value={voicing}
+	onChange={setVoicing}
+	dotRadius={21}
+	dotHoverPadding={3}
+	dotLabelFontSize={17}
+	fretLabelFontSize={10}
+	tuningLabelFontSize={10}
+	inlayRadius={6}
+	tuningLabelGap={10}
+	nutStrokeWidth={3}
+	colors={{
+		background: "#1a1a1a",
+		dot: "#3b82f6",
+		dotMuted: "#ef4444",
+	}}
+/>
+```
+
+Headless merge with defaults:
+
+```tsx
+import {
+	resolveInteractiveFretboardAppearance,
+	interactiveFretboardThemeStyle,
+} from "@achorde/interactive-fretboard";
+
+const appearance = resolveInteractiveFretboardAppearance({ dotRadius: 28 });
+const style = interactiveFretboardThemeStyle(appearance);
+```
+
+## Finger assignment (mouse)
+
+On fretted cells only:
+
+- **Right click**: cycle finger 1→4→1 (`pointerButton: "secondary"`).
+- **Middle click**: apply sticky finger (`pointerButton: "middle"`).
+
+Finger numbers appear inside dots when assigned and persist on `FrettedInstrumentVoicing.strings[].finger`.
+
 ## Theming (CSS variables)
 
+Props `colors` map to wrapper CSS variables. You can also set them in CSS:
+
 ```css
-.interactive-fretboard-theme {
+.ifret-root {
 	--ifret-bg: #1a1a1a;
 	--ifret-fret-color: #444;
 	--ifret-string-color: #888;
 	--ifret-dot-fill: #f59e0b;
 	--ifret-dot-muted: #dc2626;
+	--ifret-dot-label-size: 17px;
+	--ifret-fret-label-size: 10px;
+	--ifret-tuning-label-size: 10px;
 }
 ```
 
@@ -89,7 +139,7 @@ import { ChordDiagram, InteractiveFretboard } from "@ac15/ui";
 cd packages/interactive-fretboard
 pnpm test:run
 pnpm build
-pnpm storybook   # port 6010
+pnpm storybook   # port 6010 — use AppearancePlayground for visual QA
 ```
 
 ## Responsive container

@@ -69,3 +69,23 @@ export const FretNotationMode: Story = {
 		layout: "fullscreen",
 	},
 };
+
+/** All appearance controls exposed — tweak dots, labels, inlays, and colors in the panel. */
+export const AppearancePlayground: Story = {
+	args: {
+		fullWidth: true,
+		showTuning: true,
+		fretCount: 12,
+		viewBoxWidth: 480,
+		viewBoxHeight: 640,
+	},
+	parameters: {
+		layout: "fullscreen",
+		docs: {
+			description: {
+				story:
+					"Use the Appearance and Colors groups in Controls to preview dot size, label sizes, inlays, nut stroke, and theme colors.",
+			},
+		},
+	},
+};

@@ -7,6 +7,10 @@ import {
 import type { ViewId } from "@achorde/svguitar-react";
 import { InteractiveFretboard } from "../components/InteractiveFretboard/InteractiveFretboard.js";
 import { DEFAULT_GUITAR_TUNING } from "../components/InteractiveFretboard/constants.js";
+import {
+	DEFAULT_INTERACTIVE_FRETBOARD_APPEARANCE,
+	DEFAULT_INTERACTIVE_FRETBOARD_COLORS,
+} from "../components/InteractiveFretboard/resolveAppearance.js";
 import type { InteractiveFretboardProps } from "../components/InteractiveFretboard/types.js";
 import type { InteractiveFretboardChangeDetails } from "../adapters/applyChangePipeline.js";
 import { partitionStoryArgs } from "../utils/partitionStoryArgs.js";
@@ -137,6 +141,83 @@ export const fretboardArgTypes = {
 		control: "boolean",
 		table: { category: "Display" },
 	},
+	dotRadius: {
+		control: { type: "range", min: 8, max: 40, step: 1 },
+		table: { category: "Appearance" },
+	},
+	dotHoverPadding: {
+		control: { type: "range", min: 0, max: 12, step: 1 },
+		table: { category: "Appearance" },
+	},
+	dotHoverRadius: {
+		control: { type: "range", min: 8, max: 48, step: 1 },
+		description: "Optional override; defaults to dotRadius + dotHoverPadding.",
+		table: { category: "Appearance" },
+	},
+	dotLabelFontSize: {
+		control: { type: "range", min: 8, max: 32, step: 1 },
+		table: { category: "Appearance" },
+	},
+	fretLabelFontSize: {
+		control: { type: "range", min: 6, max: 24, step: 1 },
+		table: { category: "Appearance" },
+	},
+	tuningLabelFontSize: {
+		control: { type: "range", min: 6, max: 24, step: 1 },
+		table: { category: "Appearance" },
+	},
+	inlayRadius: {
+		control: { type: "range", min: 2, max: 16, step: 1 },
+		table: { category: "Appearance" },
+	},
+	tuningLabelGap: {
+		control: { type: "range", min: 4, max: 24, step: 1 },
+		table: { category: "Appearance" },
+	},
+	nutStrokeWidth: {
+		control: { type: "range", min: 1, max: 8, step: 1 },
+		table: { category: "Appearance" },
+	},
+	"colors.background": {
+		control: "color",
+		table: { category: "Colors" },
+	},
+	"colors.fret": {
+		control: "color",
+		table: { category: "Colors" },
+	},
+	"colors.string": {
+		control: "color",
+		table: { category: "Colors" },
+	},
+	"colors.dot": {
+		control: "color",
+		table: { category: "Colors" },
+	},
+	"colors.dotMuted": {
+		control: "color",
+		table: { category: "Colors" },
+	},
+	"colors.hover": {
+		control: "color",
+		table: { category: "Colors" },
+	},
+	"colors.inlay": {
+		control: "color",
+		table: { category: "Colors" },
+	},
+	"colors.label": {
+		control: "color",
+		table: { category: "Colors" },
+	},
+	"colors.nut": {
+		control: "color",
+		table: { category: "Colors" },
+	},
+	"colors.dotLabel": {
+		control: "color",
+		table: { category: "Colors" },
+	},
 	className: {
 		control: "text",
 		table: { category: "Display" },
@@ -161,6 +242,9 @@ export const fretboardDefaultArgs: StoryArgs = {
 	handedness: "right",
 	fretCount: 5,
 	stringCount: 6,
+	viewBoxWidth: 400,
+	viewBoxHeight: 550,
+	minHitSize: 44,
 	tuning: [...DEFAULT_GUITAR_TUNING],
 	inferBarresOnChange: true,
 	detectChord: true,
@@ -169,6 +253,17 @@ export const fretboardDefaultArgs: StoryArgs = {
 	showDotText: true,
 	showTuning: false,
 	disabled: false,
+	dotRadius: DEFAULT_INTERACTIVE_FRETBOARD_APPEARANCE.dotRadius,
+	dotHoverPadding:
+		DEFAULT_INTERACTIVE_FRETBOARD_APPEARANCE.dotHoverRadius -
+		DEFAULT_INTERACTIVE_FRETBOARD_APPEARANCE.dotRadius,
+	dotLabelFontSize: DEFAULT_INTERACTIVE_FRETBOARD_APPEARANCE.dotLabelFontSize,
+	fretLabelFontSize: DEFAULT_INTERACTIVE_FRETBOARD_APPEARANCE.fretLabelFontSize,
+	tuningLabelFontSize: DEFAULT_INTERACTIVE_FRETBOARD_APPEARANCE.tuningLabelFontSize,
+	inlayRadius: DEFAULT_INTERACTIVE_FRETBOARD_APPEARANCE.inlayRadius,
+	tuningLabelGap: DEFAULT_INTERACTIVE_FRETBOARD_APPEARANCE.tuningLabelGap,
+	nutStrokeWidth: DEFAULT_INTERACTIVE_FRETBOARD_APPEARANCE.nutStrokeWidth,
+	colors: { ...DEFAULT_INTERACTIVE_FRETBOARD_COLORS },
 	"aria-label": "Interactive fretboard",
 };
 

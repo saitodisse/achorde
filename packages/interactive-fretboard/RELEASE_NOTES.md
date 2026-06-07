@@ -1,5 +1,54 @@
 # Release Notes
 
+## Version 0.1.11
+
+**Release date:** June 6, 2026
+
+### Configurable appearance
+
+Dot size, label font sizes, inlay radius, nut stroke width, and theme colors are now **props** on `InteractiveFretboard` (or nested under `appearance`). Defaults match the previous hard-coded values (`dotRadius: 21`, `dotLabelFontSize: 17`, etc.).
+
+New exports for headless reuse:
+
+- `resolveInteractiveFretboardAppearance()`
+- `interactiveFretboardThemeStyle()`
+- `DEFAULT_INTERACTIVE_FRETBOARD_APPEARANCE`, `DEFAULT_INTERACTIVE_FRETBOARD_COLORS`
+- `DEFAULT_*` constants for individual sizes
+
+Storybook exposes every appearance and color control; see the **AppearancePlayground** story.
+
+```tsx
+<InteractiveFretboard
+	value={voicing}
+	onChange={setVoicing}
+	dotRadius={28}
+	dotLabelFontSize={20}
+	colors={{ dot: "#f59e0b", background: "#111" }}
+/>
+```
+
+```bash
+pnpm add @achorde/interactive-fretboard@0.1.11
+```
+
+## Version 0.1.10
+
+**Release date:** June 6, 2026
+
+### Finger assignment
+
+On **already fretted** cells:
+
+- **Right click** (`pointerButton: "secondary"`): cycle finger index 1 → 2 → 3 → 4 → 1 and update sticky finger.
+- **Middle click** (`pointerButton: "middle"`): assign the current sticky finger to the cell.
+- Dots show the finger number when assigned; fingers round-trip through `FrettedInstrumentVoicing`.
+
+Exports: `applyFingerCycle`, `applyFingerStick`, `cycleFingerIndex`.
+
+```bash
+pnpm add @achorde/interactive-fretboard@0.1.10
+```
+
 ## Version 0.1.9
 
 **Release date:** June 6, 2026
@@ -15,7 +64,7 @@ Right-click opens no browser context menu while the fretboard is editable (`onCh
 	value={voicing}
 	onChange={(details) => {
 		if (details.pointerButton === "secondary") {
-			// e.g. cycle voicing variation
+			// e.g. cycle finger on fretted string
 		} else {
 			setVoicing(details.voicing);
 		}

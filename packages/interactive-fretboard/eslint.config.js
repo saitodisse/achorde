@@ -24,4 +24,10 @@ export default defineConfig([
 			"@typescript-eslint/no-unused-vars": "off",
 		},
 	},
+	{
+		files: ["src/stories/**/*.{ts,tsx}"],
+		rules: {
+			"react-refresh/only-export-components": "off",
+		},
+	},
 ]);
