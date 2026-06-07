@@ -2,6 +2,14 @@
 
 All notable changes to `@achorde/interactive-fretboard` are documented in this file.
 
+## [0.1.10] - 2026-06-06
+
+### Added
+
+- Finger assignment on fretted cells: right-click (`secondary`) cycles finger 1→4→1; middle-click (`middle`) applies the sticky finger (last value from right-click) to another fretted string.
+- Editor state preserves `finger` per string through voicing round-trip and primary tap edits.
+- Fret dots show finger number when assigned.
+
 ## [0.1.9] - 2026-06-06
 
 ### Added

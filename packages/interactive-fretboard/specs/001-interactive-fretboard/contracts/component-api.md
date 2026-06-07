@@ -58,6 +58,18 @@ export type InteractiveFretboardChangeDetails = {
 
 Fret ≥ 1: tap toggles fretted on that fret; tap same cell again removes string from voicing.
 
+## Finger assignment (mouse)
+
+On an **already fretted** cell (matching string and fret):
+
+| Button     | `pointerButton` | Behavior                                                             |
+| ---------- | --------------- | -------------------------------------------------------------------- |
+| Right      | `secondary`     | Cycle finger index on that string: 1 → 2 → 3 → 4 → 1; updates sticky |
+| Middle     | `middle`        | Assign the current **sticky** finger (last value from right-click)   |
+| Left/touch | `primary`       | Normal tap cycle (fingers preserved on unchanged strings)            |
+
+Auxiliary mouse buttons are ignored. Context menu is suppressed while editing.
+
 ## Exported utilities (public)
 
 ```ts

@@ -21,3 +21,4 @@ export {
 	type FretboardEditorState,
 } from "./adapters/voicingEditorState.js";
 export { applyTapToEditorState } from "./adapters/applyTap.js";
+export { applyFingerCycle, applyFingerStick, cycleFingerIndex } from "./adapters/applyFinger.js";

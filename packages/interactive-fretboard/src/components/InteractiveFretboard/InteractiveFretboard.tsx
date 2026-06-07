@@ -95,7 +95,7 @@ export const InteractiveFretboard = forwardRef<SVGSVGElement, InteractiveFretboa
 
 		const syncedState = useMemo(() => {
 			if (!baseVoicing) {
-				return { cells: new Map() };
+				return { cells: new Map(), stickyFinger: 1 };
 			}
 			return voicingToEditorState(baseVoicing);
 		}, [voicingKey, baseVoicing]);
@@ -166,6 +166,10 @@ export const InteractiveFretboard = forwardRef<SVGSVGElement, InteractiveFretboa
 					detectChord,
 					includeFretNotation: valueMode === "fretNotation",
 				});
+
+				if (!result) {
+					return;
+				}
 
 				setEditorState(result.state);
 				onChange(result.details);
@@ -279,8 +283,10 @@ export const InteractiveFretboard = forwardRef<SVGSVGElement, InteractiveFretboa
 					label = showDotText ? openNote.replace(/\d/g, "") : "○";
 				} else {
 					label = showDotText
-						? noteAtFret(openNote, cell.fret).replace(/\d/g, "")
-						: String(cell.fret);
+						? cell.finger !== undefined
+							? String(cell.finger)
+							: noteAtFret(openNote, cell.fret).replace(/\d/g, "")
+						: String(cell.finger ?? cell.fret);
 				}
 
 				items.push({

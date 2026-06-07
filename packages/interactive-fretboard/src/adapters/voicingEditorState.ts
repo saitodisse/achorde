@@ -6,10 +6,13 @@ export type FretEditorCell = {
 	stringIndex: number;
 	fret: number;
 	state: FretEditorCellState;
+	finger?: number;
 };
 
 export type FretboardEditorState = {
 	cells: Map<number, FretEditorCell>;
+	/** Last finger index chosen via right-click; middle-click repeats this on other strings. */
+	stickyFinger?: number;
 };
 
 function stringToCell(string: FrettedInstrumentString): FretEditorCell {
@@ -24,6 +27,7 @@ function stringToCell(string: FrettedInstrumentString): FretEditorCell {
 		stringIndex: string.stringIndex,
 		fret,
 		state: fret > 0 ? "fretted" : "open",
+		...(string.finger !== undefined ? { finger: string.finger } : {}),
 	};
 }
 
@@ -34,7 +38,11 @@ export function voicingToEditorState(voicing: FrettedInstrumentVoicing): Fretboa
 		cells.set(string.stringIndex, stringToCell(string));
 	}
 
-	return { cells };
+	const stickyFinger =
+		voicing.strings.find((string) => string.finger !== undefined && string.finger >= 1)?.finger ??
+		1;
+
+	return { cells, stickyFinger };
 }
 
 export function editorStateToVoicing(
@@ -79,6 +87,7 @@ export function editorStateToVoicing(
 			fret: cell.fret,
 			state: "fretted",
 			label: String(cell.fret),
+			...(cell.finger !== undefined ? { finger: cell.finger } : {}),
 		});
 	}
 
