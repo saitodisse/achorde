@@ -42,8 +42,11 @@ export type InteractiveFretboardChangeDetails = {
 	fretNotation?: string;
 	pressedNotes: string[];
 	detectedChord?: string;
+	pointerButton: "primary" | "middle" | "secondary";
 };
 ```
+
+`pointerButton` reflects which button initiated the edit: `"primary"` (left / touch / pen), `"middle"`, or `"secondary"` (right). Auxiliary buttons are ignored.
 
 ## Tap cycle (fret 0)
 

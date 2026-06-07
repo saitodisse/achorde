@@ -1,6 +1,6 @@
 # Quickstart: @achorde/interactive-fretboard
 
-**npm `latest`:** `0.1.1` — requires `@achorde/musical-domain@^0.5.1` and React 18+.
+**npm `latest`:** `0.1.9` — requires `@achorde/musical-domain@^0.5.2` and React 18+.
 
 ## Install
 
@@ -28,6 +28,7 @@ export function ChordEditor() {
 				value={voicing}
 				onChange={(details: InteractiveFretboardChangeDetails) => {
 					setVoicing(details.voicing);
+					// details.pointerButton: "primary" | "middle" | "secondary"
 				}}
 				orientation="horizontal"
 				handedness="right"

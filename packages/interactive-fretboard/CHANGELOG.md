@@ -2,6 +2,14 @@
 
 All notable changes to `@achorde/interactive-fretboard` are documented in this file.
 
+## [0.1.9] - 2026-06-06
+
+### Added
+
+- `pointerButton` on `InteractiveFretboardChangeDetails`: `"primary"` (left / touch / pen), `"middle"`, or `"secondary"` (right click).
+- Exported `resolvePointerButton()` and `InteractiveFretboardPointerButton` for headless reuse.
+- Middle and secondary mouse buttons trigger the same edit pipeline with distinct identification; context menu is suppressed while editing.
+
 ## [0.1.8] - 2026-06-04
 
 ### Changed

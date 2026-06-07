@@ -11,12 +11,15 @@ import {
 	type FretboardEditorState,
 } from "./voicingEditorState.js";
 import type { TapTarget } from "./applyTap.js";
+import type { InteractiveFretboardPointerButton } from "../interaction/resolvePointerButton.js";
 
 export type InteractiveFretboardChangeDetails = {
 	voicing: FrettedInstrumentVoicing;
 	fretNotation?: string;
 	pressedNotes: string[];
 	detectedChord?: string;
+	/** Which pointer button triggered the edit (`primary` = left / touch / pen). */
+	pointerButton: InteractiveFretboardPointerButton;
 };
 
 export function applyChangePipeline(input: {
@@ -24,6 +27,7 @@ export function applyChangePipeline(input: {
 	baseVoicing: FrettedInstrumentVoicing;
 	openNotesByString: Map<number, string>;
 	target: TapTarget;
+	pointerButton: InteractiveFretboardPointerButton;
 	inferBarresOnChange: boolean;
 	detectChord: boolean;
 	includeFretNotation: boolean;
@@ -50,6 +54,7 @@ export function applyChangePipeline(input: {
 			fretNotation: input.includeFretNotation ? formatVoicingToFretNotation(voicing) : undefined,
 			pressedNotes,
 			detectedChord,
+			pointerButton: input.pointerButton,
 		},
 	};
 }

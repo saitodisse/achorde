@@ -1,5 +1,32 @@
 # Release Notes
 
+## Version 0.1.9
+
+**Release date:** June 6, 2026
+
+### Pointer button identification
+
+`onChange` now includes **`pointerButton`**: `"primary"` (left click, touch, or pen), `"middle"`, or `"secondary"` (right click). Consumers can branch on the button without re-implementing hit-testing.
+
+Right-click opens no browser context menu while the fretboard is editable (`onChange` set). Auxiliary mouse buttons (back / forward) are ignored.
+
+```tsx
+<InteractiveFretboard
+	value={voicing}
+	onChange={(details) => {
+		if (details.pointerButton === "secondary") {
+			// e.g. cycle voicing variation
+		} else {
+			setVoicing(details.voicing);
+		}
+	}}
+/>
+```
+
+```bash
+pnpm add @achorde/interactive-fretboard@0.1.9
+```
+
 ## Version 0.1.6
 
 **Release date:** June 4, 2026

@@ -76,5 +76,6 @@ export function buildHitAreas(frame: FretboardFrame): Array<{
 
 ## Events
 
-- Listen on root SVG: `onPointerDown` (primary), `onPointerMove` (hover preview), `onPointerLeave` (clear hover).
-- Call `event.preventDefault()` on down when editing to reduce scroll jitter on touch.
+- Listen on root SVG: `onPointerDown` (primary, middle, secondary), `onPointerMove` (hover preview), `onPointerLeave` (clear hover), `onContextMenu` (prevent default while editing).
+- Map `event.button` → `pointerButton`: `0` primary, `1` middle, `2` secondary; ignore other buttons.
+- Call `event.preventDefault()` on down when editing to reduce scroll jitter on touch and suppress middle-click autoscroll.

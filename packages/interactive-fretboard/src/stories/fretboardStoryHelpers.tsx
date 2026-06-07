@@ -36,6 +36,12 @@ export function chordDiagramView(
 	orientation: InteractiveFretboardProps["orientation"],
 	handedness: InteractiveFretboardProps["handedness"],
 ): ViewId {
+	// svguitar-react inverts the string axis on vertical layouts relative to this package
+	if (orientation === "vertical") {
+		const mirroredHandedness = handedness === "right" ? "left" : "right";
+		return `${orientation}-${mirroredHandedness}` as ViewId;
+	}
+
 	return `${orientation}-${handedness}` as ViewId;
 }
 
@@ -188,6 +194,7 @@ export function useInteractiveFretboardStoryState(args: StoryArgs) {
 
 	const [voicing, setVoicing] = useState<FrettedInstrumentVoicing | null>(seedVoicing);
 	const [liveFretNotation, setLiveFretNotation] = useState(fretNotation ?? "");
+	const [lastPointerButton, setLastPointerButton] = useState<string | null>(null);
 
 	useEffect(() => {
 		setVoicing(seedVoicing);
@@ -197,6 +204,7 @@ export function useInteractiveFretboardStoryState(args: StoryArgs) {
 	const handleChange = (details: InteractiveFretboardChangeDetails) => {
 		setVoicing(details.voicing);
 		setLiveFretNotation(details.fretNotation ?? formatVoicingToFretNotation(details.voicing));
+		setLastPointerButton(details.pointerButton);
 		onChange?.(details);
 	};
 
@@ -221,6 +229,7 @@ export function useInteractiveFretboardStoryState(args: StoryArgs) {
 		handedness,
 		wrapperStyle,
 		handleChange,
+		lastPointerButton,
 	};
 }
 
@@ -235,6 +244,7 @@ export function InteractiveFretboardStory(args: StoryArgs) {
 		voicing,
 		wrapperStyle,
 		handleChange,
+		lastPointerButton,
 	} = useInteractiveFretboardStoryState(args);
 
 	const layoutProps = { orientation, handedness };
@@ -269,6 +279,7 @@ export function InteractiveFretboardStory(args: StoryArgs) {
 				<p style={{ color: "#aaa", fontFamily: "monospace", fontSize: 12, marginTop: 8 }}>
 					strings:{" "}
 					{voicing.strings.map((s) => `${s.stringIndex}:${s.state}${s.fret ?? ""}`).join(" ")}
+					{lastPointerButton ? ` · button: ${lastPointerButton}` : null}
 				</p>
 			) : null}
 		</div>

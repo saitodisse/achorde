@@ -1,6 +1,8 @@
 export { InteractiveFretboard } from "./components/InteractiveFretboard/InteractiveFretboard.js";
 export type { InteractiveFretboardProps } from "./components/InteractiveFretboard/types.js";
 export type { InteractiveFretboardChangeDetails } from "./adapters/applyChangePipeline.js";
+export type { InteractiveFretboardPointerButton } from "./interaction/resolvePointerButton.js";
+export { resolvePointerButton } from "./interaction/resolvePointerButton.js";
 export { screenToSvgPoint } from "./interaction/screenToSvgPoint.js";
 export { hitTestFretCell } from "./interaction/hitTestFretCell.js";
 export { buildHitAreas } from "./interaction/buildHitAreas.js";

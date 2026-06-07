@@ -7,12 +7,14 @@ import {
 	useRef,
 	useState,
 	type PointerEvent as ReactPointerEvent,
+	type MouseEvent as ReactMouseEvent,
 } from "react";
 import { parseFretNotationToVoicing, type FrettedInstrumentVoicing } from "@achorde/musical-domain";
 import { applyChangePipeline, voicingToEditorState } from "../../adapters/applyChangePipeline.js";
 import { buildHitAreas } from "../../interaction/buildHitAreas.js";
 import { hitTestFretCell } from "../../interaction/hitTestFretCell.js";
 import { screenToSvgPoint } from "../../interaction/screenToSvgPoint.js";
+import { resolvePointerButton } from "../../interaction/resolvePointerButton.js";
 import { computeFretboardFrame } from "../../layout/computeFretboardFrame.js";
 import { noteAtFret } from "../../utils/noteAtFret.js";
 import {
@@ -138,6 +140,11 @@ export const InteractiveFretboard = forwardRef<SVGSVGElement, InteractiveFretboa
 					return;
 				}
 
+				const pointerButton = resolvePointerButton(event.nativeEvent);
+				if (!pointerButton) {
+					return;
+				}
+
 				event.preventDefault();
 				const point = screenToSvgPoint(svgRef.current, event.nativeEvent);
 				if (!point) {
@@ -154,6 +161,7 @@ export const InteractiveFretboard = forwardRef<SVGSVGElement, InteractiveFretboa
 					baseVoicing,
 					openNotesByString,
 					target: hit,
+					pointerButton,
 					inferBarresOnChange,
 					detectChord,
 					includeFretNotation: valueMode === "fretNotation",
@@ -190,6 +198,16 @@ export const InteractiveFretboard = forwardRef<SVGSVGElement, InteractiveFretboa
 				setHover(hitTestFretCell(frame, point));
 			},
 			[disabled, frame],
+		);
+
+		const handleContextMenu = useCallback(
+			(event: ReactMouseEvent<SVGSVGElement>) => {
+				if (disabled || !onChange) {
+					return;
+				}
+				event.preventDefault();
+			},
+			[disabled, onChange],
 		);
 
 		const isHorizontal = orientation === "horizontal";
@@ -290,6 +308,7 @@ export const InteractiveFretboard = forwardRef<SVGSVGElement, InteractiveFretboa
 					onPointerDown={handlePointerDown}
 					onPointerMove={handlePointerMove}
 					onPointerLeave={() => setHover(null)}
+					onContextMenu={handleContextMenu}
 				>
 					<rect
 						x={0}
