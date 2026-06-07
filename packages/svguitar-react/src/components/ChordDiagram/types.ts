@@ -152,7 +152,7 @@ export interface ChordDiagramProps {
 
 	// Layout (mapping-per-view)
 	/** Predefined view for layout */
-	view?: ViewId; // default: "horizontal-right"
+	view?: ViewId; // default: "vertical-right"
 	/** Custom layout engine strategy; if provided, takes precedence over view */
 	layoutEngine?: LayoutEngine;
 

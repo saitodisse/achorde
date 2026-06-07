@@ -32,6 +32,7 @@ import { Finger } from "./Finger";
 import { Barre } from "./Barre";
 import { TuningLabels } from "./TuningLabels";
 import { FretNumbers } from "./FretNumbers";
+import { DEFAULT_VIEW } from "./constants";
 
 /**
  * ChordDiagram component for rendering guitar chord diagrams in SVG format
@@ -227,7 +228,7 @@ export const ChordDiagram: React.FC<ChordDiagramProps> = props => {
 	// Build layout frame for the selected view
 	const startX = getStartX({ fretWidth: style.fretWidth, tuningTextSize: style.tuningTextSize });
 	const startY = getStartY({ fretTextSize: style.fretTextSize });
-	const isVertical = (resolvedLayoutEngine?.id || "horizontal-right").startsWith("vertical");
+	const isVertical = (resolvedLayoutEngine?.id || DEFAULT_VIEW).startsWith("vertical");
 	const gridWidth = isVertical
 		? (style.stringCount - 1) * style.fretWidth
 		: effectiveFretCount * style.fretWidth;

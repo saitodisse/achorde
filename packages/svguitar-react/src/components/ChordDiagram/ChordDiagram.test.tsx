@@ -16,11 +16,12 @@ import {
 	validateInstrument,
 	processChordData,
 	mergeStyles,
+	validateViewProps,
 } from "./utils";
 import { exportChordDiagramState } from "./utils/exportState";
 import { importChordDiagramState } from "./utils/importState";
 import { ChordDiagramError } from "./types";
-import { DEFAULT_CHORD_STYLE, DEFAULT_INSTRUMENT } from "./constants";
+import { DEFAULT_CHORD_STYLE, DEFAULT_INSTRUMENT, DEFAULT_VIEW } from "./constants";
 
 // Corrected chord data based on the new convention (string 1 = low E)
 const cMajor = {
@@ -147,6 +148,14 @@ describe("ChordDiagram Component", () => {
 
 		const imported = importChordDiagramState(state);
 		expect(imported.zoom).toBe(1.25);
+	});
+
+	it("defaults to vertical-right when view is omitted", () => {
+		expect(DEFAULT_VIEW).toBe("vertical-right");
+		expect(validateViewProps({})).toBe("vertical-right");
+
+		const state = exportChordDiagramState(cMajor);
+		expect(state.view).toBe("vertical-right");
 	});
 });
 

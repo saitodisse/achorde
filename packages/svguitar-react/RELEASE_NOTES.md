@@ -1,5 +1,13 @@
 # Release Notes
 
+## Version 2.5.3
+
+**Release date:** June 7, 2026
+
+### Default vertical-right layout
+
+`ChordDiagram` now defaults to `vertical-right` when `view` is omitted. State export/import, Storybook controls, and docs were aligned to the same default so right-handed vertical diagrams remain the baseline.
+
 ## Version 2.5.2
 
 **Release date:** June 4, 2026

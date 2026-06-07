@@ -4,7 +4,7 @@ A React component for rendering guitar chord diagrams in SVG format with high pe
 
 - 🌐 **Storybook**: [https://storybook-svguitar-react.vercel.app/](https://storybook-svguitar-react.vercel.app/?path=/docs/components-chorddiagram--docs)
 - 🌐 **Live Demo**: [https://svguitar-react.vercel.app/](https://svguitar-react.vercel.app/)
-- 🔗 **NPM Package**: [https://www.npmjs.com/package/@achorde/svguitar-react](https://www.npmjs.com/package/@achorde/svguitar-react) (`latest`: **2.5.2**)
+- 🔗 **NPM Package**: [https://www.npmjs.com/package/@achorde/svguitar-react](https://www.npmjs.com/package/@achorde/svguitar-react) (`latest`: **2.5.3**)
 
 ## Features
 
@@ -49,7 +49,7 @@ const App = () => {
 		quality: "recommended",
 	};
 
-	return <ChordDiagram voicing={cMajorVoicing} view="horizontal-right" />;
+	return <ChordDiagram voicing={cMajorVoicing} view="vertical-right" />;
 };
 ```
 
@@ -214,7 +214,7 @@ layoutRegistry.register(diagonalEngine);
 | `voicing`        | `FrettedInstrumentVoicing` | Shared chord voicing contract from `achorde-musical-domain`                     |
 | `chord`          | `Chord`                    | Chord data with fingers and barres                                              |
 | `instrument`     | `Partial<Instrument>`      | Instrument configuration for fret notation                                      |
-| `view`           | `ViewId`                   | Predefined layout view (`horizontal-right`, `horizontal-left`, `vertical-right`, `vertical-left`) |
+| `view`           | `ViewId`                   | Predefined layout view (`vertical-right` by default; `horizontal-right`, `horizontal-left`, `vertical-left` remain supported) |
 | `layoutEngine`   | `LayoutEngine`             | Custom layout strategy (takes precedence over `view`)                           |
 | `autoFirstFret`  | `boolean`                  | Automatically adjusts `firstFret` when fingers are outside visible range (default: `false`) |
 | `width`/`height` | `number`                   | Total width/height of the SVG                                                   |

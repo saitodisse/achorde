@@ -23,7 +23,7 @@ interface ChordDiagramProps {
 	onError?: (error: ChordDiagramError, context: ErrorContext) => void;
 	errorFallback?: React.ReactNode | ((error: ChordDiagramError, context: ErrorContext) => React.ReactNode);
 
-	view?: ViewId;
+	view?: ViewId; // default: vertical-right
 	layoutEngine?: LayoutEngine;
 
 	width?: number;

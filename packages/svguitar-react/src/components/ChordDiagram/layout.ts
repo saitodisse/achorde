@@ -5,6 +5,7 @@
  */
 
 import type { LayoutEngine, ViewId } from "./types";
+import { DEFAULT_VIEW } from "./constants";
 import { horizontalRightEngine } from "./layouts/horizontalRight";
 import { horizontalLeftEngine } from "./layouts/horizontalLeft";
 import { verticalRightEngine } from "./layouts/verticalRight";
@@ -63,7 +64,7 @@ layoutRegistry.register(verticalLeftEngine);
  */
 export function resolveViewId(
 	props: { layoutEngine?: LayoutEngine; view?: ViewId },
-	defaultView: ViewId = "horizontal-right"
+	defaultView: ViewId = DEFAULT_VIEW
 ): ViewId {
 	if (props.layoutEngine) return props.layoutEngine.id;
 	if (props.view) return props.view;

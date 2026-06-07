@@ -5,6 +5,7 @@
  */
 
 import type { ChordDiagramProps, ChordDiagramState } from "../types";
+import { DEFAULT_VIEW } from "../constants";
 import { mergeStyles, mergeInstrument } from "../utils";
 
 /**
@@ -39,7 +40,7 @@ export function exportChordDiagramState(props: ChordDiagramProps): ChordDiagramS
 		lastFret: props.lastFret,
 
 		// Layout
-		view: props.view || "horizontal-right",
+		view: props.view || DEFAULT_VIEW,
 
 		// All style properties
 		width: style.width,

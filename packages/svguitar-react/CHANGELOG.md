@@ -1,5 +1,13 @@
 # Changelog
 
+## 2.5.3 (2026-06-07)
+
+### Fixed
+
+- `ChordDiagram` now defaults to `vertical-right` when `view` is omitted.
+- Exported state now serializes `vertical-right` as the default view.
+- Storybook controls and docs now describe `vertical-right` as the baseline vertical layout.
+
 ## 2.5.2 (2026-06-04)
 
 ### Fixed

@@ -210,7 +210,7 @@ export const DEFAULT_CHORD_STYLE = VERTICAL_RIGHT_STYLE;
 /**
  * Default view for layout
  */
-export const DEFAULT_VIEW: ViewId = "horizontal-right";
+export const DEFAULT_VIEW: ViewId = "vertical-right";
 
 /**
  * Default instrument configuration for standard guitar

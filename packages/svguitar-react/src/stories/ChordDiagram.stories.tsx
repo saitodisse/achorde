@@ -77,7 +77,7 @@ const meta: Meta<typeof ChordDiagram> = {
 			control: { type: "radio" },
 			options: ["horizontal-right", "horizontal-left", "vertical-right", "vertical-left"],
 			description: "Predefined view for layout",
-			table: { category: "Layout", defaultValue: { summary: "horizontal-right" } },
+			table: { category: "Layout", defaultValue: { summary: "vertical-right" } },
 		},
 		layoutEngine: {
 			control: "object",

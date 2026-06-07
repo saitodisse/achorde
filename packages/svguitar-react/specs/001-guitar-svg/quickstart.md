@@ -90,7 +90,7 @@ const fMajor: FrettedInstrumentVoicing = {
 ## Views
 
 ```tsx
-<ChordDiagram voicing={cMajor} view="horizontal-right" />
+<ChordDiagram voicing={cMajor} view="vertical-right" />
 <ChordDiagram voicing={cMajor} view="horizontal-left" />
 <ChordDiagram voicing={cMajor} view="vertical-right" />
 <ChordDiagram voicing={cMajor} view="vertical-left" />

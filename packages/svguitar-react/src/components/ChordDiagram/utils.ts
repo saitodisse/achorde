@@ -287,13 +287,13 @@ export function mergeInstrument(customInstrument?: Partial<Instrument>): Instrum
 /**
  * Maps `achorde-musical-domain` stringIndex (1 = high E … 6 = low E) to the
  * diagram string axis used by layout engines (1 = low E at bottom / left in
- * default views).
+ * the default vertical-right view).
  */
 export function voicingStringToDiagramString(stringIndex: number, stringCount: number): number {
 	return stringCount + 1 - stringIndex;
 }
 
-/** Open-string labels ordered for diagram string numbers 1…n (1 = low E in default views). */
+/** Open-string labels ordered for diagram string numbers 1…n (1 = low E in the default vertical-right view). */
 export function voicingToDiagramTuning(voicing: FrettedInstrumentVoicing): string[] {
 	const stringCount = voicing.strings.length;
 	const tuning = new Array<string>(stringCount);
