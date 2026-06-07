@@ -77,3 +77,11 @@ Consumers may override via props; hit-test must use the same frame as render.
 ## Storybook requirement
 
 One story per mode with the same voicing (`x32010` parsed) so reviewers can verify inversion does not corrupt `stringIndex` in `onChange`.
+
+## Companion chord diagram (AC15 / `@ac15/ui`)
+
+When pairing this fretboard with `@achorde/svguitar-react` in product UIs:
+
+- Vertical + right-handed fretboard → diagram **`vertical-right`** (`ViewId`).
+- Map orientation/handedness directly: `` `${orientation}-${handedness}` `` — **no extra mirroring** for vertical modes.
+- Low string (6) appears on the **left** in both components for right-handed vertical layouts.

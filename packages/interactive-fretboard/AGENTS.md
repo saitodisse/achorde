@@ -31,6 +31,8 @@ Use **pnpm** only. Read `specs/001-interactive-fretboard/` before behavior chang
 - Public docs, changelog, comments, and commits: **English**.
 - Hit-testing must use **viewBox logical coordinates**, never `getBoundingClientRect` on rendered lines as the source of truth.
 - Canonical string indices: **1 = high E, 6 = low E** (`@achorde/musical-domain`); view modes only change **visual axis order**.
+- **`pointerButton`** in `onChange` (`0.1.9+`); finger assignment via middle/secondary clicks on fretted cells (`0.1.10+`); appearance props and CSS variables (`0.1.11+`).
+- Companion **chord diagram** in AC15 uses `@achorde/svguitar-react` **`vertical-right`** when paired with vertical-right fretboard — do not mirror handedness when mapping to `ViewId`.
 
 ## Downstream
 
