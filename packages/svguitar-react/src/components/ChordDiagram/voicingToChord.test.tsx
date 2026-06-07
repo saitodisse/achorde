@@ -72,6 +72,30 @@ describe("voicingToChord", () => {
 		const muted = chord.fingers.find(f => f.is_muted);
 		expect(muted?.string).toBe(1);
 	});
+
+	it("uses finger for dot text and ignores fret label on strings", () => {
+		const voicing = {
+			id: "c",
+			instrumentId: "guitar",
+			tuningId: "guitar-standard-eadgbe",
+			chordSymbol: "G",
+			source: "manual" as const,
+			quality: "unknown" as const,
+			strings: [
+				{
+					stringIndex: 2,
+					openNote: "A",
+					fret: 3,
+					state: "fretted" as const,
+					label: "3",
+					finger: 2,
+				},
+			],
+		};
+
+		const chord = voicingToChord(voicing);
+		expect(chord.fingers[0]?.text).toBe("2");
+	});
 });
 
 describe("ChordDiagram voicing handedness", () => {
