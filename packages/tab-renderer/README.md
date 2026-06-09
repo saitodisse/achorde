@@ -34,6 +34,19 @@ The package exposes two public entrypoints:
 - `parseTab()` → `ParsedTab` → `ParsedTabSection` → `ParsedTabLine` → `ParsedTabToken` (`ChordToken`, `LyricToken`, `DecorationToken`, `SpaceToken`)
 - Compose with `Tab.Root`, `Tab.Section`, `Tab.Line`, `Tab.Chord`, `Tab.Lyric`, `TabDecoration`
 
+### How chord detection works
+
+The parser is the source of truth for chord detection. The flow is:
+
+1. `parseChordSymbol()` checks whether a token really looks like a chord symbol.
+2. `tokenizeContentWord()` turns each whitespace-delimited word into `ChordToken`, `LyricToken`, or `DecorationToken`.
+3. `tokenizeRawLine()` keeps the original columns and whitespace while scanning each line.
+4. `parseTab()` builds the section/line tree and stores the final AST in `ParsedTab`.
+5. `collectDiagrammableChords()` walks only real `ChordToken` entries and fills `ParsedTab.chordsFound` with unique symbols in appearance order.
+6. `transposeParsedTab()` recomputes the same list after transposition.
+
+Downstream consumers should use `ParsedTab.chordsFound` instead of trying to rediscover chords from raw lyrics or line segments.
+
 See [PRD 0002](./docs/prd/0002-styled-viewer-pipeline.md) and [RFC 0002](./docs/rfc/0002-interleaved-bars-and-tab-style-config.md).
 
 Repository guidance: [`AGENTS.md`](./AGENTS.md), [`docs/AGENTS.md`](./docs/AGENTS.md), [`src/AGENTS.md`](./src/AGENTS.md).

@@ -9,6 +9,18 @@ This repository publishes `tab-renderer`, an open-source library for chord sheet
 - `./react` is the React adapter entrypoint.
 - The core owns parsing, normalization, and AST construction.
 - The React layer owns composition and rendering, but not domain parsing.
+- `ParsedTab.chordsFound` is the downstream contract for chord discovery; consumers should not infer chords by scanning lyrics or React nodes.
+
+## Chord Detection Contract
+
+The order of responsibility inside the core is:
+
+1. `parseChordSymbol()` validates one token.
+2. `tokenizeContentWord()` decides whether the word is a chord, lyric, or decoration.
+3. `tokenizeRawLine()` preserves spacing and columns.
+4. `parseTab()` builds the AST and adds `chordsFound`.
+5. `collectDiagrammableChords()` keeps only the real `ChordToken` values and removes duplicates.
+6. `transposeParsedTab()` must refresh `chordsFound` after transposition.
 
 ## Source Layout
 
@@ -30,6 +42,7 @@ This repository publishes `tab-renderer`, an open-source library for chord sheet
 - Use `npm run build` for package output and declaration emit.
 - Use `npm run build-storybook` for Storybook coverage.
 - Keep `npm run lint` clean before committing.
+- When a parsing rule changes, update `src/core/__tests__/` and the docs that describe `ParsedTab.chordsFound`.
 
 ## Publishing
 
