@@ -51,3 +51,4 @@ export default {
 | ---------------- | -------------- | ----------------------------- |
 | `tab-renderer`   | 6007           | `pnpm storybook:tab-renderer` |
 | `svguitar-react` | 6006           | `pnpm storybook:svguitar`     |
+| `interactive-fretboard` | 6010 | `pnpm storybook:interactive-fretboard` |

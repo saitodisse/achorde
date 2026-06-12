@@ -170,7 +170,7 @@ Also exported: `Tab.Line`, `Tab.Chord`, `Tab.Lyric`, `TabDecoration`.
 ## Storybook
 
 ```bash
-npm run storybook
+pnpm storybook # port 6007
 ```
 
 Teaching trail (sidebar):
@@ -185,15 +185,15 @@ Use the **Theme** toolbar (Light / Dark) for readable preview frames.
 ## Local development
 
 ```bash
-npm install
-npm run dev
-npm run storybook
-npm test
-npm run lint
-npm run build
-npm run build-storybook
-npm run build:site
-npm run preview:site
+pnpm install
+pnpm dev
+pnpm storybook
+pnpm test
+pnpm lint
+pnpm build
+pnpm build-storybook
+pnpm build:site
+pnpm preview:site
 ```
 
 The demo site is published at [tab-renderer-react.vercel.app](https://tab-renderer-react.vercel.app/).

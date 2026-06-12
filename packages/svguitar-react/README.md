@@ -384,13 +384,13 @@ src/
 
 Explore all components and features in our interactive Storybook documentation:
 
-- 🌐 **Live Storybook**: [https://svguitar-react-storybook.vercel.app](https://svguitar-react-storybook.vercel.app) _(Coming soon)_
+- 🌐 **Live Storybook**: [https://storybook-svguitar-react.vercel.app/](https://storybook-svguitar-react.vercel.app/?path=/docs/components-chorddiagram--docs)
 
 ### Running Storybook Locally
 
 ```bash
 # Start Storybook development server
-pnpm storybook
+pnpm storybook # port 6006
 
 # Build Storybook for production
 pnpm build-storybook
