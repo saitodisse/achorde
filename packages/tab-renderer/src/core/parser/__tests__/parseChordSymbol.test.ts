@@ -35,6 +35,7 @@ describe("parseChordSymbol", () => {
   it("rejects lyric words that start with a note letter", () => {
     expect(parseChordSymbol("Eu")).toBeNull();
     expect(parseChordSymbol("De")).toBeNull();
+    expect(parseChordSymbol("Amor")).toBeNull();
   });
 
   it("still accepts minor and major spellings that share a note prefix", () => {
