@@ -49,5 +49,5 @@ export default {
 
 | Pacote           | Porta (padrão) | Script raiz                   |
 | ---------------- | -------------- | ----------------------------- |
-| `tab-renderer`   | 6006           | `pnpm storybook:tab-renderer` |
-| `svguitar-react` | (local)        | `pnpm storybook:svguitar`     |
+| `tab-renderer`   | 6007           | `pnpm storybook:tab-renderer` |
+| `svguitar-react` | 6006           | `pnpm storybook:svguitar`     |
