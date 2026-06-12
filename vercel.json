@@ -1,0 +1,7 @@
+{
+	"$schema": "https://openapi.vercel.sh/vercel.json",
+	"buildCommand": "pnpm --dir packages/tab-renderer build:site",
+	"outputDirectory": "packages/tab-renderer/dist-site",
+	"framework": "vite",
+	"installCommand": "pnpm install --ignore-scripts"
+}
