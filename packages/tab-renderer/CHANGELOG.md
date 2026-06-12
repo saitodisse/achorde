@@ -2,6 +2,12 @@
 
 All notable changes to this project are documented in this file.
 
+## [0.8.4] - 2026-06-12
+
+### Changed
+
+- Bump `TAB_RENDERER_PARSER_VERSION` and `TAB_RENDERER_AST_VERSION` to `2.2.1` so the viewer cache invalidates stale ASTs after the `Amor` chord false-positive fix.
+
 ## [0.8.3] - 2026-06-12
 
 ### Fixed
