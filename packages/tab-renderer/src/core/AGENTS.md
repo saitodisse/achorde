@@ -4,7 +4,7 @@ The core is the framework-agnostic heart of the library.
 
 ## Responsibilities
 
-- **`parseTab()`** — primary headless parser: multiline body → `ParsedTab` (AST 2.2.1; chord-line majority rule; `DecorationToken` for non-chord parens).
+- **`parseTab()`** — primary headless parser: multiline body → `ParsedTab` (AST 2.2.2; chord-line majority rule; `DecorationToken` for non-chord parens).
 - **`prepareSongFromParsedTab()`** — styled `Tab` pipeline: align chord/lyric lines → `extractChordLineMarkers` → `generateBarList` → interleaved segments.
 - **`prepareSong()`** — legacy pairer pipeline: split sections → pair lines → `extractChords` → transpose → `barList`.
 - Export shared types: `ParsedTab`, `ParsedTabSection`, `ParsedTabLine`, `ParsedTabToken`, `PreparedSong`, `TabStyleConfig`, `DEFAULT_TAB_STYLE`, parser/transposer types.

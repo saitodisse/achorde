@@ -16,8 +16,8 @@ import type {
   ParsedTabToken,
 } from "./types";
 
-export const TAB_RENDERER_PARSER_VERSION = "2.2.1";
-export const TAB_RENDERER_AST_VERSION = "2.2.1";
+export const TAB_RENDERER_PARSER_VERSION = "2.2.2";
+export const TAB_RENDERER_AST_VERSION = "2.2.2";
 
 const SECTION_LABEL_RE = /^\s*\[([^\]]+)\](.*)$/;
 const COMMENT_LINE_RE = /^\s*(#|\/\/)/;
@@ -29,13 +29,19 @@ function lyricTokenLooksLikeInvalidChord(text: string): boolean {
     return false;
   }
 
-  if (!/^[A-G][#b♯♭]?/.test(text)) {
+  const rootMatch = text.match(/^([A-G])([#b♯♭]?)(.+)$/);
+  if (!rootMatch) {
+    return false;
+  }
+
+  const suffix = rootMatch[3] ?? "";
+  if (suffix.length === 0) {
     return false;
   }
 
   return (
-    /[0-9/()+#°º+\-]/.test(text) ||
-    /^[A-G][#b♯♭]?(?:m|M|maj|min|dim|aug|sus|add)/.test(text)
+    /[0-9/()+#°º+\-]/.test(suffix) ||
+    /^(?:m|M|maj|min|dim|aug|sus|add)(?![a-z])/i.test(suffix)
   );
 }
 

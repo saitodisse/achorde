@@ -65,6 +65,21 @@ describe("strict parseTab grammar", () => {
     ]);
   });
 
+  it("treats lyric lines starting with Amor as lyrics", () => {
+    const result = parseTab("Amor de verdade eu só senti");
+
+    expect(result.sections[0]?.lines[0]).toMatchObject({
+      kind: "lyrics",
+      text: "Amor de verdade eu só senti",
+    });
+    expect(result.diagnostics).toEqual([]);
+    expect(
+      result.sections[0]?.lines[0]?.tokens.some(
+        (token) => token.kind === "ChordToken",
+      ),
+    ).toBe(false);
+  });
+
   it("rejects comments and tablature as invalid-line", () => {
     const result = parseTab("# comentario\nE|--0-2-3--");
 

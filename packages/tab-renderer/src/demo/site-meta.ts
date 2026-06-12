@@ -1,5 +1,5 @@
 export const LIB_NAME = "@achorde/tab-renderer";
-export const LIB_VERSION = "0.8.4";
+export const LIB_VERSION = "0.8.5";
 export const LIB_LICENSE = "MIT";
 export const SITE_URL = "https://tab-renderer-react.vercel.app/";
 export const GITHUB_URL =
