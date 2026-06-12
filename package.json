@@ -6,10 +6,11 @@
   "scripts": {
     "build": "turbo run build",
     "dev": "pnpm dev:all",
-    "dev:all": "sh -c 'turbo run dev --parallel & pnpm storybook:tab-renderer & pnpm storybook:svguitar & pnpm storybook:interactive-fretboard & wait'",
+    "dev:all": "sh -c 'turbo run dev --parallel & pnpm storybook:musical-domain & pnpm storybook:tab-renderer & pnpm storybook:svguitar & pnpm storybook:interactive-fretboard & wait'",
     "test": "turbo run test",
     "typecheck": "turbo run typecheck",
     "lint": "turbo run lint",
+    "storybook:musical-domain": "pnpm --filter @achorde/musical-domain storybook",
     "storybook:tab-renderer": "pnpm --filter @achorde/tab-renderer storybook",
     "storybook:svguitar": "pnpm --filter @achorde/svguitar-react storybook",
     "storybook:interactive-fretboard": "pnpm --filter @achorde/interactive-fretboard storybook"

@@ -13,7 +13,7 @@
   "bugs": {
     "url": "https://github.com/saitodisse/achorde/issues"
   },
-  "homepage": "https://github.com/saitodisse/achorde/tree/main/packages/musical-domain#readme",
+  "homepage": "https://musical-domain.vercel.app/",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "files": [
@@ -33,13 +33,29 @@
   },
   "scripts": {
     "build": "tsc -p tsconfig.json",
+    "dev": "pnpm dev:site",
+    "dev:site": "vite --config vite.config.site.ts",
+    "build:site": "vite build --config vite.config.site.ts",
+    "preview:site": "vite preview --config vite.config.site.ts --outDir dist-site",
+    "storybook": "storybook dev -p 6005",
+    "build-storybook": "storybook build",
     "prepare": "pnpm build",
     "lint": "tsc -p tsconfig.json --noEmit",
     "test": "vitest run",
     "prepublishOnly": "pnpm build && pnpm test"
   },
   "devDependencies": {
+    "@achorde/storybook-config": "workspace:*",
+    "@storybook/addon-docs": "^10.4.1",
+    "@storybook/react-vite": "^10.4.1",
+    "@vitejs/plugin-react": "^5.0.0",
+    "@types/react": "^19.2.14",
+    "@types/react-dom": "^19.2.3",
+    "react": "19.2.6",
+    "react-dom": "19.2.6",
     "typescript": "^5.9.3",
+    "storybook": "^10.4.1",
+    "vite": "^7.3.1",
     "vitest": "^4.1.6"
   }
 }

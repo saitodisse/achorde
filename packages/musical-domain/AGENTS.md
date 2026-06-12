@@ -6,7 +6,8 @@ This repository publishes shared musical contracts for chord charts, textual tab
 
 ## Public Surfaces
 
-- Docs only: no public demo site or Storybook.
+- Demo site: https://musical-domain.vercel.app/
+- Storybook: https://storybook-musical-domain.vercel.app/
 
 ## Rules
 
@@ -21,6 +22,16 @@ This repository publishes shared musical contracts for chord charts, textual tab
 
 - `src/` contains public contracts and version constants.
 - `docs/` explains package scope, architecture, and migration guidance.
+
+## Commands
+
+| Script | Purpose |
+| ------ | ------- |
+| `pnpm dev:site` | Demo site on port 5283 |
+| `pnpm build:site` | Demo site build |
+| `pnpm preview:site` | Preview built demo |
+| `pnpm storybook` | Storybook on port 6005 |
+| `pnpm build-storybook` | Storybook build |
 
 ## Downstream Consumers
 

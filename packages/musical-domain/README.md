@@ -1,8 +1,8 @@
 # @achorde/musical-domain
 
 **npm `latest`:** `0.5.3` — [package page](https://www.npmjs.com/package/@achorde/musical-domain)
-
-This package is contract-only: it has no public demo site or Storybook. The published documentation lives in this README and in `docs/`.
+- 🌐 **Live Demo**: [https://musical-domain.vercel.app/](https://musical-domain.vercel.app/)
+- 🌐 **Storybook**: [https://storybook-musical-domain.vercel.app/](https://storybook-musical-domain.vercel.app/)
 
 Shared TypeScript contracts for musical applications that need a common language for chord charts, parsed tabs, parser diagnostics, and fretted-instrument voicings.
 
@@ -25,6 +25,20 @@ The package is intentionally small and runtime-light. It defines stable data sha
 
 ```bash
 pnpm add @achorde/musical-domain
+```
+
+## Demo site
+
+```bash
+pnpm dev:site      # port 5283
+pnpm build:site
+pnpm preview:site  # port 4283
+```
+
+## Storybook
+
+```bash
+pnpm storybook   # port 6005
 ```
 
 ## Usage
@@ -81,3 +95,13 @@ selectPreferredFrettedVoicing([voicing /* ... */]);
 - [Architecture](docs/architecture.md)
 - [Migration](docs/migration.md)
 - [Changelog](CHANGELOG.md)
+
+## Scripts
+
+| Script | Description |
+| ------ | ----------- |
+| `pnpm dev:site` | Demo site on port 5283 |
+| `pnpm build:site` | Demo site build |
+| `pnpm preview:site` | Preview built demo |
+| `pnpm storybook` | Storybook on port 6005 |
+| `pnpm build-storybook` | Storybook build |
