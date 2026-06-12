@@ -2,6 +2,12 @@
 
 All notable changes to this project are documented in this file.
 
+## [0.8.3] - 2026-06-12
+
+### Fixed
+
+- Preserve `m(7M)`-style Brazilian major-minor spellings after Oolimo preprocessing while still rejecting lyric words such as `Amor`.
+
 ## [0.8.2] - 2026-06-12
 
 ### Fixed

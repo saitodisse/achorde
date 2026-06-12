@@ -10,7 +10,7 @@ const CHORD_SLASH_EXTENSION_RE = /^[#b♯♭]?\d[\w\-+°º♭♯#()]*$/;
  * Rejects lyric tails such as the "u" in "Eu" or "e" in "De".
  */
 const CHORD_SUFFIX_RE =
-  /^(?:\([^)]*\))*(?:\/[#b♯♭]?\d[\w\-+°º♭♯#()]*)?(?:m(?![a-z])|M(?![a-z])|Maj|Min|maj|min|major|minor|dim|aug|sus|add|[#b°º+\-]|\d)[\w\-+°º♭♯#()/]*$/;
+  /^(?:\([^)]*\))*(?:\/[#b♯♭]?\d[\w\-+°º♭♯#()]*)?(?:mmaj|m(?![a-z])|M(?![a-z])|Maj|Min|maj|min|major|minor|dim|aug|sus|add|[#b°º+\-]|\d)[\w\-+°º♭♯#()/]*$/;
 
 function isValidChordSuffix(suffix: string): boolean {
   if (suffix.length === 0) {

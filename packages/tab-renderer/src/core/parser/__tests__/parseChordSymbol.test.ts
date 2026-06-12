@@ -39,6 +39,12 @@ describe("parseChordSymbol", () => {
   });
 
   it("still accepts minor and major spellings that share a note prefix", () => {
+    expect(parseChordSymbol("F#mmaj7")).toEqual({
+      kind: "chord",
+      text: "F#mmaj7",
+      root: "F#",
+      suffix: "mmaj7",
+    });
     expect(parseChordSymbol("Em")).toEqual({
       kind: "chord",
       text: "Em",

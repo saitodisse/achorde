@@ -59,7 +59,7 @@ Repository guidance: [`AGENTS.md`](./AGENTS.md), [`docs/AGENTS.md`](./docs/AGENT
 pnpm add @achorde/tab-renderer @achorde/musical-domain
 ```
 
-Current release: **`@achorde/tab-renderer@0.8.2`** (depends on `@achorde/musical-domain@^0.5.2`). Legacy unscoped `tab-renderer` remains on npm for older consumers.
+Current release: **`@achorde/tab-renderer@0.8.3`** (depends on `@achorde/musical-domain@^0.5.2`). Legacy unscoped `tab-renderer` remains on npm for older consumers.
 
 **Monorepo / git:**
 
