@@ -16,14 +16,15 @@ import {
   type AppPageTheme,
 } from "./demo/styling-dialkit";
 import {
-  CORE_USAGE_SNIPPET,
-  GITHUB_URL,
-  INSTALL_SNIPPET,
-  LIB_LICENSE,
-  LIB_NAME,
-  LIB_VERSION,
-  NPM_URL,
-  REACT_USAGE_SNIPPET,
+	CORE_USAGE_SNIPPET,
+	GITHUB_URL,
+	INSTALL_SNIPPET,
+	LIB_LICENSE,
+	LIB_NAME,
+	LIB_VERSION,
+	NPM_URL,
+	REACT_USAGE_SNIPPET,
+	STORYBOOK_URL,
 } from "./demo/site-meta";
 import "./react/stories/stories.css";
 import "./App.css";
@@ -99,6 +100,14 @@ function App() {
           </p>
 
           <div className="lib-actions">
+            <a
+              className="lib-button"
+              href={STORYBOOK_URL}
+              target="_blank"
+              rel="noreferrer"
+            >
+              Storybook
+            </a>
             <a
               className="lib-button lib-button-primary"
               href={GITHUB_URL}

@@ -4,6 +4,10 @@
 
 This repository publishes shared musical contracts for chord charts, textual tab ASTs, parser diagnostics, fretted-instrument voicings, and music-theory adapter ports. It does not contain React, storage, routing, sync, SVG rendering, or product-specific application rules.
 
+## Public Surfaces
+
+- Docs only: no public demo site or Storybook.
+
 ## Rules
 
 - Use `pnpm` to install dependencies, run tests, build, and publish.

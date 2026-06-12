@@ -2,8 +2,9 @@ export const LIB_NAME = "@achorde/tab-renderer";
 export const LIB_VERSION = "0.8.5";
 export const LIB_LICENSE = "MIT";
 export const SITE_URL = "https://tab-renderer-react.vercel.app/";
+export const STORYBOOK_URL = "https://storybook-tab-renderer.vercel.app/";
 export const GITHUB_URL =
-  "https://github.com/saitodisse/achorde/tree/main/packages/tab-renderer";
+	"https://github.com/saitodisse/achorde/tree/main/packages/tab-renderer";
 export const NPM_URL = "https://www.npmjs.com/package/@achorde/tab-renderer";
 
 export const INSTALL_SNIPPET = "pnpm add @achorde/tab-renderer";

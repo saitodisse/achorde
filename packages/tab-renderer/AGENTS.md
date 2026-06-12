@@ -2,6 +2,11 @@
 
 This repository publishes `tab-renderer`, an open-source library for chord sheet parsing and rendering.
 
+## Public Surfaces
+
+- Demo site: https://tab-renderer-react.vercel.app/
+- Storybook: https://storybook-tab-renderer.vercel.app/
+
 ## Architecture
 
 - The public npm package is a single artifact with subpath exports.

@@ -6,10 +6,10 @@ Monorepo for the shared music ecosystem (public npm packages under the [`@achord
 
 | Package                                                     | npm                                                                                              | Role                                                                                               |
 | ----------------------------------------------------------- | ------------------------------------------------------------------------------------------------ | -------------------------------------------------------------------------------------------------- |
-| [`musical-domain`](./packages/musical-domain)               | [`@achorde/musical-domain`](https://www.npmjs.com/package/@achorde/musical-domain)               | Shared contracts: `ParsedTab`, voicings, diagnostics, chord label normalization, voicing selection |
-| [`tab-renderer`](./packages/tab-renderer)                   | [`@achorde/tab-renderer`](https://www.npmjs.com/package/@achorde/tab-renderer)                   | Headless parse/transpose (`./core`) and React rendering (`./react`)                                |
-| [`svguitar-react`](./packages/svguitar-react)               | [`@achorde/svguitar-react`](https://www.npmjs.com/package/@achorde/svguitar-react)               | SVG chord diagrams for fretted instruments                                                         |
-| [`interactive-fretboard`](./packages/interactive-fretboard) | [`@achorde/interactive-fretboard`](https://www.npmjs.com/package/@achorde/interactive-fretboard) | Interactive SVG fretboard editor                                                                   |
+| [`musical-domain`](./packages/musical-domain)               | [`@achorde/musical-domain`](https://www.npmjs.com/package/@achorde/musical-domain)               | docs only                                                                                          |
+| [`tab-renderer`](./packages/tab-renderer)                   | [`@achorde/tab-renderer`](https://www.npmjs.com/package/@achorde/tab-renderer)                   | [demo](https://tab-renderer-react.vercel.app/) · [storybook](https://storybook-tab-renderer.vercel.app/) |
+| [`svguitar-react`](./packages/svguitar-react)               | [`@achorde/svguitar-react`](https://www.npmjs.com/package/@achorde/svguitar-react)               | [demo](https://svguitar-react.vercel.app/) · [storybook](https://storybook-svguitar-react.vercel.app/?path=/docs/components-chorddiagram--docs) |
+| [`interactive-fretboard`](./packages/interactive-fretboard) | [`@achorde/interactive-fretboard`](https://www.npmjs.com/package/@achorde/interactive-fretboard) | [demo](https://interactive-fretboard.vercel.app/) · [storybook](https://storybook-interactive-fretboard.vercel.app/) |
 | [`storybook-config`](./packages/storybook-config)           | _(private, workspace only)_                                                                      | Shared Storybook + Vite setup for `tab-renderer`                                                   |
 
 Legacy unscoped names (`achorde-musical-domain`, `tab-renderer`, `svguitar-react`) remain on npm for existing consumers; new releases use `@achorde/*`.
@@ -31,9 +31,9 @@ pnpm typecheck
 | Package                          | npm `latest` |
 | -------------------------------- | ------------ |
 | `@achorde/musical-domain`        | `0.5.3`      |
-| `@achorde/tab-renderer`          | `0.8.1`      |
-| `@achorde/svguitar-react`        | `2.5.2`      |
-| `@achorde/interactive-fretboard` | `0.1.8`      |
+| `@achorde/tab-renderer`          | `0.8.5`      |
+| `@achorde/svguitar-react`        | `2.5.3`      |
+| `@achorde/interactive-fretboard` | `0.1.11`     |
 
 ## Install (consumers)
 

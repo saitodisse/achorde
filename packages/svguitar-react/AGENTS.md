@@ -6,6 +6,11 @@ Central instructions for AI agents and IDE assistants working in this repository
 
 `svguitar-react` is an open-source React and TypeScript library for rendering fretted-instrument chord diagrams as SVG. It uses Vite, Storybook, Vitest, ESLint, and Prettier.
 
+## Public Surfaces
+
+- Demo site: https://svguitar-react.vercel.app/
+- Storybook: https://storybook-svguitar-react.vercel.app/?path=/docs/components-chorddiagram--docs
+
 **Package manager:** always use **pnpm**. Do not use npm or yarn for repository tasks.
 
 **Specs:** read `specs/` before behavior changes. For formal review, use the [`specs-audit`](.cursor/skills/specs-audit/SKILL.md) skill.

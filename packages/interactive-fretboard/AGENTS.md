@@ -4,6 +4,11 @@
 
 Publishable React library for **pointer-based fretboard editing**. Owns SVG layout, view modes (orientation × handedness), hit-testing in viewBox space, and editor UX—not chord identity, persistence, routing, or compact chord diagrams.
 
+## Public Surfaces
+
+- Demo site: https://interactive-fretboard.vercel.app/
+- Storybook: https://storybook-interactive-fretboard.vercel.app/
+
 ## Boundaries
 
 | In scope                                                | Out of scope                               |
@@ -13,7 +18,7 @@ Publishable React library for **pointer-based fretboard editing**. Owns SVG layo
 | Adapters: voicing ↔ editor state, fretNotation helpers  | Tab parse, `parseChordSymbol`              |
 | Storybook demos for OSS embeds                          | AC15 product copy / i18n                   |
 
-**Contracts:** `@achorde/musical-domain@^0.5.2` for `FrettedInstrumentVoicing` and headless parse/barre pipeline.
+**Contracts:** `@achorde/musical-domain@^0.5.3` for `FrettedInstrumentVoicing` and headless parse/barre pipeline.
 
 ## Commands
 
@@ -21,6 +26,9 @@ Use **pnpm** only. Read `specs/001-interactive-fretboard/` before behavior chang
 
 | Script           | Purpose                      |
 | ---------------- | ---------------------------- |
+| `pnpm dev:app`   | Demo site on port 6011       |
+| `pnpm build:app` | Demo site build              |
+| `pnpm preview:app` | Preview demo site          |
 | `pnpm test:run`  | Vitest unit tests            |
 | `pnpm build`     | Library build (Vite + `tsc`) |
 | `pnpm lint`      | ESLint                       |

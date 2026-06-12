@@ -20,7 +20,7 @@
 		"url": "git+https://github.com/saitodisse/achorde.git",
 		"directory": "packages/interactive-fretboard"
 	},
-	"homepage": "https://github.com/saitodisse/achorde/tree/main/packages/interactive-fretboard#readme",
+	"homepage": "https://interactive-fretboard.vercel.app/",
 	"bugs": {
 		"url": "https://github.com/saitodisse/achorde/issues"
 	},
@@ -42,10 +42,15 @@
 		"access": "public"
 	},
 	"scripts": {
+		"dev": "pnpm dev:app",
+		"dev:app": "vite --config vite.config.app.ts",
 		"build": "tsc -p tsconfig.lib.json && vite build",
+		"build:app": "vite build --config vite.config.app.ts",
 		"lint": "eslint .",
 		"format": "prettier --write .",
 		"format:check": "prettier --check .",
+		"preview": "pnpm preview:app",
+		"preview:app": "vite preview --config vite.config.app.ts",
 		"storybook": "storybook dev -p 6010",
 		"storybook:ci": "storybook dev -p 6010 --ci",
 		"build-storybook": "storybook build",

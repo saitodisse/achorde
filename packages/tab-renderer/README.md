@@ -1,6 +1,7 @@
 # @achorde/tab-renderer
 
 **Live demo:** [tab-renderer-react.vercel.app](https://tab-renderer-react.vercel.app/)
+**Storybook:** [storybook-tab-renderer.vercel.app](https://storybook-tab-renderer.vercel.app/)
 
 Open-source chord sheet rendering library with:
 
@@ -59,7 +60,7 @@ Repository guidance: [`AGENTS.md`](./AGENTS.md), [`docs/AGENTS.md`](./docs/AGENT
 pnpm add @achorde/tab-renderer @achorde/musical-domain
 ```
 
-Current release: **`@achorde/tab-renderer@0.8.4`** (depends on `@achorde/musical-domain@^0.5.2`). Legacy unscoped `tab-renderer` remains on npm for older consumers.
+Current release: **`@achorde/tab-renderer@0.8.5`** (depends on `@achorde/musical-domain@^0.5.3`). Legacy unscoped `tab-renderer` remains on npm for older consumers.
 
 **Monorepo / git:**
 
@@ -111,7 +112,7 @@ const song = parseTab(body);
 // song.sections[].lines[].tokens — ChordToken | LyricToken | DecorationToken | SpaceToken
 ```
 
-Exported: `ParsedTab`, `PreparedSong`, `TabStyleConfig`, `ChordLineMarker`, `BarsListItem`, `prepareSongFromParsedTab`, `transposeParsedTab`. Contracts from `@achorde/musical-domain` `^0.5.2` (`DecorationToken` and later APIs). See [`CONTEXT.md`](./CONTEXT.md).
+Exported: `ParsedTab`, `PreparedSong`, `TabStyleConfig`, `ChordLineMarker`, `BarsListItem`, `prepareSongFromParsedTab`, `transposeParsedTab`. Contracts from `@achorde/musical-domain` `^0.5.3` (`DecorationToken` and later APIs). See [`CONTEXT.md`](./CONTEXT.md).
 
 ## React usage
 

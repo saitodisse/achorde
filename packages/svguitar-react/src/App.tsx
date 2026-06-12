@@ -618,6 +618,14 @@ function App() {
 				<h1 className="text-4xl font-semibold tracking-tight">svguitar-react</h1>
 				<nav className="flex items-center gap-4 text-sm font-medium text-sky-300">
 					<a
+						href="https://storybook-svguitar-react.vercel.app/?path=/docs/components-chorddiagram--docs"
+						target="_blank"
+						rel="noopener noreferrer"
+						className="transition hover:text-sky-200"
+					>
+						Storybook
+					</a>
+					<a
 						href="https://github.com/saitodisse/achorde/tree/main/packages/svguitar-react"
 						target="_blank"
 						rel="noopener noreferrer"

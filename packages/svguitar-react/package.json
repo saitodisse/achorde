@@ -33,7 +33,7 @@
 		"url": "git+https://github.com/saitodisse/achorde.git",
 		"directory": "packages/svguitar-react"
 	},
-	"homepage": "https://github.com/saitodisse/achorde/tree/main/packages/svguitar-react#readme",
+	"homepage": "https://svguitar-react.vercel.app/",
 	"bugs": {
 		"url": "https://github.com/saitodisse/achorde/issues"
 	},

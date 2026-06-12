@@ -2,11 +2,14 @@
 
 **npm `latest`:** `0.1.11` — [package page](https://www.npmjs.com/package/@achorde/interactive-fretboard)
 
+- 🌐 **Live Demo**: [https://interactive-fretboard.vercel.app/](https://interactive-fretboard.vercel.app/)
+- 🌐 **Storybook**: [https://storybook-interactive-fretboard.vercel.app/](https://storybook-interactive-fretboard.vercel.app/)
+
 Responsive SVG **interactive fretboard** editor for React. Build chord fingerings by pointer (mouse, touch, pen) on a full neck view—suitable for chord apps, education sites, and video embeds.
 
 ## Features
 
-- Controlled **`FrettedInstrumentVoicing`** value (from `@achorde/musical-domain@^0.5.2`) with optional **`fretNotation`** convenience mode
+- Controlled **`FrettedInstrumentVoicing`** value (from `@achorde/musical-domain@^0.5.3`) with optional **`fretNotation`** convenience mode
 - Four **view modes**: horizontal / vertical × right-handed / left-handed (inverted string axis)
 - Robust hit-testing: fixed **`viewBox`**, `DOMPoint` + `getScreenCTM().inverse()`, pure geometry + invisible hit areas
 - Optional chord detection on change (`tonal` + `@tonaljs/chord-detect`)
@@ -84,10 +87,21 @@ pnpm storybook   # port 6010
 
 Stories expose **all** component props in Controls (Layout, Appearance, Colors, Behavior). Use the **AppearancePlayground** story to tweak dot size, labels, inlays, and theme colors interactively.
 
+## Demo site
+
+```bash
+pnpm dev:app      # port 6011
+pnpm build:app
+pnpm preview:app  # port 4311
+```
+
 ## Scripts
 
 | Script           | Description                |
 | ---------------- | -------------------------- |
+| `pnpm dev:app`   | Vite demo site             |
+| `pnpm build:app` | Static demo build          |
+| `pnpm preview:app` | Preview built demo       |
 | `pnpm build`     | Typecheck + Vite library   |
 | `pnpm test:run`  | Vitest unit tests          |
 | `pnpm storybook` | Storybook on port **6010** |
