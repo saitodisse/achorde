@@ -5,11 +5,11 @@
   "homepage": "https://tab-renderer-react.vercel.app/",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/achorde/achorde.git",
+    "url": "git+https://github.com/saitodisse/achorde.git",
     "directory": "packages/tab-renderer"
   },
   "bugs": {
-    "url": "https://github.com/achorde/achorde/issues"
+    "url": "https://github.com/saitodisse/achorde/issues"
   },
   "license": "MIT",
   "type": "module",

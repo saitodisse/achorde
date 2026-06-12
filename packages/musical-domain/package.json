@@ -7,13 +7,13 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/achorde/achorde.git",
+    "url": "git+https://github.com/saitodisse/achorde.git",
     "directory": "packages/musical-domain"
   },
   "bugs": {
-    "url": "https://github.com/achorde/achorde/issues"
+    "url": "https://github.com/saitodisse/achorde/issues"
   },
-  "homepage": "https://github.com/achorde/achorde/tree/main/packages/musical-domain#readme",
+  "homepage": "https://github.com/saitodisse/achorde/tree/main/packages/musical-domain#readme",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "files": [

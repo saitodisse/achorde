@@ -43,7 +43,7 @@ pnpm add @achorde/musical-domain @achorde/tab-renderer @achorde/svguitar-react @
 
 Use the version ranges documented in each package `README.md` and `CHANGELOG.md`. After publishing, bump dependents (including `ac15`) and run their install + test + build.
 
-Repository: [github.com/achorde/achorde](https://github.com/achorde/achorde)
+Repository: [github.com/saitodisse/achorde](https://github.com/saitodisse/achorde)
 
 ## Agent docs
 

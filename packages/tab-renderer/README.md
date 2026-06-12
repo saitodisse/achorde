@@ -64,7 +64,7 @@ Current release: **`@achorde/tab-renderer@0.8.1`** (depends on `@achorde/musical
 **Monorepo / git:**
 
 ```bash
-git clone https://github.com/achorde/achorde.git
+git clone https://github.com/saitodisse/achorde.git
 cd achorde && pnpm install
 ```
 
