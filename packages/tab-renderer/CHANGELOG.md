@@ -2,6 +2,13 @@
 
 All notable changes to this project are documented in this file.
 
+## [0.8.2] - 2026-06-12
+
+### Fixed
+
+- Prevent lyric words such as `Amor` from being classified as chords in the legacy line pairing pipeline.
+- Tighten chord-line detection to treat a line as chords only when its content tokens are genuinely chord-like.
+
 ## [0.8.1] - 2026-06-04
 
 ### Changed
