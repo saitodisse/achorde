@@ -30,9 +30,9 @@ pnpm add @achorde/musical-domain
 ## Demo site
 
 ```bash
-pnpm dev:site      # port 5283
+pnpm dev:site      # port 5286
 pnpm build:site
-pnpm preview:site  # port 4283
+pnpm preview:site  # port 4286
 ```
 
 ## Storybook
@@ -100,7 +100,7 @@ selectPreferredFrettedVoicing([voicing /* ... */]);
 
 | Script | Description |
 | ------ | ----------- |
-| `pnpm dev:site` | Demo site on port 5283 |
+| `pnpm dev:site` | Demo site on port 5286 |
 | `pnpm build:site` | Demo site build |
 | `pnpm preview:site` | Preview built demo |
 | `pnpm storybook` | Storybook on port 6005 |

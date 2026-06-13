@@ -27,7 +27,7 @@ This repository publishes shared musical contracts for chord charts, textual tab
 
 | Script | Purpose |
 | ------ | ------- |
-| `pnpm dev:site` | Demo site on port 5283 |
+| `pnpm dev:site` | Demo site on port 5286 |
 | `pnpm build:site` | Demo site build |
 | `pnpm preview:site` | Preview built demo |
 | `pnpm storybook` | Storybook on port 6005 |

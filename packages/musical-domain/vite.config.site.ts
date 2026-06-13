@@ -9,12 +9,12 @@ export default defineConfig({
 	},
 	server: {
 		host: "127.0.0.1",
-		port: 5283,
+		port: 5286,
 		strictPort: true,
 	},
 	preview: {
 		host: "127.0.0.1",
-		port: 4283,
+		port: 4286,
 		strictPort: true,
 	},
 });

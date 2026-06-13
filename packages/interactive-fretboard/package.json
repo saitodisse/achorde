@@ -51,8 +51,8 @@
 		"format:check": "prettier --check .",
 		"preview": "pnpm preview:app",
 		"preview:app": "vite preview --config vite.config.app.ts",
-		"storybook": "storybook dev -p 6010",
-		"storybook:ci": "storybook dev -p 6010 --ci",
+		"storybook": "storybook dev -p 6010 --no-open",
+		"storybook:ci": "storybook dev -p 6010 --ci --no-open",
 		"build-storybook": "storybook build",
 		"test": "vitest",
 		"test:run": "vitest run"

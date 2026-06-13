@@ -37,7 +37,7 @@
     "dev:site": "vite --config vite.config.site.ts",
     "build:site": "vite build --config vite.config.site.ts",
     "preview:site": "vite preview --config vite.config.site.ts --outDir dist-site",
-    "storybook": "storybook dev -p 6005",
+    "storybook": "storybook dev -p 6005 --no-open",
     "build-storybook": "storybook build",
     "prepare": "pnpm build",
     "lint": "tsc -p tsconfig.json --noEmit",
