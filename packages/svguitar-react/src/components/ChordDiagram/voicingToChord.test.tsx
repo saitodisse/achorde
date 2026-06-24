@@ -15,9 +15,9 @@ import type { LayoutFrame } from "./types";
 import { DEFAULT_CHORD_STYLE } from "./constants";
 
 describe("voicingStringToDiagramString", () => {
-	it("maps domain 1 (high E) to diagram string 6 and 6 (low E) to 1", () => {
-		expect(voicingStringToDiagramString(1, 6)).toBe(6);
-		expect(voicingStringToDiagramString(6, 6)).toBe(1);
+	it("keeps domain string indices on the diagram axis", () => {
+		expect(voicingStringToDiagramString(1, 6)).toBe(1);
+		expect(voicingStringToDiagramString(6, 6)).toBe(6);
 	});
 });
 
@@ -36,7 +36,7 @@ describe("voicingToDiagramTuning", () => {
 });
 
 describe("voicingToChord", () => {
-	it("maps domain barre string range to diagram axis for partial barre shapes", () => {
+	it("keeps domain barre string range on the diagram axis for partial barre shapes", () => {
 		const voicing = {
 			id: "c",
 			instrumentId: "guitar",
@@ -56,7 +56,7 @@ describe("voicingToChord", () => {
 		};
 
 		const chord = voicingToChord(voicing);
-		expect(chord.barres).toEqual([{ fret: 3, fromString: 4, toString: 6 }]);
+		expect(chord.barres).toEqual([{ fret: 3, fromString: 1, toString: 3 }]);
 	});
 
 	it("places muted low E on diagram string 1 for x32010", () => {
@@ -124,7 +124,7 @@ describe("ChordDiagram voicing handedness", () => {
 		},
 	} satisfies Partial<LayoutFrame> as LayoutFrame;
 
-	it("vertical-right: low E (domain 6) is on the left", () => {
+	it("vertical-right: low E (domain 1) is on the left", () => {
 		expect(voicing).not.toBeNull();
 		const chord = voicingToChord(voicing!);
 		const muted = chord.fingers.find(f => f.is_muted)!;
@@ -134,7 +134,7 @@ describe("ChordDiagram voicing handedness", () => {
 		expect(x).toBeLessThan(highX);
 	});
 
-	it("vertical-left: low E (domain 6) is on the right", () => {
+	it("vertical-left: low E (domain 1) is on the right", () => {
 		expect(voicing).not.toBeNull();
 		const chord = voicingToChord(voicing!);
 		const muted = chord.fingers.find(f => f.is_muted)!;
@@ -175,5 +175,44 @@ describe("ChordDiagram voicing handedness", () => {
 		);
 
 		expect(mutedX).toBeLessThan(rightmostOpen);
+	});
+
+	it("renders Gb5 = 244xxx with pressed low strings on the left (vertical-right)", () => {
+		const gb5 =
+			parseFretNotationToVoicing({
+				fretNotation: "244xxx",
+				chordSymbol: "Gb5",
+				id: "gb5",
+			}) ?? null;
+		expect(gb5).not.toBeNull();
+
+		const chord = voicingToChord(gb5!);
+		expect(chord.fingers.filter(f => !f.is_muted).map(f => [f.string, f.fret])).toEqual([
+			[1, 2],
+			[2, 4],
+			[3, 4],
+		]);
+
+		const { container } = render(
+			<ChordDiagram voicing={gb5!} view="vertical-right" width={220} height={280} />
+		);
+		const svg = container.querySelector("svg");
+		expect(svg).not.toBeNull();
+
+		const frettedDots = Array.from(svg!.querySelectorAll("circle"))
+			.map(c => ({
+				cx: Number(c.getAttribute("cx")),
+				fill: c.getAttribute("fill"),
+			}))
+			.filter(circle => circle.fill !== "white");
+		const mutedLines = Array.from(svg!.querySelectorAll("line")).filter(
+			line => line.getAttribute("stroke-width") === "4"
+		);
+
+		expect(frettedDots).toHaveLength(3);
+		expect(mutedLines.length).toBeGreaterThanOrEqual(6);
+		expect(Math.max(...frettedDots.map(dot => dot.cx))).toBeLessThan(
+			Math.max(...mutedLines.map(line => Number(line.getAttribute("x1") ?? 0)))
+		);
 	});
 });

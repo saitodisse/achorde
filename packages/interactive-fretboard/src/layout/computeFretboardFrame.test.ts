@@ -14,7 +14,7 @@ const frameDefaults = {
 };
 
 describe("computeFretboardFrame", () => {
-	it("places fret 1 dot in the space between nut and first fret wire (C major string 2)", () => {
+	it("places fret 1 dot in the space between nut and first fret wire (C major string 5)", () => {
 		const voicing =
 			parseFretNotationToVoicing({
 				fretNotation: "x32010",
@@ -26,14 +26,14 @@ describe("computeFretboardFrame", () => {
 		const frame = computeFretboardFrame(frameDefaults);
 		const nutX = frame.frets[0]!.x1;
 		const firstWireX = frame.frets[1]!.x1;
-		const cell = frame.cells.find((c) => c.stringIndex === 2 && c.fret === 1);
+		const cell = frame.cells.find((c) => c.stringIndex === 5 && c.fret === 1);
 		expect(cell).toBeDefined();
 		expect(cell!.center.x).toBeGreaterThan(nutX);
 		expect(cell!.center.x).toBeLessThan(firstWireX);
 		expect(cell!.center.x).toBeCloseTo((nutX + firstWireX) / 2, 0);
 
 		const state = voicingToEditorState(voicing!);
-		const editorFret = state.cells.get(2)?.fret;
+		const editorFret = state.cells.get(5)?.fret;
 		expect(editorFret).toBe(1);
 	});
 

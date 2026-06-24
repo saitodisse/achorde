@@ -26,7 +26,7 @@ export function resolveViewMode(
 }
 
 /**
- * Canonical stringIndex: 1 = high E, 6 = low E (achorde-musical-domain).
+ * Canonical stringIndex: 1 = low E, 6 = high E (achorde-musical-domain).
  * visualStringIndex 0 is top (horizontal) or left (vertical).
  */
 export function createVisualToStringIndex(
@@ -37,15 +37,15 @@ export function createVisualToStringIndex(
 
 	if (orientation === "horizontal") {
 		if (handedness === "right") {
-			return (visual) => visual + 1;
+			return (visual) => stringCount - visual;
 		}
-		return (visual) => stringCount - visual;
+		return (visual) => visual + 1;
 	}
 
 	if (handedness === "right") {
-		return (visual) => stringCount - visual;
+		return (visual) => visual + 1;
 	}
-	return (visual) => visual + 1;
+	return (visual) => stringCount - visual;
 }
 
 /** Vertical viewBox height scaled to fret count (fits ~5 frets within a typical viewport). */

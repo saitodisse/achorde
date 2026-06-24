@@ -37,20 +37,20 @@ function nutCellY(
 	return cell!.center.y;
 }
 
-describe("handedness layout (domain: 1 = high E, 6 = low E)", () => {
-	it("vertical-right: low E (6) on the left, high E (1) on the right", () => {
-		expect(nutCellX("vertical", "right", 6)).toBeLessThan(nutCellX("vertical", "right", 1));
+describe("handedness layout (domain: 1 = low E, 6 = high E)", () => {
+	it("vertical-right: low E (1) on the left, high E (6) on the right", () => {
+		expect(nutCellX("vertical", "right", 1)).toBeLessThan(nutCellX("vertical", "right", 6));
 	});
 
-	it("vertical-left: low E (6) on the right, high E (1) on the left", () => {
-		expect(nutCellX("vertical", "left", 6)).toBeGreaterThan(nutCellX("vertical", "left", 1));
+	it("vertical-left: low E (1) on the right, high E (6) on the left", () => {
+		expect(nutCellX("vertical", "left", 1)).toBeGreaterThan(nutCellX("vertical", "left", 6));
 	});
 
-	it("horizontal-right: high E (1) on top, low E (6) on bottom", () => {
-		expect(nutCellY("horizontal", "right", 1)).toBeLessThan(nutCellY("horizontal", "right", 6));
+	it("horizontal-right: high E (6) on top, low E (1) on bottom", () => {
+		expect(nutCellY("horizontal", "right", 6)).toBeLessThan(nutCellY("horizontal", "right", 1));
 	});
 
-	it("horizontal-left: low E (6) on top, high E (1) on bottom", () => {
-		expect(nutCellY("horizontal", "left", 6)).toBeLessThan(nutCellY("horizontal", "left", 1));
+	it("horizontal-left: low E (1) on top, high E (6) on bottom", () => {
+		expect(nutCellY("horizontal", "left", 1)).toBeLessThan(nutCellY("horizontal", "left", 6));
 	});
 });

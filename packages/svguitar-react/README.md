@@ -26,6 +26,8 @@ pnpm add @achorde/svguitar-react @achorde/musical-domain
 
 ## Quick Start
 
+`voicing` follows `@achorde/musical-domain` directly: `stringIndex: 1` is low E, followed by A, D, G, B, and `stringIndex: 6` is high E. The default `vertical-right` view places string 1 on the left.
+
 ```tsx
 import React from "react";
 import { ChordDiagram } from "@achorde/svguitar-react";

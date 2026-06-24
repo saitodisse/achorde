@@ -32,6 +32,8 @@
 
 **Rationale:** renderers, parsers, and applications need a common public contract that is independent from React and SVG.
 
+**Coordinate rule:** consume the domain contract directly. `stringIndex: 1` is the lowest-pitched string and `6` is the highest-pitched string on standard guitar; `voicingToChord` must not reverse string indices or barre ranges.
+
 ## Layout Strategies
 
 **Decision:** represent each view with a `LayoutEngine`.

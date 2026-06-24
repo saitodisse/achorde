@@ -74,6 +74,12 @@ interface ChordDiagramProps {
 3. `instrument` provides fret-notation input and tuning metadata.
 4. Missing optional props are merged with defaults.
 
+## String Coordinate Contract
+
+`voicing` follows `@achorde/musical-domain` directly: `stringIndex: 1` is the lowest-pitched string, and standard guitar tuning is ordered `E A D G B E` from low to high. `fromStringIndex` and `toStringIndex` are copied to `fromString` and `toString` without reversing.
+
+Legacy `chord.fingers[].string`, `chord.barres[]`, and `instrument.chord` use the same low-to-high diagram axis. Layout views decide where string 1 appears visually; `vertical-right` places string 1 on the left.
+
 ## Validation Rules
 
 - At least one input source should be provided.

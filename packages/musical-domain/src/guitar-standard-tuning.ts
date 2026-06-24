@@ -1,10 +1,10 @@
-/** Open notes for stringIndex 1 (high E) through 6 (low E). */
+/** Open notes for stringIndex 1 (low E) through 6 (high E). */
 export const GUITAR_STANDARD_EADGBE_OPEN_NOTES = [
   "E",
-  "B",
-  "G",
-  "D",
   "A",
+  "D",
+  "G",
+  "B",
   "E",
 ] as const;
 

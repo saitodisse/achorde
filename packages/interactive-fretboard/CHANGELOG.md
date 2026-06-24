@@ -2,6 +2,13 @@
 
 All notable changes to `@achorde/interactive-fretboard` are documented in this file.
 
+## [0.2.0] - 2026-06-23
+
+### Changed
+
+- **BREAKING:** `FrettedInstrumentVoicing` now follows the shared low-to-high contract directly: `stringIndex: 1` is low E and `stringIndex: 6` is high E.
+- `vertical-right` places `stringIndex: 1` on the left, matching the AC15 editor and `@achorde/svguitar-react` diagram orientation for low-E-first shapes such as `Gb5 = 244xxx`.
+
 ## [0.1.11] - 2026-06-06
 
 ### Added

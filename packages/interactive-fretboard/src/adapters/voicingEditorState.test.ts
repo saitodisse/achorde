@@ -5,10 +5,10 @@ import { editorStateToVoicing, voicingToEditorState } from "./voicingEditorState
 describe("voicing round-trip", () => {
 	const openNotes = new Map<number, string>([
 		[1, "E"],
-		[2, "B"],
-		[3, "G"],
-		[4, "D"],
-		[5, "A"],
+		[2, "A"],
+		[3, "D"],
+		[4, "G"],
+		[5, "B"],
 		[6, "E"],
 	]);
 
@@ -25,9 +25,9 @@ describe("voicing round-trip", () => {
 		const state = voicingToEditorState(voicing!);
 		const roundTrip = editorStateToVoicing(state, voicing!, openNotes);
 
-		expect(roundTrip.strings.find((s) => s.stringIndex === 6)?.state).toBe("muted");
-		expect(roundTrip.strings.find((s) => s.stringIndex === 1)?.state).toBe("open");
-		expect(roundTrip.strings.find((s) => s.stringIndex === 2)?.fret).toBe(1);
+		expect(roundTrip.strings.find((s) => s.stringIndex === 1)?.state).toBe("muted");
+		expect(roundTrip.strings.find((s) => s.stringIndex === 6)?.state).toBe("open");
+		expect(roundTrip.strings.find((s) => s.stringIndex === 5)?.fret).toBe(1);
 	});
 
 	it("preserves finger assignments on round-trip", () => {

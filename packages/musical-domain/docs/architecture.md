@@ -30,6 +30,12 @@
 
 Consumers should depend on this package for shared public contracts and keep implementation-specific behavior in their own packages. Parser libraries own parsing behavior. Renderer libraries own visual rendering. Applications own persistence, sync, routing, and product workflows.
 
+## Fretted String Coordinate Rule
+
+Fretted-instrument guitar voicings use low-to-high string coordinates. For standard EADGBE guitar, `stringIndex: 1` is low E, `2` is A, `3` is D, `4` is G, `5` is B, and `6` is high E. `fromStringIndex` and `toStringIndex` on barres use the same coordinate system.
+
+Helpers that parse or format fret notation preserve the common low-E-first notation order. For example, `244xxx` means frets 2, 4, and 4 on low E, A, and D, followed by three muted higher strings.
+
 ## Versioning Rule
 
 Contract changes follow semantic versioning:

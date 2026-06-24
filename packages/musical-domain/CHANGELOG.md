@@ -1,5 +1,12 @@
 # Changelog
 
+## 0.6.0 - 2026-06-23
+
+### Changed
+
+- **BREAKING:** Fretted guitar voicing helpers now use low-to-high string coordinates consistently: `stringIndex: 1` is low E and `stringIndex: 6` is high E.
+- `parseFretNotationToVoicing` now maps low-E-first notation directly to `stringIndex` 1..6, and `formatVoicingToFretNotation` emits notation in that same order.
+
 ## 0.5.3 - 2026-06-05
 
 ### Added
@@ -33,7 +40,7 @@
 ### Added
 
 - `inferBarresFromFrettedVoicing` — headless barre inference aligned with svguitar `detectAutoBarre`.
-- `parseFretNotationToVoicing` and `formatVoicingToFretNotation` for 6-string guitar notation (low E first, e.g. `x32100`).
+- `parseFretNotationToVoicing` and `formatVoicingToFretNotation` for 6-string guitar notation (low E first, e.g. `x32010`).
 - `applyVoicingEditorPipeline` convenience wrapper.
 - `GUITAR_STANDARD_EADGBE_OPEN_NOTES` tuning constants.
 

@@ -14,7 +14,7 @@
 
 ### Voicing string mapping fix
 
-`ChordDiagram` now maps `FrettedInstrumentVoicing` string indices (1 = high E in domain) to diagram axes (1 = low E in default views). Tuning labels and finger positions stay consistent when passing `voicing` from `@achorde/musical-domain`.
+`ChordDiagram` now consumes `FrettedInstrumentVoicing` string indices directly (`1` = low E in the domain and in default views). Tuning labels and finger positions stay consistent when passing `voicing` from `@achorde/musical-domain`.
 
 Requires `@achorde/musical-domain@^0.5.2` for aligned barre inference.
 

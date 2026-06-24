@@ -10,6 +10,12 @@
 
 `ChordSpellingMetadata.chordQuality` is the musical suffix (e.g. `maj7`, `aug9`), not `VoicingQuality` on `FrettedInstrumentVoicing`.
 
+## Fretted string coordinates
+
+Current fretted guitar voicings use low-to-high coordinates: `stringIndex: 1` is low E and `stringIndex: 6` is high E. Barres use the same order through `fromStringIndex` and `toStringIndex`.
+
+Consumers migrating from a high-E-first local model must rewrite stored local voicings once at the persistence boundary. Do not reverse coordinates again when rendering with `@achorde/svguitar-react`.
+
 ## Recommended Order
 
 1. Add `achorde-musical-domain` as a dependency.

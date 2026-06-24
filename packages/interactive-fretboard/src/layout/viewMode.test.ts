@@ -13,13 +13,13 @@ describe("resolveViewMode", () => {
 describe("createVisualToStringIndex", () => {
 	const stringCount = 6;
 
-	it("horizontal-right maps visual 0 to stringIndex 1 (high E on top)", () => {
+	it("horizontal-right maps visual 0 to stringIndex 6 (high E on top)", () => {
 		const map = createVisualToStringIndex(
 			{ orientation: "horizontal", handedness: "right" },
 			stringCount,
 		);
-		expect(map(0)).toBe(1);
-		expect(map(5)).toBe(6);
+		expect(map(0)).toBe(6);
+		expect(map(5)).toBe(1);
 	});
 
 	it("horizontal-left mirrors strings", () => {
@@ -27,17 +27,17 @@ describe("createVisualToStringIndex", () => {
 			{ orientation: "horizontal", handedness: "left" },
 			stringCount,
 		);
-		expect(map(0)).toBe(6);
-		expect(map(5)).toBe(1);
+		expect(map(0)).toBe(1);
+		expect(map(5)).toBe(6);
 	});
 
-	it("vertical-right places low string on the left", () => {
+	it("vertical-right places stringIndex 1 low string on the left", () => {
 		const map = createVisualToStringIndex(
 			{ orientation: "vertical", handedness: "right" },
 			stringCount,
 		);
-		expect(map(0)).toBe(6);
-		expect(map(5)).toBe(1);
+		expect(map(0)).toBe(1);
+		expect(map(5)).toBe(6);
 	});
 
 	it("vertical-left mirrors along X", () => {
@@ -45,7 +45,7 @@ describe("createVisualToStringIndex", () => {
 			{ orientation: "vertical", handedness: "left" },
 			stringCount,
 		);
-		expect(map(0)).toBe(1);
-		expect(map(5)).toBe(6);
+		expect(map(0)).toBe(6);
+		expect(map(5)).toBe(1);
 	});
 });

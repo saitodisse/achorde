@@ -10,6 +10,8 @@ pnpm add svguitar-react achorde-musical-domain
 
 ## Basic Usage
 
+`FrettedInstrumentVoicing` uses low-to-high coordinates: `stringIndex: 1` is low E and `stringIndex: 6` is high E. `ChordDiagram` consumes that order directly.
+
 ```tsx
 import { ChordDiagram } from "svguitar-react";
 import type { FrettedInstrumentVoicing } from "achorde-musical-domain";

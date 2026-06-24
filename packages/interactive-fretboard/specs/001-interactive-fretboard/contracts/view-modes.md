@@ -37,18 +37,18 @@ Persisted `FrettedInstrumentVoicing.strings[].stringIndex` always uses this tabl
 ### Horizontal + right-handed (default)
 
 - Frets increase along **+X** (left = nut, right = higher frets).
-- **High string (1)** at top visual row (−Y), **low string (6)** at bottom (+Y).
+- **High string (6)** at top visual row (−Y), **low string (1)** at bottom (+Y).
 - Matches AC12 edit-page mental model for right-handed players.
 
 ### Horizontal + left-handed
 
 - Same fret axis as horizontal-right.
-- **Mirror string axis**: low string (6) at top, high string (1) at bottom (documented in tests).
+- **Mirror string axis**: low string (1) at top, high string (6) at bottom (documented in tests).
 
 ### Vertical + right-handed
 
 - Frets increase along **+Y** (nut at top).
-- Strings spaced along **X**; low string (6) on the player’s left side of the diagram (screen −X).
+- Strings spaced along **X**; low string (1) on the player’s left side of the diagram (screen −X).
 
 ### Vertical + left-handed
 

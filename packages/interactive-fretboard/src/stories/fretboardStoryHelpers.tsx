@@ -110,7 +110,7 @@ export const fretboardArgTypes = {
 	},
 	tuning: {
 		control: "object",
-		description: "Open-string notes, high string first (stringIndex 1 … n).",
+		description: "Open-string notes, low string first (stringIndex 1 … n).",
 		table: { category: "Instrument" },
 	},
 	inferBarresOnChange: {

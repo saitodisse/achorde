@@ -67,7 +67,7 @@ function parseFretCharacter(
 }
 
 /**
- * Parses guitar fret notation with one character per string, low E (string 6) first.
+ * Parses guitar fret notation with one character per string, low E (string 1) first.
  * Example: `x32010` → standard C major shape.
  */
 export function parseFretNotationToVoicing(
@@ -81,7 +81,7 @@ export function parseFretNotationToVoicing(
   const strings: FrettedInstrumentString[] = [];
 
   for (let index = 0; index < 6; index += 1) {
-    const stringIndex = 6 - index;
+    const stringIndex = index + 1;
     const openNote =
       GUITAR_STANDARD_EADGBE_OPEN_NOTES[stringIndex - 1] ?? "E";
     const ch = compact[index] ?? "";
@@ -117,7 +117,7 @@ export function formatVoicingToFretNotation(
   let notation = "";
 
   for (let index = 0; index < 6; index += 1) {
-    const stringIndex = 6 - index;
+    const stringIndex = index + 1;
     const string = byStringIndex.get(stringIndex);
 
     if (!string || string.state === "muted") {

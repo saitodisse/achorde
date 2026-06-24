@@ -1,5 +1,12 @@
 # Changelog
 
+## 3.0.0 - 2026-06-23
+
+### Changed
+
+- **BREAKING:** `voicing` input now consumes `@achorde/musical-domain` string coordinates directly (`stringIndex: 1` = low E, `6` = high E) without reversing strings or barres.
+- `vertical-right` keeps string 1 on the left, so low-E-first shapes such as `Gb5 = 244xxx` render with the low strings on the left.
+
 ## 2.5.3 (2026-06-07)
 
 ### Fixed
@@ -12,7 +19,7 @@
 
 ### Fixed
 
-- `voicingToChord` maps `achorde-musical-domain` string indices (1 = high E) to diagram string axes (1 = low E in default views); tuning order follows the same convention.
+- `voicingToChord` maps the former `achorde-musical-domain` high-E-first string indices to diagram string axes; tuning order follows the same convention.
 - Auto-barre detection aligned with updated domain barre inference.
 
 ### Added

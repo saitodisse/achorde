@@ -8,6 +8,8 @@ Shared TypeScript contracts for musical applications that need a common language
 
 The package is intentionally small and runtime-light. It defines stable data shapes that parsers, renderers, editors, and storage layers can agree on without depending on React, browser APIs, SVG rendering, or a specific music-theory engine.
 
+Fretted guitar voicings use low-to-high string coordinates: `stringIndex: 1` is low E, then A, D, G, B, and `stringIndex: 6` is high E. Fret notation such as `x32010` is parsed and formatted in that same low-E-first order.
+
 ## What It Provides
 
 - parser diagnostics

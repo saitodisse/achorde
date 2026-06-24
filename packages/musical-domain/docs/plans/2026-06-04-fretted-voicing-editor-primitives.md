@@ -71,7 +71,7 @@ type ParseFretNotationInput = {
 
 - Accept digits `0-9`, `x`/`X` muted, `o`/`O` open (if present in notation convention).
 - One character per string **or** documented delimiter pattern matching AC12/svguitar common forms (`x32010`, `320003`).
-- Map to `FrettedInstrumentVoicing.strings[]` with `stringIndex` 1..6.
+- Map to `FrettedInstrumentVoicing.strings[]` with `stringIndex` 1..6 (`1` = low E, `6` = high E).
 - Set `baseFret` / absolute frets per existing domain conventions.
 - Return `null` on invalid length or character.
 
