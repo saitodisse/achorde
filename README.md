@@ -7,6 +7,7 @@ Monorepo for the shared music ecosystem (public npm packages under the [`@achord
 | Package                                                     | npm                                                                                              | Role                                                                                               |
 | ----------------------------------------------------------- | ------------------------------------------------------------------------------------------------ | -------------------------------------------------------------------------------------------------- |
 | [`musical-domain`](./packages/musical-domain)               | [`@achorde/musical-domain`](https://www.npmjs.com/package/@achorde/musical-domain)               | [demo](https://musical-domain.vercel.app/) · [storybook](https://storybook-musical-domain.vercel.app/) |
+| [`source-catalog`](./packages/source-catalog)               | [`@achorde/source-catalog`](https://www.npmjs.com/package/@achorde/source-catalog)               | Read-only static catalog contracts and validators                                                  |
 | [`tab-renderer`](./packages/tab-renderer)                   | [`@achorde/tab-renderer`](https://www.npmjs.com/package/@achorde/tab-renderer)                   | [demo](https://tab-renderer-react.vercel.app/) · [storybook](https://storybook-tab-renderer.vercel.app/) |
 | [`svguitar-react`](./packages/svguitar-react)               | [`@achorde/svguitar-react`](https://www.npmjs.com/package/@achorde/svguitar-react)               | [demo](https://svguitar-react.vercel.app/) · [storybook](https://storybook-svguitar-react.vercel.app/?path=/docs/components-chorddiagram--docs) |
 | [`interactive-fretboard`](./packages/interactive-fretboard) | [`@achorde/interactive-fretboard`](https://www.npmjs.com/package/@achorde/interactive-fretboard) | [demo](https://interactive-fretboard.vercel.app/) · [storybook](https://storybook-interactive-fretboard.vercel.app/) |
@@ -31,6 +32,7 @@ pnpm typecheck
 | Package                          | npm `latest` |
 | -------------------------------- | ------------ |
 | `@achorde/musical-domain`        | `0.5.3`      |
+| `@achorde/source-catalog`        | `0.1.0`      |
 | `@achorde/tab-renderer`          | `0.8.5`      |
 | `@achorde/svguitar-react`        | `2.5.3`      |
 | `@achorde/interactive-fretboard` | `0.1.11`     |
@@ -38,7 +40,7 @@ pnpm typecheck
 ## Install (consumers)
 
 ```bash
-pnpm add @achorde/musical-domain @achorde/tab-renderer @achorde/svguitar-react @achorde/interactive-fretboard
+pnpm add @achorde/musical-domain @achorde/source-catalog @achorde/tab-renderer @achorde/svguitar-react @achorde/interactive-fretboard
 ```
 
 Use the version ranges documented in each package `README.md` and `CHANGELOG.md`. After publishing, bump dependents (including `ac15`) and run their install + test + build.
