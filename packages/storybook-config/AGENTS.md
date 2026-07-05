@@ -4,10 +4,6 @@
 
 Shared Storybook and Vite configuration for packages in the `achorde` monorepo. It is private workspace tooling, not a public runtime package.
 
-## Public Surfaces
-
-- English package docs: https://achorde-musical-domain.vercel.app/en/packages/storybook-config
-
 ## Rules
 
 - Use `pnpm` for install, validation, and workspace scripts.
