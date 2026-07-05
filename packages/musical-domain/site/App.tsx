@@ -9,12 +9,13 @@ import {
 import { Suspense, lazy, type ReactNode } from "react";
 import {
 	type Locale,
-	type MusicalDomainConceptDoc,
 	type PackageDoc,
+	type PackageConceptDoc,
+	getConceptDocsForPackage,
 	localeFromRoute,
 	locales,
-	musicalDomainConceptDocs,
 	oppositeLocale,
+	packageConceptDocs,
 	packageDocs,
 	routeLocale,
 	siteCopy,
@@ -53,11 +54,12 @@ function packagePath(locale: Locale, packageId: PackageDoc["id"]) {
 	return `/${routeLocale(locale)}/packages/${packageId}`;
 }
 
-function musicalDomainConceptPath(
+function packageConceptPath(
 	locale: Locale,
-	conceptId: MusicalDomainConceptDoc["id"],
+	packageId: PackageDoc["id"],
+	conceptId: PackageConceptDoc["id"],
 ) {
-	return `/${routeLocale(locale)}/packages/musical-domain/concepts/${conceptId}`;
+	return `/${routeLocale(locale)}/packages/${packageId}/concepts/${conceptId}`;
 }
 
 function homePath(locale: Locale) {
@@ -73,12 +75,15 @@ function Shell({
 	children: ReactNode;
 	locale: Locale;
 	activePackageId?: PackageDoc["id"];
-	activeConceptId?: MusicalDomainConceptDoc["id"];
+	activeConceptId?: PackageConceptDoc["id"];
 }) {
 	const copy = siteCopy[locale];
 	const otherLocale = oppositeLocale(locale);
-	const otherLocalePath = activeConceptId
-		? musicalDomainConceptPath(otherLocale, activeConceptId)
+	const conceptDocs = activePackageId
+		? getConceptDocsForPackage(activePackageId)
+		: [];
+	const otherLocalePath = activeConceptId && activePackageId
+		? packageConceptPath(otherLocale, activePackageId, activeConceptId)
 		: activePackageId
 			? packagePath(otherLocale, activePackageId)
 			: homePath(otherLocale);
@@ -116,15 +121,15 @@ function Shell({
 					))}
 				</nav>
 
-				{activePackageId === "musical-domain" ? (
+				{conceptDocs.length > 0 ? (
 					<nav className="docs-concept-nav" aria-label={copy.conceptRoutes}>
 						<p className="docs-nav-heading">{copy.conceptRoutes}</p>
-						{musicalDomainConceptDocs.map((conceptDoc) => {
+						{conceptDocs.map((conceptDoc) => {
 							const concept = conceptDoc.copy[locale];
 							return (
 								<Link
 									key={conceptDoc.id}
-									to={musicalDomainConceptPath(locale, conceptDoc.id)}
+									to={packageConceptPath(locale, conceptDoc.packageId, conceptDoc.id)}
 									className="docs-concept-nav-link"
 								>
 									<span>{concept.label}</span>
@@ -248,6 +253,7 @@ function PackagePage({
 	const currentIndex = packageOrder.indexOf(packageDoc.id);
 	const nextPackageId = packageOrder[(currentIndex + 1) % packageOrder.length]!;
 	const nextPackage = packageDocs.find((item) => item.id === nextPackageId)!;
+	const conceptDocs = getConceptDocsForPackage(packageDoc.id);
 
 	return (
 		<Shell locale={locale} activePackageId={packageDoc.id}>
@@ -279,7 +285,7 @@ function PackagePage({
 					</ol>
 				</section>
 
-				{packageDoc.id === "musical-domain" ? (
+				{conceptDocs.length > 0 ? (
 					<section className="docs-section docs-section--inside">
 						<div className="docs-section-heading">
 							<p className="docs-kicker">{copy.conceptRoutes}</p>
@@ -287,7 +293,7 @@ function PackagePage({
 							<p>{copy.coreConceptsText}</p>
 						</div>
 						<div className="docs-concept-grid">
-							{musicalDomainConceptDocs.map((conceptDoc) => (
+							{conceptDocs.map((conceptDoc) => (
 								<ConceptSummaryCard
 									key={conceptDoc.id}
 									conceptDoc={conceptDoc}
@@ -336,13 +342,13 @@ function ConceptSummaryCard({
 	conceptDoc,
 	locale,
 }: {
-	conceptDoc: MusicalDomainConceptDoc;
+	conceptDoc: PackageConceptDoc;
 	locale: Locale;
 }) {
 	const concept = conceptDoc.copy[locale];
 	return (
 		<Link
-			to={musicalDomainConceptPath(locale, conceptDoc.id)}
+			to={packageConceptPath(locale, conceptDoc.packageId, conceptDoc.id)}
 			className="docs-concept-card"
 		>
 			<p className="docs-card-label">{concept.label}</p>
@@ -360,27 +366,27 @@ function ConceptCodeBlock({ children }: { children: string }) {
 	);
 }
 
-function MusicalDomainConceptPage({
+function PackageConceptPage({
 	locale,
 	conceptDoc,
 }: {
 	locale: Locale;
-	conceptDoc: MusicalDomainConceptDoc;
+	conceptDoc: PackageConceptDoc;
 }) {
 	const copy = siteCopy[locale];
 	const concept = conceptDoc.copy[locale];
-	const currentIndex = musicalDomainConceptDocs.findIndex(
+	const conceptDocs = getConceptDocsForPackage(conceptDoc.packageId);
+	const packageDoc = packageDocs.find((item) => item.id === conceptDoc.packageId)!;
+	const currentIndex = conceptDocs.findIndex(
 		(item) => item.id === conceptDoc.id,
 	);
 	const nextConcept =
-		musicalDomainConceptDocs[
-			(currentIndex + 1) % musicalDomainConceptDocs.length
-		]!;
+		conceptDocs[(currentIndex + 1) % conceptDocs.length]!;
 
 	return (
 		<Shell
 			locale={locale}
-			activePackageId="musical-domain"
+			activePackageId={conceptDoc.packageId}
 			activeConceptId={conceptDoc.id}
 		>
 			<article className="docs-package-page docs-concept-page">
@@ -390,7 +396,7 @@ function MusicalDomainConceptPage({
 						<h1>{concept.title}</h1>
 					</div>
 					<div className="docs-actions">
-						<Link to={packagePath(locale, "musical-domain")}>
+						<Link to={packagePath(locale, conceptDoc.packageId)}>
 							{copy.backToPackage}
 						</Link>
 					</div>
@@ -437,7 +443,7 @@ function MusicalDomainConceptPage({
 
 				<footer className="docs-next">
 					<span>{locale === "pt-BR" ? "Próximo conceito" : "Next concept"}</span>
-					<Link to={musicalDomainConceptPath(locale, nextConcept.id)}>
+					<Link to={packageConceptPath(locale, packageDoc.id, nextConcept.id)}>
 						{nextConcept.copy[locale].label}
 					</Link>
 				</footer>
@@ -515,17 +521,17 @@ const localeRoutes = (["pt-br", "en"] as const).flatMap((localeSegment) => {
 			component: () => <PackagePage locale={locale} packageDoc={packageDoc} />,
 		}),
 	);
-	const musicalDomainConceptRoutes = musicalDomainConceptDocs.map((conceptDoc) =>
+	const conceptRoutes = packageConceptDocs.map((conceptDoc) =>
 		createRoute({
 			getParentRoute: () => rootRoute,
-			path: `${localeSegment}/packages/musical-domain/concepts/${conceptDoc.id}`,
+			path: `${localeSegment}/packages/${conceptDoc.packageId}/concepts/${conceptDoc.id}`,
 			component: () => (
-				<MusicalDomainConceptPage locale={locale} conceptDoc={conceptDoc} />
+				<PackageConceptPage locale={locale} conceptDoc={conceptDoc} />
 			),
 		}),
 	);
 
-	return [homeRoute, ...packageRoutes, ...musicalDomainConceptRoutes];
+	return [homeRoute, ...packageRoutes, ...conceptRoutes];
 });
 
 const routeTree = rootRoute.addChildren([indexRoute, ...localeRoutes]);
