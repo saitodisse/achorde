@@ -6,6 +6,10 @@
 
 Shared TypeScript contracts for musical applications that need a common language for chord charts, parsed tabs, parser diagnostics, and fretted-instrument voicings.
 
+## ACHORDE Docs Hub
+
+Use the [ACHORDE Docs Hub](https://musical-domain.vercel.app/en) as the main entry point for understanding every public package in the ecosystem. This package has its own hub page at <https://musical-domain.vercel.app/en/packages/musical-domain>. Local development version: <http://127.0.0.1:5286/>.
+
 The package is intentionally small and runtime-light. It defines stable data shapes that parsers, renderers, editors, and storage layers can agree on without depending on React, browser APIs, SVG rendering, or a specific music-theory engine.
 
 Fretted guitar voicings use low-to-high string coordinates: `stringIndex: 1` is low E, then A, D, G, B, and `stringIndex: 6` is high E. Fret notation such as `x32010` is parsed and formatted in that same low-E-first order.

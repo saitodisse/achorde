@@ -2,6 +2,14 @@
 
 Monorepo for the shared music ecosystem (public npm packages under the [`@achorde`](https://www.npmjs.com/org/achorde) scope).
 
+## ACHORDE Docs Hub
+
+The main documentation hub for this monorepo is the ACHORDE Docs site. It explains each package, the role it plays in the ecosystem, and how the public packages connect to AC15 and artist portals.
+
+- English: <https://musical-domain.vercel.app/en>
+- Portuguese: <https://musical-domain.vercel.app/pt-br>
+- Local dev server: <http://127.0.0.1:5286/>
+
 ## Packages
 
 | Package                                                     | npm                                                                                              | Role                                                                                               |

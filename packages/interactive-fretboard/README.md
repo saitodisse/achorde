@@ -7,6 +7,10 @@
 
 Responsive SVG **interactive fretboard** editor for React. Build chord fingerings by pointer (mouse, touch, pen) on a full neck view—suitable for chord apps, education sites, and video embeds.
 
+## ACHORDE Docs Hub
+
+Use the [ACHORDE Docs Hub](https://musical-domain.vercel.app/en) as the main entry point for understanding every public package in the ecosystem. This package has its own hub page at <https://musical-domain.vercel.app/en/packages/interactive-fretboard>. Local development version: <http://127.0.0.1:5286/>.
+
 ## Features
 
 - Controlled **`FrettedInstrumentVoicing`** value (from `@achorde/musical-domain@^0.5.3`) with optional **`fretNotation`** convenience mode

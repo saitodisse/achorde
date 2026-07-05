@@ -4,5 +4,11 @@
 	"outputDirectory": "dist-site",
 	"framework": "vite",
 	"installCommand": "pnpm install --ignore-scripts",
-	"devCommand": "pnpm dev:site"
+	"devCommand": "pnpm dev:site",
+	"rewrites": [
+		{
+			"source": "/(.*)",
+			"destination": "/index.html"
+		}
+	]
 }
