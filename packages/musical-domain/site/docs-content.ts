@@ -113,7 +113,7 @@ export const packageDocs = [
 		name: "@achorde/musical-domain",
 		scope: "contracts",
 		npm: "https://www.npmjs.com/package/@achorde/musical-domain",
-		demo: "https://musical-domain.vercel.app/",
+		demo: "https://achorde-musical-domain.vercel.app/",
 		storybook: "https://storybook-musical-domain.vercel.app/",
 		github: "https://github.com/saitodisse/achorde/tree/main/packages/musical-domain",
 		summary: {

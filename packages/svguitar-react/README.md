@@ -8,7 +8,10 @@ A React component for rendering guitar chord diagrams in SVG format with high pe
 
 ## ACHORDE Docs Hub
 
-Use the [ACHORDE Docs Hub](https://musical-domain.vercel.app/en) as the main entry point for understanding every public package in the ecosystem. This package has its own hub page at <https://musical-domain.vercel.app/en/packages/svguitar-react>. Local development version: <http://127.0.0.1:5286/>.
+Use the [ACHORDE Docs Hub](https://achorde-musical-domain.vercel.app/en) as the main entry point for understanding every public package in the ecosystem.
+
+- English package docs: <https://achorde-musical-domain.vercel.app/en/packages/svguitar-react>
+- Local development version: <http://127.0.0.1:5286/>
 
 ## Features
 

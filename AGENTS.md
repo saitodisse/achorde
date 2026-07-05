@@ -15,13 +15,14 @@ This repository is the public monorepo root for the shared music ecosystem.
 
 ## Public Surfaces
 
-| Package | Demo | Storybook |
-| ------- | ---- | --------- |
-| `@achorde/musical-domain` | https://musical-domain.vercel.app/ | https://storybook-musical-domain.vercel.app/ |
-| `@achorde/source-catalog` | _(none)_ | _(none)_ |
-| `@achorde/tab-renderer` | https://tab-renderer-react.vercel.app/ | https://storybook-tab-renderer.vercel.app/ |
-| `@achorde/svguitar-react` | https://svguitar-react.vercel.app/ | https://storybook-svguitar-react.vercel.app/?path=/docs/components-chorddiagram--docs |
-| `@achorde/interactive-fretboard` | https://interactive-fretboard.vercel.app/ | https://storybook-interactive-fretboard.vercel.app/ |
+| Package | English docs | Demo | Storybook |
+| ------- | ------------ | ---- | --------- |
+| `@achorde/musical-domain` | https://achorde-musical-domain.vercel.app/en/packages/musical-domain | https://achorde-musical-domain.vercel.app/ | https://storybook-musical-domain.vercel.app/ |
+| `@achorde/source-catalog` | https://achorde-musical-domain.vercel.app/en/packages/source-catalog | _(none)_ | _(none)_ |
+| `@achorde/tab-renderer` | https://achorde-musical-domain.vercel.app/en/packages/tab-renderer | https://tab-renderer-react.vercel.app/ | https://storybook-tab-renderer.vercel.app/ |
+| `@achorde/svguitar-react` | https://achorde-musical-domain.vercel.app/en/packages/svguitar-react | https://svguitar-react.vercel.app/ | https://storybook-svguitar-react.vercel.app/?path=/docs/components-chorddiagram--docs |
+| `@achorde/interactive-fretboard` | https://achorde-musical-domain.vercel.app/en/packages/interactive-fretboard | https://interactive-fretboard.vercel.app/ | https://storybook-interactive-fretboard.vercel.app/ |
+| `@achorde/storybook-config` | https://achorde-musical-domain.vercel.app/en/packages/storybook-config | _(none)_ | _(none)_ |
 
 The private product app [`ac15`](../ac15) consumes these packages from npm; coordinate breaking changes with bumps there (`@ac15/contracts`, `@ac15/ui`, `apps/web`).
 

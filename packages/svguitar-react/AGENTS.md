@@ -8,6 +8,7 @@ Central instructions for AI agents and IDE assistants working in this repository
 
 ## Public Surfaces
 
+- English package docs: https://achorde-musical-domain.vercel.app/en/packages/svguitar-react
 - Demo site: https://svguitar-react.vercel.app/
 - Storybook: https://storybook-svguitar-react.vercel.app/?path=/docs/components-chorddiagram--docs
 

@@ -2,9 +2,12 @@
 
 Configuração compartilhada de Storybook para o monorepo **achorde**.
 
-## Hub de documentação do ACHORDE
+## ACHORDE Docs Hub
 
-Use o [Hub de documentação do ACHORDE](https://musical-domain.vercel.app/pt-br) como ponto de entrada para entender todos os pacotes públicos do ecossistema. Esta configuração interna também tem uma página no hub: <https://musical-domain.vercel.app/pt-br/packages/storybook-config>. Versão local: <http://127.0.0.1:5286/>.
+Use the [ACHORDE Docs Hub](https://achorde-musical-domain.vercel.app/en) as the main entry point for understanding every public package in the ecosystem.
+
+- English package docs: <https://achorde-musical-domain.vercel.app/en/packages/storybook-config>
+- Local development version: <http://127.0.0.1:5286/>
 
 Segue o padrão descrito na [discussão Turborepo #6879](https://github.com/vercel/turborepo/discussions/6879): um pacote leve tipo `tsconfig` + `.storybook/` mínimo em cada biblioteca que publica stories.
 

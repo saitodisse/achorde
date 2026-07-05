@@ -6,6 +6,7 @@ Publishable React library for **pointer-based fretboard editing**. Owns SVG layo
 
 ## Public Surfaces
 
+- English package docs: https://achorde-musical-domain.vercel.app/en/packages/interactive-fretboard
 - Demo site: https://interactive-fretboard.vercel.app/
 - Storybook: https://storybook-interactive-fretboard.vercel.app/
 

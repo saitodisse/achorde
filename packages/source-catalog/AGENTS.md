@@ -4,6 +4,10 @@
 
 This package publishes runtime-light contracts and validators for static, read-only source catalogs consumed by achorde-compatible apps and artist portals.
 
+## Public Surfaces
+
+- English package docs: https://achorde-musical-domain.vercel.app/en/packages/source-catalog
+
 ## Rules
 
 - Use `pnpm` for install, tests, build, and publish.

@@ -4,6 +4,7 @@ This repository publishes `tab-renderer`, an open-source library for chord sheet
 
 ## Public Surfaces
 
+- English package docs: https://achorde-musical-domain.vercel.app/en/packages/tab-renderer
 - Demo site: https://tab-renderer-react.vercel.app/
 - Storybook: https://storybook-tab-renderer.vercel.app/
 

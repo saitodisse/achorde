@@ -6,7 +6,8 @@ This repository publishes shared musical contracts for chord charts, textual tab
 
 ## Public Surfaces
 
-- Demo site: https://musical-domain.vercel.app/
+- English package docs: https://achorde-musical-domain.vercel.app/en/packages/musical-domain
+- Demo site: https://achorde-musical-domain.vercel.app/
 - Storybook: https://storybook-musical-domain.vercel.app/
 
 ## Rules

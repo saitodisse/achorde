@@ -1,14 +1,17 @@
 # @achorde/musical-domain
 
 **npm `latest`:** `0.5.3` — [package page](https://www.npmjs.com/package/@achorde/musical-domain)
-- 🌐 **Live Demo**: [https://musical-domain.vercel.app/](https://musical-domain.vercel.app/)
+- 🌐 **Live Demo**: [https://achorde-musical-domain.vercel.app/](https://achorde-musical-domain.vercel.app/)
 - 🌐 **Storybook**: [https://storybook-musical-domain.vercel.app/](https://storybook-musical-domain.vercel.app/)
 
 Shared TypeScript contracts for musical applications that need a common language for chord charts, parsed tabs, parser diagnostics, and fretted-instrument voicings.
 
 ## ACHORDE Docs Hub
 
-Use the [ACHORDE Docs Hub](https://musical-domain.vercel.app/en) as the main entry point for understanding every public package in the ecosystem. This package has its own hub page at <https://musical-domain.vercel.app/en/packages/musical-domain>. Local development version: <http://127.0.0.1:5286/>.
+Use the [ACHORDE Docs Hub](https://achorde-musical-domain.vercel.app/en) as the main entry point for understanding every public package in the ecosystem.
+
+- English package docs: <https://achorde-musical-domain.vercel.app/en/packages/musical-domain>
+- Local development version: <http://127.0.0.1:5286/>
 
 The package is intentionally small and runtime-light. It defines stable data shapes that parsers, renderers, editors, and storage layers can agree on without depending on React, browser APIs, SVG rendering, or a specific music-theory engine.
 
