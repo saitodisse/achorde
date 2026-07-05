@@ -9,6 +9,8 @@ export type PackageId =
 	| "interactive-fretboard"
 	| "storybook-config";
 
+export type AppId = "ac15" | "artist-portal-base";
+
 export type PackageDoc = {
 	id: PackageId;
 	name: string;
@@ -17,6 +19,23 @@ export type PackageDoc = {
 	demo?: string;
 	storybook?: string;
 	github: string;
+	summary: Record<Locale, {
+		label: string;
+		headline: string;
+		paragraph: string;
+		steps: string[];
+		whenToUse: string;
+		remember: string;
+	}>;
+};
+
+export type AppDoc = {
+	id: AppId;
+	name: string;
+	scope: "product" | "portal";
+	demo?: string;
+	github: string;
+	sources: string[];
 	summary: Record<Locale, {
 		label: string;
 		headline: string;
@@ -46,6 +65,10 @@ export type PackageConceptDoc = PackageSpecificConceptDoc & {
 	packageId: PackageId;
 };
 
+export type AppConceptDoc = PackageSpecificConceptDoc & {
+	appId: AppId;
+};
+
 export const locales = {
 	"pt-BR": {
 		route: "pt-br",
@@ -71,12 +94,16 @@ export const siteCopy = {
 		intro:
 			"ACHORDE é um conjunto de pacotes para representar, renderizar e editar músicas com acordes. Cada página abaixo ensina uma parte em três níveis: manchete, um parágrafo e passo a passo.",
 		allPackages: "Todos os pacotes",
+		allApps: "Apps principais",
 		startHere: "Comece aqui",
 		startHereText:
 			"Leia primeiro o pacote de contratos. Depois siga para parser/renderização, desenho de diagramas, edição interativa e infraestrutura.",
 		packageRoutes: "Rotas por pacote",
 		packageRoutesText:
 			"Cada rota tem uma explicação fácil e cumulativa. A ideia é você conseguir lembrar o papel de cada pacote antes de olhar a API.",
+		appRoutes: "Rotas por app",
+		appRoutesText:
+			"Os apps mostram onde os pacotes viram produto: AC15 consome, persiste e sincroniza; Artist Portal Base publica catálogos estáticos para importação.",
 		levelsTitle: "Três níveis de explicação",
 		headlineLabel: "Manchete",
 		paragraphLabel: "Um parágrafo",
@@ -89,20 +116,22 @@ export const siteCopy = {
 		openGithub: "GitHub",
 		language: "Idioma",
 		notFound: "Pacote não encontrado",
-		notFoundText: "Escolha um pacote na navegação lateral para continuar.",
+		notFoundText: "Escolha uma área na navegação lateral para continuar.",
 		retrievalTitle: "Teste rápido de memória",
 		retrievalPrompt:
-			"Antes de seguir, tente responder sem olhar: este pacote guarda dados, desenha algo ou coordena ferramentas?",
+			"Antes de seguir, tente responder sem olhar: esta área guarda dados, desenha algo ou coordena ferramentas?",
 		readmeLabel: "README do pacote",
+		sourceDocumentsLabel: "Documentos-fonte",
 		readmeLoading: "Preparando Markdown e syntax highlighting...",
 		coreConceptsTitle: "Conceitos centrais",
 		coreConceptsText:
-			"Cada rota abaixo ensina uma peça central deste pacote. Abra uma por vez e tente explicar a peça antes de olhar o código.",
+			"Cada rota abaixo ensina uma peça central desta área. Abra uma por vez e tente explicar a peça antes de olhar o código.",
 		conceptRoutes: "Rotas por conceito",
 		whyItMattersLabel: "Por que importa",
 		sourceLabel: "Fonte",
 		nextQuestionLabel: "Pergunte ao agente",
 		backToPackage: "Voltar ao pacote",
+		backToApp: "Voltar ao app",
 	},
 	en: {
 		title: "ACHORDE Docs",
@@ -111,12 +140,16 @@ export const siteCopy = {
 		intro:
 			"ACHORDE is a set of packages for representing, rendering, and editing chord-based music. Each page teaches one part at three levels: headline, one paragraph, and step by step.",
 		allPackages: "All packages",
+		allApps: "Main apps",
 		startHere: "Start here",
 		startHereText:
 			"Read the contracts package first. Then move through parsing/rendering, diagram drawing, interactive editing, and infrastructure.",
 		packageRoutes: "Package routes",
 		packageRoutesText:
 			"Each route gives a simple cumulative explanation. The goal is to remember each package role before reading the API.",
+		appRoutes: "App routes",
+		appRoutesText:
+			"The apps show where the packages become product: AC15 consumes, persists, and syncs; Artist Portal Base publishes static catalogs for import.",
 		levelsTitle: "Three explanation levels",
 		headlineLabel: "Headline",
 		paragraphLabel: "One paragraph",
@@ -128,21 +161,23 @@ export const siteCopy = {
 		openNpm: "npm",
 		openGithub: "GitHub",
 		language: "Language",
-		notFound: "Package not found",
-		notFoundText: "Choose a package in the side navigation to continue.",
+		notFound: "Area not found",
+		notFoundText: "Choose an area in the side navigation to continue.",
 		retrievalTitle: "Quick memory check",
 		retrievalPrompt:
-			"Before moving on, answer without looking: does this package store data, draw something, or coordinate tools?",
+			"Before moving on, answer without looking: does this area store data, draw something, or coordinate tools?",
 		readmeLabel: "Package README",
+		sourceDocumentsLabel: "Source documents",
 		readmeLoading: "Preparing Markdown and syntax highlighting...",
 		coreConceptsTitle: "Core concepts",
 		coreConceptsText:
-			"Each route below teaches one central piece of this package. Open one at a time and try to explain the piece before reading the code.",
+			"Each route below teaches one central piece of this area. Open one at a time and try to explain the piece before reading the code.",
 		conceptRoutes: "Concept routes",
 		whyItMattersLabel: "Why it matters",
 		sourceLabel: "Source",
 		nextQuestionLabel: "Ask the agent",
 		backToPackage: "Back to package",
+		backToApp: "Back to app",
 	},
 } as const;
 
@@ -388,6 +423,103 @@ export const packageDocs = [
 		},
 	},
 ] as const satisfies PackageDoc[];
+
+export const appDocs = [
+	{
+		id: "ac15",
+		name: "AC15",
+		scope: "product",
+		demo: "http://127.0.0.1:5285/",
+		github: "https://github.com/saitodisse/ac15",
+		sources: [
+			"../ac15/README.md",
+			"../ac15/AGENTS.md",
+			"../ac15/docs/rfc/0001-offline-first-agent-friendly-chord-platform.md",
+			"../ac15/docs/prd/0020-artist-portal-base-e-importacao-portal-aware.md",
+		],
+		summary: {
+			"pt-BR": {
+				label: "App consumidor offline-first",
+				headline: "O produto que junta catálogo, cifra, acordes, storage e sync.",
+				paragraph:
+					"AC15 é o app privado que consome os pacotes públicos @achorde/* e transforma contratos musicais em uma experiência local-first: importar repertórios, ler cifras, resolver diagramas, salvar preferências e sincronizar comandos depois.",
+				steps: [
+					"Importe ou hidrate catálogos para o IndexedDB local.",
+					"Abra uma versão tocável e carregue cifra, AST, preferências e voicings.",
+					"Use os pacotes públicos para parser, renderização e edição sem duplicar contratos.",
+					"Guarde mudanças locais em repositórios e outbox antes de depender da rede.",
+				],
+				whenToUse:
+					"Use AC15 para validar o comportamento integrado do ecossistema em produto real.",
+				remember:
+					"Ele é o app consumidor: coordena produto e estado local, mas não deve virar dono dos contratos públicos.",
+			},
+			en: {
+				label: "Offline-first consuming app",
+				headline: "The product that joins catalog, chart, chords, storage, and sync.",
+				paragraph:
+					"AC15 is the private app that consumes the public @achorde/* packages and turns musical contracts into a local-first experience: importing repertoires, reading chord charts, resolving diagrams, saving preferences, and syncing commands later.",
+				steps: [
+					"Import or hydrate catalogs into local IndexedDB.",
+					"Open a playable version and load chart text, AST, preferences, and voicings.",
+					"Use public packages for parsing, rendering, and editing without duplicating contracts.",
+					"Store local changes in repositories and outbox before relying on the network.",
+				],
+				whenToUse:
+					"Use AC15 to validate the integrated ecosystem behavior in a real product.",
+				remember:
+					"It is the consuming app: it coordinates product and local state, but should not own public contracts.",
+			},
+		},
+	},
+	{
+		id: "artist-portal-base",
+		name: "Artist Portal Base",
+		scope: "portal",
+		demo: "http://127.0.0.1:5287/",
+		github: "https://github.com/saitodisse/artist-portal-base",
+		sources: [
+			"../artist-portal-base/README.md",
+			"../artist-portal-base/portal.config.ts",
+			"../artist-portal-base/scripts/catalog-core.ts",
+			"../artist-portal-base/src/components/PortalCatalogReader.tsx",
+		],
+		summary: {
+			"pt-BR": {
+				label: "Portal público importável",
+				headline: "A base estática para artistas publicarem repertórios.",
+				paragraph:
+					"Artist Portal Base é um repo Astro + React que vira portal humano e catálogo importável ao mesmo tempo. O conteúdo fica em Markdown/YAML, o build gera manifest, checksums e NDJSON em /source-catalog/, e o AC15 importa tudo como fonte somente leitura.",
+				steps: [
+					"Clone a base e transforme o repo em um portal com origin próprio e upstream na base.",
+					"Edite portal.config.ts, catalog/artist.md e as cifras em catalog/charts/.",
+					"Rode validação para checar frontmatter, chaves sensíveis e parse das cifras.",
+					"Gere o catálogo estático para publicar site, manifest e entidades importáveis.",
+				],
+				whenToUse:
+					"Use quando um artista, banda ou comunidade precisa publicar um repertório público sem backend.",
+				remember:
+					"Ele é a origem editorial: bonito para humanos, determinístico para o AC15 importar.",
+			},
+			en: {
+				label: "Importable public portal",
+				headline: "The static base for artists to publish repertoires.",
+				paragraph:
+					"Artist Portal Base is an Astro + React repo that becomes both a human portal and an importable catalog. Content lives in Markdown/YAML, the build emits manifest, checksums, and NDJSON under /source-catalog/, and AC15 imports everything as a read-only source.",
+				steps: [
+					"Clone the base and turn the repo into a portal with its own origin and upstream pointing to the base.",
+					"Edit portal.config.ts, catalog/artist.md, and charts under catalog/charts/.",
+					"Run validation to check frontmatter, sensitive keys, and chord-chart parsing.",
+					"Generate the static catalog to publish the site, manifest, and importable entities.",
+				],
+				whenToUse:
+					"Use it when an artist, band, or community needs to publish a public repertoire without a backend.",
+				remember:
+					"It is the editorial source: readable for humans, deterministic for AC15 imports.",
+			},
+		},
+	},
+] as const satisfies AppDoc[];
 
 export const musicalDomainConceptDocs = [
 	{
@@ -1884,10 +2016,583 @@ export const packageConceptDocs: readonly PackageConceptDoc[] = [
 	},
 ] as const;
 
+export const appConceptDocs = [
+	{
+		appId: "ac15",
+		id: "offline-first-state",
+		source: "../ac15/README.md, docs/rfc/0001-offline-first-agent-friendly-chord-platform.md, docs/prd/0001-offline-first-foundation.md",
+		copy: {
+			"pt-BR": {
+				label: "Estado offline-first",
+				title: "AC15 trata IndexedDB como verdade local antes da rede.",
+				summary:
+					"O app foi desenhado para continuar útil sem conexão. Importação, parse, preferências, voicings e comandos pendentes vivem localmente antes de qualquer confirmação remota.",
+				whyItMatters:
+					"Se a UI depender da rede para tocar ou ler uma cifra, o produto quebra exatamente no ensaio, no palco ou no estudo offline.",
+				steps: [
+					"Carregue catálogos e versões tocáveis para storage local.",
+					"Resolva leitura, transposição e diagramas usando dados locais.",
+					"Persist a mudança local primeiro.",
+					"Deixe sync remoto confirmar ou reprocessar depois.",
+				],
+				code:
+					"// Regra mental do AC15\nconst ui = projectLocalState(indexedDbState);\nconst remoteAck = await syncLater(outboxCommand);",
+				memoryPrompt:
+					"Sem olhar: por que sucesso local e sucesso remoto são estados diferentes?",
+				nextQuestion:
+					"Peça para o agente mapear uma ação do viewer até o storage local.",
+			},
+			en: {
+				label: "Offline-first state",
+				title: "AC15 treats IndexedDB as local truth before the network.",
+				summary:
+					"The app is designed to remain useful without a connection. Importing, parsing, preferences, voicings, and pending commands live locally before any remote acknowledgement.",
+				whyItMatters:
+					"If the UI depends on the network to play or read a chart, the product fails during rehearsal, on stage, or in offline study.",
+				steps: [
+					"Load catalogs and playable versions into local storage.",
+					"Resolve reading, transposition, and diagrams from local data.",
+					"Persist the local change first.",
+					"Let remote sync confirm or retry later.",
+				],
+				code:
+					"// AC15 mental rule\nconst ui = projectLocalState(indexedDbState);\nconst remoteAck = await syncLater(outboxCommand);",
+				memoryPrompt:
+					"Without looking: why are local success and remote success different states?",
+				nextQuestion:
+					"Ask the agent to map one viewer action all the way to local storage.",
+			},
+		},
+	},
+	{
+		appId: "ac15",
+		id: "layer-boundaries",
+		source: "../ac15/AGENTS.md, README.md, machine/package-boundaries.json",
+		copy: {
+			"pt-BR": {
+				label: "Limites de camadas",
+				title: "UI projeta estado; domínio e storage ficam fora do React.",
+				summary:
+					"O AC15 separa apps/web, domínio, storage, sync, contratos e UI. Cada camada tem uma responsabilidade para evitar que tela, banco e regra musical se misturem.",
+				whyItMatters:
+					"Essa fronteira mantém mudanças pequenas: uma rota pode mudar sem reescrever parser, e um repositório Dexie pode mudar sem quebrar o domínio.",
+				steps: [
+					"Use apps/web para rotas, composição e estado de interface.",
+					"Use packages/domain para regras puras e invariantes.",
+					"Use packages/storage para esconder Dexie atrás de repositórios.",
+					"Use packages/ui para adapters visuais sobre pacotes públicos.",
+				],
+				code:
+					"// Forma esperada\nconst model = await loadViewerModel(playableVersionId);\nreturn <ViewerRoute model={model} />;",
+				memoryPrompt:
+					"Sem olhar: qual camada pode importar Dexie?",
+				nextQuestion:
+					"Peça para o agente classificar uma mudança nova na camada correta.",
+			},
+			en: {
+				label: "Layer boundaries",
+				title: "UI projects state; domain and storage stay outside React.",
+				summary:
+					"AC15 separates apps/web, domain, storage, sync, contracts, and UI. Each layer has one responsibility so screens, database code, and musical rules do not blend together.",
+				whyItMatters:
+					"This boundary keeps changes small: a route can change without rewriting the parser, and a Dexie repository can change without breaking the domain.",
+				steps: [
+					"Use apps/web for routes, composition, and interface state.",
+					"Use packages/domain for pure rules and invariants.",
+					"Use packages/storage to hide Dexie behind repositories.",
+					"Use packages/ui for visual adapters over public packages.",
+				],
+				code:
+					"// Expected shape\nconst model = await loadViewerModel(playableVersionId);\nreturn <ViewerRoute model={model} />;",
+				memoryPrompt:
+					"Without looking: which layer may import Dexie?",
+				nextQuestion:
+					"Ask the agent to classify a new change into the right layer.",
+			},
+		},
+	},
+	{
+		appId: "ac15",
+		id: "viewer-pipeline",
+		source: "../ac15/README.md, apps/web/src/features/viewer/load-viewer-model.ts, apps/web/src/features/viewer/viewer-route.tsx",
+		copy: {
+			"pt-BR": {
+				label: "Pipeline do viewer",
+				title: "A cifra vira modelo carregado antes de virar tela.",
+				summary:
+					"O viewer não renderiza texto cru diretamente. Ele carrega versão tocável, cifra, AST cacheada, preferências, key visual e voicings antes de projetar a leitura.",
+				whyItMatters:
+					"Quando o pipeline é explícito, fica claro onde corrigir uma falha: importação, cache de parse, preferência, seleção de voicing ou render.",
+				steps: [
+					"Receba playableVersionId pela rota.",
+					"Carregue ChordChart e cache de AST no storage.",
+					"Projete configurações do DialKit em estilo de cifra e preferências.",
+					"Renderize a cifra e o painel de diagramas a partir do modelo.",
+				],
+				code:
+					"const model = await loadViewerModel({ playableVersionId });\nconst style = viewerDialToTabStyle(dial);\nrenderChart(model.parsedTab, style);",
+				memoryPrompt:
+					"Sem olhar: o slider de tom altera o rawText persistido?",
+				nextQuestion:
+					"Peça para o agente explicar um bug de viewer em qual etapa do pipeline.",
+			},
+			en: {
+				label: "Viewer pipeline",
+				title: "The chart becomes a loaded model before becoming UI.",
+				summary:
+					"The viewer does not render raw text directly. It loads the playable version, chart, cached AST, preferences, visual key, and voicings before projecting the reading surface.",
+				whyItMatters:
+					"When the pipeline is explicit, it is clear where to fix a failure: import, parse cache, preference, voicing selection, or render.",
+				steps: [
+					"Receive playableVersionId from the route.",
+					"Load ChordChart and AST cache from storage.",
+					"Project DialKit settings into chart style and preferences.",
+					"Render the chart and diagram panel from the model.",
+				],
+				code:
+					"const model = await loadViewerModel({ playableVersionId });\nconst style = viewerDialToTabStyle(dial);\nrenderChart(model.parsedTab, style);",
+				memoryPrompt:
+					"Without looking: does the key slider mutate persisted rawText?",
+				nextQuestion:
+					"Ask the agent to place a viewer bug in one pipeline step.",
+			},
+		},
+	},
+	{
+		appId: "ac15",
+		id: "chord-identity-registry",
+		source: "../ac15/README.md, apps/web/src/features/viewer/chord-diagram-registry.ts, docs/adr/0003-identidade-de-acorde-alias-e-voicing.md",
+		copy: {
+			"pt-BR": {
+				label: "Registry de acordes",
+				title: "Símbolos da cifra resolvem para identidade, alias e voicing.",
+				summary:
+					"O viewer pega chordsFound do parser e tenta resolver cada símbolo contra identidades canônicas, apelidos, equivalências convencionais e voicings locais ou importados.",
+				whyItMatters:
+					"Sem registry, cada grafia de acorde viraria um caso isolado e o app inventaria diagramas ou falharia em aliases comuns.",
+				steps: [
+					"Leia os símbolos encontrados na cifra renderizada.",
+					"Procure match exato, alias manual e equivalência convencional.",
+					"Escolha o voicing explícito ou preferido pelo usuário.",
+					"Quando faltar dados, mostre fallback acionável em vez de adivinhar.",
+				],
+				code:
+					"const entry = registry.resolve(\"Gb7M\");\nconst voicing = selectPreferredVoicing(entry, userAffinity);",
+				memoryPrompt:
+					"Sem olhar: por que alias e identidade não são a mesma coisa?",
+				nextQuestion:
+					"Peça para o agente rastrear um acorde ausente até o fallback correto.",
+			},
+			en: {
+				label: "Chord registry",
+				title: "Chart symbols resolve to identity, alias, and voicing.",
+				summary:
+					"The viewer takes chordsFound from the parser and resolves each symbol against canonical identities, aliases, conventional equivalences, and local or imported voicings.",
+				whyItMatters:
+					"Without the registry, every spelling would become its own case and the app would invent diagrams or miss common aliases.",
+				steps: [
+					"Read symbols found in the rendered chart.",
+					"Look for exact match, manual alias, and conventional equivalence.",
+					"Choose the explicit voicing or the user's preferred one.",
+					"When data is missing, show an actionable fallback instead of guessing.",
+				],
+				code:
+					"const entry = registry.resolve(\"Gb7M\");\nconst voicing = selectPreferredVoicing(entry, userAffinity);",
+				memoryPrompt:
+					"Without looking: why are alias and identity not the same thing?",
+				nextQuestion:
+					"Ask the agent to trace a missing chord to the right fallback.",
+			},
+		},
+	},
+	{
+		appId: "ac15",
+		id: "source-catalog-import",
+		source: "../ac15/docs/prd/0020-artist-portal-base-e-importacao-portal-aware.md, apps/web/src/features/source-catalog/source-catalog-sync.ts, packages/sync-engine/src/source-catalog-importer.ts",
+		copy: {
+			"pt-BR": {
+				label: "Importação de catálogo",
+				title: "Portais entram como fontes pull-only com proveniência preservada.",
+				summary:
+					"O AC15 importa manifest, checksums e NDJSON de /source-catalog/. Registros externos viram dados locais com sourceId, sem sobrescrever verdade local silenciosamente.",
+				whyItMatters:
+					"Isso permite receber repertórios públicos sem acoplar o produto a um portal, servidor ou API privada.",
+				steps: [
+					"Baixe source-manifest.json a partir da URL configurada.",
+					"Valide modo readonly, arquivos e checksums.",
+					"Importe envelopes de artist, musicalWork, playableVersion e chordChart.",
+					"Persist o sourceId sincronizado para status, reset e hidratação futuros.",
+				],
+				code:
+					"await syncCatalogFromServer(\"https://artist.example/source-catalog/\");\nconst sourceId = localStorage.getItem(LAST_SOURCE_ID);",
+				memoryPrompt:
+					"Sem olhar: por que o AC15 salva sourceId depois do sync bem-sucedido?",
+				nextQuestion:
+					"Peça para o agente comparar uma importação de portal com o fallback ac12-export.",
+			},
+			en: {
+				label: "Catalog import",
+				title: "Portals enter as pull-only sources with provenance preserved.",
+				summary:
+					"AC15 imports manifest, checksums, and NDJSON from /source-catalog/. External records become local data with sourceId, without silently overwriting local truth.",
+				whyItMatters:
+					"This lets the product receive public repertoires without coupling itself to one portal, server, or private API.",
+				steps: [
+					"Download source-manifest.json from the configured URL.",
+					"Validate readonly mode, files, and checksums.",
+					"Import artist, musicalWork, playableVersion, and chordChart envelopes.",
+					"Persist the synced sourceId for future status, reset, and hydration.",
+				],
+				code:
+					"await syncCatalogFromServer(\"https://artist.example/source-catalog/\");\nconst sourceId = localStorage.getItem(LAST_SOURCE_ID);",
+				memoryPrompt:
+					"Without looking: why does AC15 store sourceId after successful sync?",
+				nextQuestion:
+					"Ask the agent to compare a portal import with the ac12-export fallback.",
+			},
+		},
+	},
+	{
+		appId: "ac15",
+		id: "outbox-sync",
+		source: "../ac15/docs/prd/0006-sync-engine-mvp.md, packages/sync-engine/src/index.ts, packages/storage/src/repositories/outbox.dexie-repository.ts",
+		copy: {
+			"pt-BR": {
+				label: "Outbox de sync",
+				title: "Comandos locais aguardam confirmação remota explícita.",
+				summary:
+					"O sync engine persiste comandos pendentes, processa FIFO por agregado e separa synced, failed e blocked. A rede não decide se a edição local existe.",
+				whyItMatters:
+					"Essa regra é o coração offline-first: a pessoa pode continuar trabalhando, e falhas remotas ficam rastreáveis em vez de apagar a ação local.",
+				steps: [
+					"Crie um comando de outbox para uma mudança local.",
+					"Liste comandos pending ou failed em ordem estável.",
+					"Envie por adaptador canônico de servidor.",
+					"Marque synced, failed ou blocked conforme o resultado explícito.",
+				],
+				code:
+					"await outbox.save(command);\nawait runOutboxFifoByAggregate({ outbox, adapter });",
+				memoryPrompt:
+					"Sem olhar: por que um comando blocked pausa o agregado?",
+				nextQuestion:
+					"Peça para o agente desenhar a diferença entre retry e blocked.",
+			},
+			en: {
+				label: "Sync outbox",
+				title: "Local commands wait for explicit remote acknowledgement.",
+				summary:
+					"The sync engine persists pending commands, processes FIFO per aggregate, and separates synced, failed, and blocked. The network does not decide whether the local edit exists.",
+				whyItMatters:
+					"This rule is the offline-first core: the person can keep working, and remote failures stay traceable instead of erasing local action.",
+				steps: [
+					"Create an outbox command for a local change.",
+					"List pending or failed commands in stable order.",
+					"Send through a canonical server adapter.",
+					"Mark synced, failed, or blocked from the explicit result.",
+				],
+				code:
+					"await outbox.save(command);\nawait runOutboxFifoByAggregate({ outbox, adapter });",
+				memoryPrompt:
+					"Without looking: why does a blocked command pause its aggregate?",
+				nextQuestion:
+					"Ask the agent to draw the difference between retry and blocked.",
+			},
+		},
+	},
+	{
+		appId: "artist-portal-base",
+		id: "updateable-base",
+		source: "../artist-portal-base/README.md, ../ac15/docs/adr/0007-portais-git-native-e-catalogos-validados.md",
+		copy: {
+			"pt-BR": {
+				label: "Base atualizável",
+				title: "Cada portal real tem origin próprio e upstream na base.",
+				summary:
+					"O portal não é uma instância editada dentro do AC15. Ele nasce como repo próprio, mantém histórico editorial próprio e pode receber melhorias da base com merge de upstream.",
+				whyItMatters:
+					"Isso dá colaboração, forks, revisão e continuidade usando Git, sem construir um CMS ou forge musical cedo demais.",
+				steps: [
+					"Clone artist-portal-base para um novo repositório.",
+					"Renomeie a base como upstream.",
+					"Configure origin para o portal real.",
+					"Traga melhorias futuras com git fetch upstream e git merge upstream/main.",
+				],
+				code:
+					"git remote rename origin upstream\ngit remote add origin https://github.com/org/portal.git\ngit merge upstream/main",
+				memoryPrompt:
+					"Sem olhar: por que o portal real não deve editar a base diretamente?",
+				nextQuestion:
+					"Peça para o agente montar o fluxo de criação de um portal novo.",
+			},
+			en: {
+				label: "Updateable base",
+				title: "Each real portal has its own origin and the base as upstream.",
+				summary:
+					"The portal is not an instance edited inside AC15. It starts as its own repo, keeps its own editorial history, and can receive base improvements by merging upstream.",
+				whyItMatters:
+					"This gives collaboration, forks, review, and continuity through Git without building a CMS or music forge too early.",
+				steps: [
+					"Clone artist-portal-base into a new repository.",
+					"Rename the base remote to upstream.",
+					"Configure origin for the real portal.",
+					"Bring future improvements with git fetch upstream and git merge upstream/main.",
+				],
+				code:
+					"git remote rename origin upstream\ngit remote add origin https://github.com/org/portal.git\ngit merge upstream/main",
+				memoryPrompt:
+					"Without looking: why should the real portal not edit the base directly?",
+				nextQuestion:
+					"Ask the agent to build the creation flow for a new portal.",
+			},
+		},
+	},
+	{
+		appId: "artist-portal-base",
+		id: "portal-identity",
+		source: "../artist-portal-base/README.md, portal.config.ts, scripts/portal-init.ts",
+		copy: {
+			"pt-BR": {
+				label: "Identidade do portal",
+				title: "portal.config.ts define sourceId, URLs, tema e publicação.",
+				summary:
+					"A identidade pública do portal vive em um arquivo pequeno: nome, sourceId, URL, basePath, repositório, links, cores e versão de schema do catálogo.",
+				whyItMatters:
+					"O AC15 precisa de sourceId estável para proveniência, enquanto o site precisa de URL e basePath corretos para GitHub Pages ou domínio próprio.",
+				steps: [
+					"Escolha um sourceId estável e único.",
+					"Configure publicName, siteUrl, basePath e repositoryUrl.",
+					"Ajuste links e tokens visuais mínimos.",
+					"Use portal:init para substituir identidade demo no início.",
+				],
+				code:
+					"pnpm portal:init --source-id my-artist --name \"My Artist\" --site-url https://my-org.github.io",
+				memoryPrompt:
+					"Sem olhar: qual campo conecta portal importado e proveniência no AC15?",
+				nextQuestion:
+					"Peça para o agente revisar um portal.config.ts antes de publicar.",
+			},
+			en: {
+				label: "Portal identity",
+				title: "portal.config.ts defines sourceId, URLs, theme, and publication.",
+				summary:
+					"The portal's public identity lives in one small file: name, sourceId, URL, basePath, repository, links, colors, and catalog schema version.",
+				whyItMatters:
+					"AC15 needs a stable sourceId for provenance, while the site needs correct URL and basePath for GitHub Pages or a custom domain.",
+				steps: [
+					"Choose a stable and unique sourceId.",
+					"Configure publicName, siteUrl, basePath, and repositoryUrl.",
+					"Adjust links and minimal visual tokens.",
+					"Use portal:init to replace demo identity at the start.",
+				],
+				code:
+					"pnpm portal:init --source-id my-artist --name \"My Artist\" --site-url https://my-org.github.io",
+				memoryPrompt:
+					"Without looking: which field connects an imported portal to AC15 provenance?",
+				nextQuestion:
+					"Ask the agent to review a portal.config.ts before publishing.",
+			},
+		},
+	},
+	{
+		appId: "artist-portal-base",
+		id: "markdown-catalog",
+		source: "../artist-portal-base/README.md, catalog/artist.md, catalog/charts/*/demo.md, scripts/catalog-core.ts",
+		copy: {
+			"pt-BR": {
+				label: "Catálogo em Markdown",
+				title: "Artista e cifras ficam em arquivos legíveis por humanos.",
+				summary:
+					"O conteúdo editorial fica em catalog/artist.md e catalog/charts/<musica>/<versao>.md. Frontmatter guarda metadados; o corpo guarda a cifra bruta.",
+				whyItMatters:
+					"Contribuidores podem revisar repertório em pull requests simples, e o build consegue transformar os mesmos arquivos em entidades importáveis.",
+				steps: [
+					"Edite catalog/artist.md para a página do artista.",
+					"Crie uma pasta por música em catalog/charts/.",
+					"Coloque metadados de work e version no frontmatter.",
+					"Deixe o corpo como rawText da cifra.",
+				],
+				code:
+					"---\nid: minha-musica-demo\nwork:\n  title: Minha Musica\n---\n[Intro]\nC G Am F",
+				memoryPrompt:
+					"Sem olhar: onde termina o metadado e começa a cifra?",
+				nextQuestion:
+					"Peça para o agente validar a estrutura de uma cifra nova.",
+			},
+			en: {
+				label: "Markdown catalog",
+				title: "Artist and charts live in human-readable files.",
+				summary:
+					"Editorial content lives in catalog/artist.md and catalog/charts/<song>/<version>.md. Frontmatter stores metadata; the body stores the raw chord chart.",
+				whyItMatters:
+					"Contributors can review repertoire in simple pull requests, and the build can turn the same files into importable entities.",
+				steps: [
+					"Edit catalog/artist.md for the artist page.",
+					"Create one folder per song under catalog/charts/.",
+					"Put work and version metadata in frontmatter.",
+					"Leave the body as the chart rawText.",
+				],
+				code:
+					"---\nid: my-song-demo\nwork:\n  title: My Song\n---\n[Intro]\nC G Am F",
+				memoryPrompt:
+					"Without looking: where does metadata end and the chart begin?",
+				nextQuestion:
+					"Ask the agent to validate the structure of a new chart.",
+			},
+		},
+	},
+	{
+		appId: "artist-portal-base",
+		id: "generated-source-catalog",
+		source: "../artist-portal-base/README.md, scripts/catalog-core.ts, public/source-catalog/source-manifest.json",
+		copy: {
+			"pt-BR": {
+				label: "Artefatos importáveis",
+				title: "O build gera manifest, checksums e NDJSON em /source-catalog/.",
+				summary:
+					"O portal transforma Markdown em envelopes Source Catalog: artist, musicalWork, playableVersion e chordChart. O manifest lista arquivos e checksums para importação segura.",
+				whyItMatters:
+					"Essa saída é o contrato entre um site estático público e um app consumidor offline-first.",
+				steps: [
+					"Carregue o draft do catálogo a partir de catalog/.",
+					"Crie envelopes com sourceId, entityType, schemaVersion e payload.",
+					"Gere arquivos NDJSON determinísticos por tipo de entidade.",
+					"Escreva checksums.json e source-manifest.json.",
+				],
+				code:
+					"pnpm build:catalog\n# public/source-catalog/source-manifest.json\n# public/source-catalog/entities/chord-charts.ndjson",
+				memoryPrompt:
+					"Sem olhar: quais quatro entidades o catálogo v1 gera por padrão?",
+				nextQuestion:
+					"Peça para o agente explicar um source-manifest.json linha por linha.",
+			},
+			en: {
+				label: "Importable artifacts",
+				title: "The build emits manifest, checksums, and NDJSON under /source-catalog/.",
+				summary:
+					"The portal turns Markdown into Source Catalog envelopes: artist, musicalWork, playableVersion, and chordChart. The manifest lists files and checksums for safe import.",
+				whyItMatters:
+					"This output is the contract between a public static site and an offline-first consuming app.",
+				steps: [
+					"Load the catalog draft from catalog/.",
+					"Create envelopes with sourceId, entityType, schemaVersion, and payload.",
+					"Generate deterministic NDJSON files per entity type.",
+					"Write checksums.json and source-manifest.json.",
+				],
+				code:
+					"pnpm build:catalog\n# public/source-catalog/source-manifest.json\n# public/source-catalog/entities/chord-charts.ndjson",
+				memoryPrompt:
+					"Without looking: which four entities does the v1 catalog generate by default?",
+				nextQuestion:
+					"Ask the agent to explain a source-manifest.json line by line.",
+			},
+		},
+	},
+	{
+		appId: "artist-portal-base",
+		id: "validation-pipeline",
+		source: "../artist-portal-base/README.md, scripts/validate-catalog.ts, scripts/catalog-core.ts, package.json",
+		copy: {
+			"pt-BR": {
+				label: "Pipeline de validação",
+				title: "pnpm build valida antes de publicar o portal.",
+				summary:
+					"A validação checa frontmatter, IDs duplicados, datas ISO, chaves sensíveis e erros fatais de parse via @achorde/tab-renderer antes de gerar o catálogo.",
+				whyItMatters:
+					"Um portal público pode ser estático, mas seus dados ainda precisam ser confiáveis para importação automática.",
+				steps: [
+					"Rode pnpm validate durante edição e CI.",
+					"Falhe cedo em metadados ausentes ou duplicados.",
+					"Use parseTab para impedir cifras estruturalmente inválidas.",
+					"Deixe pnpm build rodar validate, build:catalog e astro build.",
+				],
+				code:
+					"pnpm validate\npnpm build\n# validate -> build:catalog -> astro build",
+				memoryPrompt:
+					"Sem olhar: por que validar parse de cifra dentro do portal?",
+				nextQuestion:
+					"Peça para o agente interpretar uma falha de pnpm validate.",
+			},
+			en: {
+				label: "Validation pipeline",
+				title: "pnpm build validates before publishing the portal.",
+				summary:
+					"Validation checks frontmatter, duplicate IDs, ISO dates, sensitive keys, and fatal parse errors through @achorde/tab-renderer before generating the catalog.",
+				whyItMatters:
+					"A public portal can be static, but its data still must be trustworthy for automatic import.",
+				steps: [
+					"Run pnpm validate during editing and CI.",
+					"Fail early on missing or duplicate metadata.",
+					"Use parseTab to reject structurally invalid charts.",
+					"Let pnpm build run validate, build:catalog, and astro build.",
+				],
+				code:
+					"pnpm validate\npnpm build\n# validate -> build:catalog -> astro build",
+				memoryPrompt:
+					"Without looking: why validate chart parsing inside the portal?",
+				nextQuestion:
+					"Ask the agent to interpret a pnpm validate failure.",
+			},
+		},
+	},
+	{
+		appId: "artist-portal-base",
+		id: "interactive-reader",
+		source: "../artist-portal-base/src/components/PortalCatalogReader.tsx, src/pages/index.astro, README.md",
+		copy: {
+			"pt-BR": {
+				label: "Leitor interativo",
+				title: "O portal mostra cifras com busca, tom e tamanho de fonte.",
+				summary:
+					"A página inicial hidrata um componente React que lista as cifras publicadas, filtra por texto, transpõe visualmente e renderiza com @achorde/tab-renderer/react.",
+				whyItMatters:
+					"O portal precisa servir máquinas, mas também precisa ser útil para humanos antes de qualquer importação no AC15.",
+				steps: [
+					"Carregue o draft do catálogo no Astro.",
+					"Passe charts para PortalCatalogReader.",
+					"Controle busca, selectedId, transposeNumber e fontSize em React.",
+					"Renderize a cifra selecionada com Tab e links de importação.",
+				],
+				code:
+					"<PortalCatalogReader\n  charts={charts}\n  catalogUrl={catalogUrl}\n  manifestUrl={manifestUrl}\n/>",
+				memoryPrompt:
+					"Sem olhar: o leitor muda o rawText publicado ou só a visualização?",
+				nextQuestion:
+					"Peça para o agente comparar o leitor do portal com o viewer do AC15.",
+			},
+			en: {
+				label: "Interactive reader",
+				title: "The portal shows charts with search, key, and font-size controls.",
+				summary:
+					"The home page hydrates a React component that lists published charts, filters by text, visually transposes, and renders through @achorde/tab-renderer/react.",
+				whyItMatters:
+					"The portal must serve machines, but it also needs to be useful to humans before any AC15 import.",
+				steps: [
+					"Load the catalog draft in Astro.",
+					"Pass charts to PortalCatalogReader.",
+					"Control query, selectedId, transposeNumber, and fontSize in React.",
+					"Render the selected chart with Tab and import links.",
+				],
+				code:
+					"<PortalCatalogReader\n  charts={charts}\n  catalogUrl={catalogUrl}\n  manifestUrl={manifestUrl}\n/>",
+				memoryPrompt:
+					"Without looking: does the reader change published rawText or only the view?",
+				nextQuestion:
+					"Ask the agent to compare the portal reader with the AC15 viewer.",
+			},
+		},
+	},
+] as const satisfies readonly AppConceptDoc[];
+
 export function getConceptDocsForPackage(
 	packageId: PackageId,
 ) {
 	return packageConceptDocs.filter((conceptDoc) => conceptDoc.packageId === packageId);
+}
+
+export function getConceptDocsForApp(
+	appId: AppId,
+) {
+	return appConceptDocs.filter((conceptDoc) => conceptDoc.appId === appId);
 }
 
 export function findPackageConceptDoc(
@@ -1896,6 +2601,15 @@ export function findPackageConceptDoc(
 ) {
 	return packageConceptDocs.find(
 		(conceptDoc) => conceptDoc.packageId === packageId && conceptDoc.id === conceptId,
+	);
+}
+
+export function findAppConceptDoc(
+	appId: string | undefined,
+	conceptId: string | undefined,
+) {
+	return appConceptDocs.find(
+		(conceptDoc) => conceptDoc.appId === appId && conceptDoc.id === conceptId,
 	);
 }
 
@@ -1919,4 +2633,8 @@ export function oppositeLocale(locale: Locale): Locale {
 
 export function findPackageDoc(packageId: string | undefined) {
 	return packageDocs.find((packageDoc) => packageDoc.id === packageId);
+}
+
+export function findAppDoc(appId: string | undefined) {
+	return appDocs.find((appDoc) => appDoc.id === appId);
 }

@@ -124,6 +124,10 @@ pre {
 	text-transform: uppercase;
 }
 
+.docs-nav-heading--spaced {
+	margin-top: 14px;
+}
+
 .docs-nav-link {
 	display: grid;
 	gap: 3px;
@@ -294,6 +298,14 @@ pre {
 
 .docs-map-node--infrastructure {
 	border-left-color: #6d6474;
+}
+
+.docs-map-node--product {
+	border-left-color: #9f3f49;
+}
+
+.docs-map-node--portal {
+	border-left-color: #8f7a21;
 }
 
 .docs-map-node strong {
@@ -578,6 +590,13 @@ pre {
 .docs-readme-loading {
 	margin: 0;
 	color: #53625d;
+}
+
+.docs-source-list {
+	display: grid;
+	gap: 8px;
+	margin: 0;
+	padding-left: 22px;
 }
 
 .docs-next {

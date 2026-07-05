@@ -8,9 +8,14 @@ import {
 } from "@tanstack/react-router";
 import { Suspense, lazy, type ReactNode } from "react";
 import {
+	type AppConceptDoc,
+	type AppDoc,
 	type Locale,
 	type PackageDoc,
 	type PackageConceptDoc,
+	appConceptDocs,
+	appDocs,
+	getConceptDocsForApp,
 	getConceptDocsForPackage,
 	localeFromRoute,
 	locales,
@@ -22,6 +27,8 @@ import {
 } from "./docs-content.js";
 import { packageReadmes } from "./package-readmes.js";
 import "./site.css";
+
+type ConceptDoc = PackageConceptDoc | AppConceptDoc;
 
 const MarkdownReadme = lazy(() =>
 	import("./MarkdownReadme.js").then((module) => ({
@@ -49,9 +56,14 @@ const ecosystemPrinciples = {
 } as const;
 
 const packageOrder = packageDocs.map((packageDoc) => packageDoc.id);
+const appOrder = appDocs.map((appDoc) => appDoc.id);
 
 function packagePath(locale: Locale, packageId: PackageDoc["id"]) {
 	return `/${routeLocale(locale)}/packages/${packageId}`;
+}
+
+function appPath(locale: Locale, appId: AppDoc["id"]) {
+	return `/${routeLocale(locale)}/apps/${appId}`;
 }
 
 function packageConceptPath(
@@ -62,6 +74,20 @@ function packageConceptPath(
 	return `/${routeLocale(locale)}/packages/${packageId}/concepts/${conceptId}`;
 }
 
+function appConceptPath(
+	locale: Locale,
+	appId: AppDoc["id"],
+	conceptId: AppConceptDoc["id"],
+) {
+	return `/${routeLocale(locale)}/apps/${appId}/concepts/${conceptId}`;
+}
+
+function conceptDocPath(locale: Locale, conceptDoc: ConceptDoc) {
+	return "packageId" in conceptDoc
+		? packageConceptPath(locale, conceptDoc.packageId, conceptDoc.id)
+		: appConceptPath(locale, conceptDoc.appId, conceptDoc.id);
+}
+
 function homePath(locale: Locale) {
 	return `/${routeLocale(locale)}`;
 }
@@ -70,22 +96,30 @@ function Shell({
 	children,
 	locale,
 	activePackageId,
+	activeAppId,
 	activeConceptId,
 }: {
 	children: ReactNode;
 	locale: Locale;
 	activePackageId?: PackageDoc["id"];
-	activeConceptId?: PackageConceptDoc["id"];
+	activeAppId?: AppDoc["id"];
+	activeConceptId?: string;
 }) {
 	const copy = siteCopy[locale];
 	const otherLocale = oppositeLocale(locale);
 	const conceptDocs = activePackageId
 		? getConceptDocsForPackage(activePackageId)
-		: [];
+		: activeAppId
+			? getConceptDocsForApp(activeAppId)
+			: [];
 	const otherLocalePath = activeConceptId && activePackageId
 		? packageConceptPath(otherLocale, activePackageId, activeConceptId)
+		: activeConceptId && activeAppId
+			? appConceptPath(otherLocale, activeAppId, activeConceptId)
 		: activePackageId
 			? packagePath(otherLocale, activePackageId)
+			: activeAppId
+				? appPath(otherLocale, activeAppId)
 			: homePath(otherLocale);
 
 	return (
@@ -109,6 +143,7 @@ function Shell({
 					>
 						{copy.startHere}
 					</Link>
+					<p className="docs-nav-heading">{copy.allPackages}</p>
 					{packageDocs.map((packageDoc) => (
 						<Link
 							key={packageDoc.id}
@@ -117,6 +152,19 @@ function Shell({
 						>
 							<span>{packageDoc.name.replace("@achorde/", "")}</span>
 							<small>{packageDoc.summary[locale].label}</small>
+						</Link>
+					))}
+					<p className="docs-nav-heading docs-nav-heading--spaced">
+						{copy.allApps}
+					</p>
+					{appDocs.map((appDoc) => (
+						<Link
+							key={appDoc.id}
+							to={appPath(locale, appDoc.id)}
+							className="docs-nav-link"
+						>
+							<span>{appDoc.name}</span>
+							<small>{appDoc.summary[locale].label}</small>
 						</Link>
 					))}
 				</nav>
@@ -129,7 +177,7 @@ function Shell({
 							return (
 								<Link
 									key={conceptDoc.id}
-									to={packageConceptPath(locale, conceptDoc.packageId, conceptDoc.id)}
+									to={conceptDocPath(locale, conceptDoc)}
 									className="docs-concept-nav-link"
 								>
 									<span>{concept.label}</span>
@@ -192,6 +240,16 @@ function HomePage({ locale }: { locale: Locale }) {
 							<span>{packageDoc.summary[locale].label}</span>
 						</Link>
 					))}
+					{appDocs.map((appDoc) => (
+						<Link
+							key={appDoc.id}
+							to={appPath(locale, appDoc.id)}
+							className={`docs-map-node docs-map-node--${appDoc.scope}`}
+						>
+							<strong>{appDoc.name}</strong>
+							<span>{appDoc.summary[locale].label}</span>
+						</Link>
+					))}
 				</div>
 			</section>
 
@@ -220,6 +278,19 @@ function HomePage({ locale }: { locale: Locale }) {
 					))}
 				</div>
 			</section>
+
+			<section className="docs-section">
+				<div className="docs-section-heading">
+					<p className="docs-kicker">{copy.appRoutes}</p>
+					<h2>{copy.allApps}</h2>
+					<p>{copy.appRoutesText}</p>
+				</div>
+				<div className="docs-package-grid">
+					{appDocs.map((appDoc) => (
+						<AppSummaryCard key={appDoc.id} appDoc={appDoc} locale={locale} />
+					))}
+				</div>
+			</section>
 		</Shell>
 	);
 }
@@ -236,6 +307,23 @@ function PackageSummaryCard({
 		<Link to={packagePath(locale, packageDoc.id)} className="docs-package-card">
 			<p className="docs-card-label">{summary.label}</p>
 			<h3>{packageDoc.name}</h3>
+			<p>{summary.headline}</p>
+		</Link>
+	);
+}
+
+function AppSummaryCard({
+	appDoc,
+	locale,
+}: {
+	appDoc: AppDoc;
+	locale: Locale;
+}) {
+	const summary = appDoc.summary[locale];
+	return (
+		<Link to={appPath(locale, appDoc.id)} className="docs-package-card">
+			<p className="docs-card-label">{summary.label}</p>
+			<h3>{appDoc.name}</h3>
 			<p>{summary.headline}</p>
 		</Link>
 	);
@@ -338,6 +426,103 @@ function PackagePage({
 	);
 }
 
+function AppPage({
+	locale,
+	appDoc,
+}: {
+	locale: Locale;
+	appDoc: AppDoc;
+}) {
+	const copy = siteCopy[locale];
+	const summary = appDoc.summary[locale];
+	const currentIndex = appOrder.indexOf(appDoc.id);
+	const nextAppId = appOrder[(currentIndex + 1) % appOrder.length]!;
+	const nextApp = appDocs.find((item) => item.id === nextAppId)!;
+	const conceptDocs = getConceptDocsForApp(appDoc.id);
+
+	return (
+		<Shell locale={locale} activeAppId={appDoc.id}>
+			<article className="docs-package-page">
+				<header className="docs-package-header">
+					<div>
+						<p className="docs-kicker">{summary.label}</p>
+						<h1>{appDoc.name}</h1>
+					</div>
+					<ExternalAppLinks appDoc={appDoc} locale={locale} />
+				</header>
+
+				<section className="docs-teach-block">
+					<p className="docs-block-label">{copy.headlineLabel}</p>
+					<h2>{summary.headline}</h2>
+				</section>
+
+				<section className="docs-teach-block">
+					<p className="docs-block-label">{copy.paragraphLabel}</p>
+					<p>{summary.paragraph}</p>
+				</section>
+
+				<section className="docs-teach-block">
+					<p className="docs-block-label">{copy.stepsLabel}</p>
+					<ol className="docs-steps">
+						{summary.steps.map((step) => (
+							<li key={step}>{step}</li>
+						))}
+					</ol>
+				</section>
+
+				<section className="docs-section docs-section--inside">
+					<div className="docs-section-heading">
+						<p className="docs-kicker">{copy.conceptRoutes}</p>
+						<h2>{copy.coreConceptsTitle}</h2>
+						<p>{copy.coreConceptsText}</p>
+					</div>
+					<div className="docs-concept-grid">
+						{conceptDocs.map((conceptDoc) => (
+							<AppConceptSummaryCard
+								key={conceptDoc.id}
+								conceptDoc={conceptDoc}
+								locale={locale}
+							/>
+						))}
+					</div>
+				</section>
+
+				<div className="docs-two-column">
+					<section className="docs-note">
+						<p className="docs-block-label">{copy.whenToUseLabel}</p>
+						<p>{summary.whenToUse}</p>
+					</section>
+					<section className="docs-note">
+						<p className="docs-block-label">{copy.rememberLabel}</p>
+						<p>{summary.remember}</p>
+					</section>
+				</div>
+
+				<section className="docs-memory-check">
+					<p className="docs-block-label">{copy.retrievalTitle}</p>
+					<p>{copy.retrievalPrompt}</p>
+				</section>
+
+				<section className="docs-readme">
+					<p className="docs-block-label">{copy.sourceDocumentsLabel}</p>
+					<ul className="docs-source-list">
+						{appDoc.sources.map((source) => (
+							<li key={source}>
+								<code>{source}</code>
+							</li>
+						))}
+					</ul>
+				</section>
+
+				<footer className="docs-next">
+					<span>{locale === "pt-BR" ? "Próximo app" : "Next app"}</span>
+					<Link to={appPath(locale, nextApp.id)}>{nextApp.name}</Link>
+				</footer>
+			</article>
+		</Shell>
+	);
+}
+
 function ConceptSummaryCard({
 	conceptDoc,
 	locale,
@@ -349,6 +534,26 @@ function ConceptSummaryCard({
 	return (
 		<Link
 			to={packageConceptPath(locale, conceptDoc.packageId, conceptDoc.id)}
+			className="docs-concept-card"
+		>
+			<p className="docs-card-label">{concept.label}</p>
+			<h3>{concept.title}</h3>
+			<p>{concept.summary}</p>
+		</Link>
+	);
+}
+
+function AppConceptSummaryCard({
+	conceptDoc,
+	locale,
+}: {
+	conceptDoc: AppConceptDoc;
+	locale: Locale;
+}) {
+	const concept = conceptDoc.copy[locale];
+	return (
+		<Link
+			to={appConceptPath(locale, conceptDoc.appId, conceptDoc.id)}
 			className="docs-concept-card"
 		>
 			<p className="docs-card-label">{concept.label}</p>
@@ -452,6 +657,92 @@ function PackageConceptPage({
 	);
 }
 
+function AppConceptPage({
+	locale,
+	conceptDoc,
+}: {
+	locale: Locale;
+	conceptDoc: AppConceptDoc;
+}) {
+	const copy = siteCopy[locale];
+	const concept = conceptDoc.copy[locale];
+	const conceptDocs = getConceptDocsForApp(conceptDoc.appId);
+	const appDoc = appDocs.find((item) => item.id === conceptDoc.appId)!;
+	const currentIndex = conceptDocs.findIndex(
+		(item) => item.id === conceptDoc.id,
+	);
+	const nextConcept =
+		conceptDocs[(currentIndex + 1) % conceptDocs.length]!;
+
+	return (
+		<Shell
+			locale={locale}
+			activeAppId={conceptDoc.appId}
+			activeConceptId={conceptDoc.id}
+		>
+			<article className="docs-package-page docs-concept-page">
+				<header className="docs-package-header">
+					<div>
+						<p className="docs-kicker">{concept.label}</p>
+						<h1>{concept.title}</h1>
+					</div>
+					<div className="docs-actions">
+						<Link to={appPath(locale, conceptDoc.appId)}>
+							{copy.backToApp}
+						</Link>
+					</div>
+				</header>
+
+				<section className="docs-teach-block docs-teach-block--lead">
+					<p>{concept.summary}</p>
+				</section>
+
+				<div className="docs-two-column">
+					<section className="docs-note">
+						<p className="docs-block-label">{copy.whyItMattersLabel}</p>
+						<p>{concept.whyItMatters}</p>
+					</section>
+					<section className="docs-note">
+						<p className="docs-block-label">{copy.sourceLabel}</p>
+						<p>{conceptDoc.source}</p>
+					</section>
+				</div>
+
+				<section className="docs-teach-block">
+					<p className="docs-block-label">{copy.stepsLabel}</p>
+					<ol className="docs-steps">
+						{concept.steps.map((step) => (
+							<li key={step}>{step}</li>
+						))}
+					</ol>
+				</section>
+
+				<section className="docs-teach-block">
+					<p className="docs-block-label">TypeScript</p>
+					<ConceptCodeBlock>{concept.code}</ConceptCodeBlock>
+				</section>
+
+				<section className="docs-memory-check">
+					<p className="docs-block-label">{copy.retrievalTitle}</p>
+					<p>{concept.memoryPrompt}</p>
+				</section>
+
+				<section className="docs-note">
+					<p className="docs-block-label">{copy.nextQuestionLabel}</p>
+					<p>{concept.nextQuestion}</p>
+				</section>
+
+				<footer className="docs-next">
+					<span>{locale === "pt-BR" ? "Próximo conceito" : "Next concept"}</span>
+					<Link to={appConceptPath(locale, appDoc.id, nextConcept.id)}>
+						{nextConcept.copy[locale].label}
+					</Link>
+				</footer>
+			</article>
+		</Shell>
+	);
+}
+
 function ExternalLinks({
 	packageDoc,
 	locale,
@@ -478,6 +769,28 @@ function ExternalLinks({
 				</a>
 			) : null}
 			<a href={packageDoc.github} target="_blank" rel="noreferrer">
+				{copy.openGithub}
+			</a>
+		</div>
+	);
+}
+
+function ExternalAppLinks({
+	appDoc,
+	locale,
+}: {
+	appDoc: AppDoc;
+	locale: Locale;
+}) {
+	const copy = siteCopy[locale];
+	return (
+		<div className="docs-actions">
+			{appDoc.demo ? (
+				<a href={appDoc.demo} target="_blank" rel="noreferrer">
+					{copy.openDemo}
+				</a>
+			) : null}
+			<a href={appDoc.github} target="_blank" rel="noreferrer">
 				{copy.openGithub}
 			</a>
 		</div>
@@ -521,6 +834,13 @@ const localeRoutes = (["pt-br", "en"] as const).flatMap((localeSegment) => {
 			component: () => <PackagePage locale={locale} packageDoc={packageDoc} />,
 		}),
 	);
+	const appRoutes = appDocs.map((appDoc) =>
+		createRoute({
+			getParentRoute: () => rootRoute,
+			path: `${localeSegment}/apps/${appDoc.id}`,
+			component: () => <AppPage locale={locale} appDoc={appDoc} />,
+		}),
+	);
 	const conceptRoutes = packageConceptDocs.map((conceptDoc) =>
 		createRoute({
 			getParentRoute: () => rootRoute,
@@ -530,8 +850,17 @@ const localeRoutes = (["pt-br", "en"] as const).flatMap((localeSegment) => {
 			),
 		}),
 	);
+	const appConceptRoutes = appConceptDocs.map((conceptDoc) =>
+		createRoute({
+			getParentRoute: () => rootRoute,
+			path: `${localeSegment}/apps/${conceptDoc.appId}/concepts/${conceptDoc.id}`,
+			component: () => (
+				<AppConceptPage locale={locale} conceptDoc={conceptDoc} />
+			),
+		}),
+	);
 
-	return [homeRoute, ...packageRoutes, ...conceptRoutes];
+	return [homeRoute, ...packageRoutes, ...appRoutes, ...conceptRoutes, ...appConceptRoutes];
 });
 
 const routeTree = rootRoute.addChildren([indexRoute, ...localeRoutes]);
