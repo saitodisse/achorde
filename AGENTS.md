@@ -17,7 +17,7 @@ This repository is the public monorepo root for the shared music ecosystem.
 
 | Package | English docs | Demo | Storybook |
 | ------- | ------------ | ---- | --------- |
-| `@achorde/musical-domain` | https://achorde-musical-domain.vercel.app/en/packages/musical-domain | https://achorde-musical-domain.vercel.app/ | https://storybook-musical-domain.vercel.app/ |
+| `@achorde/musical-domain` | https://achorde-musical-domain.vercel.app/en/packages/musical-domain | https://achorde-musical-domain.vercel.app/ | _(none)_ |
 | `@achorde/source-catalog` | https://achorde-musical-domain.vercel.app/en/packages/source-catalog | _(none)_ | _(none)_ |
 | `@achorde/tab-renderer` | https://achorde-musical-domain.vercel.app/en/packages/tab-renderer | https://tab-renderer-react.vercel.app/ | https://storybook-tab-renderer.vercel.app/ |
 | `@achorde/svguitar-react` | https://achorde-musical-domain.vercel.app/en/packages/svguitar-react | https://svguitar-react.vercel.app/ | https://storybook-svguitar-react.vercel.app/?path=/docs/components-chorddiagram--docs |

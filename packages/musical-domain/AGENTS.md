@@ -8,7 +8,6 @@ This repository publishes shared musical contracts for chord charts, textual tab
 
 - English package docs: https://achorde-musical-domain.vercel.app/en/packages/musical-domain
 - Demo site: https://achorde-musical-domain.vercel.app/
-- Storybook: https://storybook-musical-domain.vercel.app/
 
 ## Rules
 
@@ -31,8 +30,6 @@ This repository publishes shared musical contracts for chord charts, textual tab
 | `pnpm dev:site` | Demo site on port 5286 |
 | `pnpm build:site` | Demo site build |
 | `pnpm preview:site` | Preview built demo |
-| `pnpm storybook` | Storybook on port 6005 |
-| `pnpm build-storybook` | Storybook build |
 
 ## Downstream Consumers
 

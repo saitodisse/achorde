@@ -107,6 +107,23 @@ pre {
 	margin-top: 18px;
 }
 
+.docs-concept-nav {
+	display: grid;
+	gap: 6px;
+	margin-top: 22px;
+	padding-top: 16px;
+	border-top: 1px solid #d8d1c4;
+}
+
+.docs-nav-heading {
+	margin: 0 0 2px;
+	color: #53625d;
+	font-size: 0.72rem;
+	font-weight: 800;
+	letter-spacing: 0.08em;
+	text-transform: uppercase;
+}
+
 .docs-nav-link {
 	display: grid;
 	gap: 3px;
@@ -115,13 +132,24 @@ pre {
 	color: #26322e;
 }
 
+.docs-concept-nav-link {
+	display: grid;
+	gap: 3px;
+	padding: 8px 10px;
+	border-radius: 8px;
+	color: #26322e;
+}
+
 .docs-nav-link:hover,
-.docs-nav-link.active {
+.docs-nav-link.active,
+.docs-concept-nav-link:hover,
+.docs-concept-nav-link.active {
 	background: #ffffff;
 	box-shadow: inset 0 0 0 1px #d8d1c4;
 }
 
-.docs-nav-link small {
+.docs-nav-link small,
+.docs-concept-nav-link small {
 	color: #68746f;
 	font-size: 0.78rem;
 	line-height: 1.35;
@@ -186,6 +214,7 @@ pre {
 .docs-intro,
 .docs-section,
 .docs-package-page,
+.docs-readme,
 .docs-empty {
 	max-width: 1180px;
 	margin: 0 auto;
@@ -233,9 +262,11 @@ pre {
 
 .docs-map-node,
 .docs-package-card,
+.docs-concept-card,
 .docs-teach-block,
 .docs-note,
-.docs-memory-check {
+.docs-memory-check,
+.docs-readme {
 	border: 1px solid #d8d1c4;
 	border-radius: 8px;
 	background: #fffaf0;
@@ -276,6 +307,10 @@ pre {
 
 .docs-section {
 	margin-top: 36px;
+}
+
+.docs-section--inside {
+	margin-top: 2px;
 }
 
 .docs-section-heading {
@@ -319,17 +354,34 @@ pre {
 	padding: 15px;
 }
 
-.docs-package-card:hover {
+.docs-concept-grid {
+	display: grid;
+	grid-template-columns: repeat(2, minmax(0, 1fr));
+	gap: 12px;
+}
+
+.docs-concept-card {
+	display: grid;
+	gap: 9px;
+	min-height: 176px;
+	padding: 15px;
+	border-left: 5px solid #2f6f62;
+}
+
+.docs-package-card:hover,
+.docs-concept-card:hover {
 	border-color: #173c33;
 }
 
-.docs-package-card h3 {
+.docs-package-card h3,
+.docs-concept-card h3 {
 	margin: 0;
 	font-size: 1rem;
 	line-height: 1.3;
 }
 
-.docs-package-card p:last-child {
+.docs-package-card p:last-child,
+.docs-concept-card p:last-child {
 	margin: 0;
 	color: #46534f;
 	line-height: 1.5;
@@ -359,6 +411,10 @@ pre {
 	display: grid;
 	gap: 10px;
 	padding: 18px;
+}
+
+.docs-teach-block--lead p {
+	font-size: 1.1rem;
 }
 
 .docs-steps {
@@ -393,6 +449,137 @@ pre {
 	background: #fff5e4;
 }
 
+.docs-readme {
+	display: flow-root;
+	min-width: 0;
+	padding: 22px;
+	overflow: hidden;
+}
+
+.docs-readme > .docs-block-label {
+	margin-bottom: 18px;
+}
+
+.docs-readme h1,
+.docs-readme h2,
+.docs-readme h3,
+.docs-readme h4 {
+	margin: 28px 0 10px;
+	color: #1d2522;
+	line-height: 1.22;
+}
+
+.docs-readme h1:first-of-type {
+	margin-top: 0;
+}
+
+.docs-readme h1 {
+	font-size: 2rem;
+}
+
+.docs-readme h2 {
+	padding-top: 16px;
+	border-top: 1px solid #e4dccf;
+	font-size: 1.45rem;
+}
+
+.docs-readme h3 {
+	font-size: 1.15rem;
+}
+
+.docs-readme p,
+.docs-readme li,
+.docs-readme td,
+.docs-readme th {
+	color: #34423d;
+	line-height: 1.65;
+}
+
+.docs-readme p,
+.docs-readme ul,
+.docs-readme ol,
+.docs-readme table,
+.docs-readme pre,
+.docs-readme figure,
+.docs-readme blockquote {
+	margin: 0 0 16px;
+}
+
+.docs-readme ul,
+.docs-readme ol {
+	padding-left: 24px;
+}
+
+.docs-readme li + li {
+	margin-top: 6px;
+}
+
+.docs-readme a {
+	color: #195c9f;
+	font-weight: 700;
+	text-decoration: underline;
+	text-underline-offset: 3px;
+}
+
+.docs-readme :not(pre) > code {
+	padding: 0.13em 0.34em;
+	border-radius: 5px;
+	background: #ece5d8;
+	color: #173c33;
+	font-size: 0.92em;
+}
+
+.docs-readme pre {
+	overflow-x: auto;
+	padding: 16px;
+	border-radius: 8px;
+	background: #171f1d;
+	color: #f5f2ea;
+	font-size: 0.88rem;
+	line-height: 1.65;
+}
+
+.docs-readme pre code {
+	display: grid;
+	min-width: max-content;
+	background: transparent;
+}
+
+.docs-readme [data-line] {
+	padding: 0 2px;
+}
+
+.docs-readme table {
+	display: block;
+	width: 100%;
+	overflow-x: auto;
+	border-collapse: collapse;
+}
+
+.docs-readme th,
+.docs-readme td {
+	padding: 9px 11px;
+	border: 1px solid #d8d1c4;
+	text-align: left;
+	vertical-align: top;
+}
+
+.docs-readme th {
+	background: #eee8dc;
+	color: #1d2522;
+}
+
+.docs-readme blockquote {
+	padding: 12px 14px;
+	border-left: 4px solid #416f9f;
+	background: #f3efe7;
+}
+
+.docs-readme-loading {
+	margin: 0;
+	color: #53625d;
+}
+
 .docs-next {
 	display: flex;
 	align-items: center;
@@ -410,6 +597,18 @@ pre {
 .docs-next a {
 	font-weight: 800;
 	color: #173c33;
+}
+
+.docs-code-block {
+	margin: 0;
+	padding: 14px;
+	border-radius: 8px;
+	background: #18221f;
+	color: #f9f5ea;
+	font-size: 0.88rem;
+	line-height: 1.55;
+	overflow-x: auto;
+	white-space: pre;
 }
 
 .docs-empty {
@@ -450,6 +649,7 @@ pre {
 	.docs-system-map,
 	.docs-principles,
 	.docs-package-grid,
+	.docs-concept-grid,
 	.docs-two-column {
 		grid-template-columns: 1fr;
 	}

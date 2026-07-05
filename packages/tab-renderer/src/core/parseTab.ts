@@ -40,7 +40,7 @@ function lyricTokenLooksLikeInvalidChord(text: string): boolean {
   }
 
   return (
-    /[0-9/()+#°º+\-]/.test(suffix) ||
+    /[0-9/()+#°º-]/.test(suffix) ||
     /^(?:m|M|maj|min|dim|aug|sus|add)(?![a-z])/i.test(suffix)
   );
 }

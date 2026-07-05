@@ -3,14 +3,14 @@ import type { ParsedChordSymbol } from "../types";
 const CHORD_ROOT_RE = /^([A-G])([#b♯♭]?)(.*)$/;
 const CHORD_BASS_RE = /^([A-G])([#b♯♭]?)$/;
 /** Slash followed by an alteration figure (e.g. D7/9), not a bass note. */
-const CHORD_SLASH_EXTENSION_RE = /^[#b♯♭]?\d[\w\-+°º♭♯#()]*$/;
+const CHORD_SLASH_EXTENSION_RE = /^[#b♯♭]?\d[\w+°º♭♯#()-]*$/;
 
 /**
  * Conventional chord suffix after the root (m7, maj7, 7/9, (13-)).
  * Rejects lyric tails such as the "u" in "Eu" or "e" in "De".
  */
 const CHORD_SUFFIX_RE =
-  /^(?:\([^)]*\))*(?:\/[#b♯♭]?\d[\w\-+°º♭♯#()]*)?(?:mmaj|m(?![a-z])|M(?![a-z])|Maj|Min|maj|min|major|minor|dim|aug|sus|add|[#b°º+\-]|\d)[\w\-+°º♭♯#()/]*$/;
+  /^(?:\([^)]*\))*(?:\/[#b♯♭]?\d[\w+°º♭♯#()-]*)?(?:mmaj|m(?![a-z])|M(?![a-z])|Maj|Min|maj|min|major|minor|dim|aug|sus|add|[#b°º+-]|\d)[\w+°º♭♯#)/(-]*$/;
 
 function isValidChordSuffix(suffix: string): boolean {
   if (suffix.length === 0) {

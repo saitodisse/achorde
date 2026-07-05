@@ -6,18 +6,31 @@ import {
 	createRoute,
 	createRouter,
 } from "@tanstack/react-router";
-import type { ReactNode } from "react";
+import { Suspense, lazy, type ReactNode } from "react";
 import {
 	type Locale,
+	type MusicalDomainConceptDoc,
 	type PackageDoc,
 	localeFromRoute,
 	locales,
+	musicalDomainConceptDocs,
 	oppositeLocale,
 	packageDocs,
 	routeLocale,
 	siteCopy,
 } from "./docs-content.js";
+import { packageReadmes } from "./package-readmes.js";
 import "./site.css";
+
+const MarkdownReadme = lazy(() =>
+	import("./MarkdownReadme.js").then((module) => ({
+		default: module.MarkdownReadme,
+	})),
+);
+
+function ReadmeFallback({ children }: { children: string }) {
+	return <p className="docs-readme-loading">{children}</p>;
+}
 
 const ecosystemPrinciples = {
 	"pt-BR": [
@@ -40,6 +53,13 @@ function packagePath(locale: Locale, packageId: PackageDoc["id"]) {
 	return `/${routeLocale(locale)}/packages/${packageId}`;
 }
 
+function musicalDomainConceptPath(
+	locale: Locale,
+	conceptId: MusicalDomainConceptDoc["id"],
+) {
+	return `/${routeLocale(locale)}/packages/musical-domain/concepts/${conceptId}`;
+}
+
 function homePath(locale: Locale) {
 	return `/${routeLocale(locale)}`;
 }
@@ -48,16 +68,20 @@ function Shell({
 	children,
 	locale,
 	activePackageId,
+	activeConceptId,
 }: {
 	children: ReactNode;
 	locale: Locale;
 	activePackageId?: PackageDoc["id"];
+	activeConceptId?: MusicalDomainConceptDoc["id"];
 }) {
 	const copy = siteCopy[locale];
 	const otherLocale = oppositeLocale(locale);
-	const otherLocalePath = activePackageId
-		? packagePath(otherLocale, activePackageId)
-		: homePath(otherLocale);
+	const otherLocalePath = activeConceptId
+		? musicalDomainConceptPath(otherLocale, activeConceptId)
+		: activePackageId
+			? packagePath(otherLocale, activePackageId)
+			: homePath(otherLocale);
 
 	return (
 		<div className="docs-shell">
@@ -91,6 +115,25 @@ function Shell({
 						</Link>
 					))}
 				</nav>
+
+				{activePackageId === "musical-domain" ? (
+					<nav className="docs-concept-nav" aria-label={copy.conceptRoutes}>
+						<p className="docs-nav-heading">{copy.conceptRoutes}</p>
+						{musicalDomainConceptDocs.map((conceptDoc) => {
+							const concept = conceptDoc.copy[locale];
+							return (
+								<Link
+									key={conceptDoc.id}
+									to={musicalDomainConceptPath(locale, conceptDoc.id)}
+									className="docs-concept-nav-link"
+								>
+									<span>{concept.label}</span>
+									<small>{concept.title}</small>
+								</Link>
+							);
+						})}
+					</nav>
+				) : null}
 			</aside>
 
 			<main className="docs-main">
@@ -236,6 +279,25 @@ function PackagePage({
 					</ol>
 				</section>
 
+				{packageDoc.id === "musical-domain" ? (
+					<section className="docs-section docs-section--inside">
+						<div className="docs-section-heading">
+							<p className="docs-kicker">{copy.conceptRoutes}</p>
+							<h2>{copy.coreConceptsTitle}</h2>
+							<p>{copy.coreConceptsText}</p>
+						</div>
+						<div className="docs-concept-grid">
+							{musicalDomainConceptDocs.map((conceptDoc) => (
+								<ConceptSummaryCard
+									key={conceptDoc.id}
+									conceptDoc={conceptDoc}
+									locale={locale}
+								/>
+							))}
+						</div>
+					</section>
+				) : null}
+
 				<div className="docs-two-column">
 					<section className="docs-note">
 						<p className="docs-block-label">{copy.whenToUseLabel}</p>
@@ -252,9 +314,132 @@ function PackagePage({
 					<p>{copy.retrievalPrompt}</p>
 				</section>
 
+				<section className="docs-readme">
+					<p className="docs-block-label">{copy.readmeLabel}</p>
+					<Suspense fallback={<ReadmeFallback>{copy.readmeLoading}</ReadmeFallback>}>
+						<MarkdownReadme fallback={copy.readmeLoading}>
+							{packageReadmes[packageDoc.id]}
+						</MarkdownReadme>
+					</Suspense>
+				</section>
+
 				<footer className="docs-next">
 					<span>{locale === "pt-BR" ? "Próximo pacote" : "Next package"}</span>
 					<Link to={packagePath(locale, nextPackage.id)}>{nextPackage.name}</Link>
+				</footer>
+			</article>
+		</Shell>
+	);
+}
+
+function ConceptSummaryCard({
+	conceptDoc,
+	locale,
+}: {
+	conceptDoc: MusicalDomainConceptDoc;
+	locale: Locale;
+}) {
+	const concept = conceptDoc.copy[locale];
+	return (
+		<Link
+			to={musicalDomainConceptPath(locale, conceptDoc.id)}
+			className="docs-concept-card"
+		>
+			<p className="docs-card-label">{concept.label}</p>
+			<h3>{concept.title}</h3>
+			<p>{concept.summary}</p>
+		</Link>
+	);
+}
+
+function ConceptCodeBlock({ children }: { children: string }) {
+	return (
+		<pre className="docs-code-block">
+			<code>{children}</code>
+		</pre>
+	);
+}
+
+function MusicalDomainConceptPage({
+	locale,
+	conceptDoc,
+}: {
+	locale: Locale;
+	conceptDoc: MusicalDomainConceptDoc;
+}) {
+	const copy = siteCopy[locale];
+	const concept = conceptDoc.copy[locale];
+	const currentIndex = musicalDomainConceptDocs.findIndex(
+		(item) => item.id === conceptDoc.id,
+	);
+	const nextConcept =
+		musicalDomainConceptDocs[
+			(currentIndex + 1) % musicalDomainConceptDocs.length
+		]!;
+
+	return (
+		<Shell
+			locale={locale}
+			activePackageId="musical-domain"
+			activeConceptId={conceptDoc.id}
+		>
+			<article className="docs-package-page docs-concept-page">
+				<header className="docs-package-header">
+					<div>
+						<p className="docs-kicker">{concept.label}</p>
+						<h1>{concept.title}</h1>
+					</div>
+					<div className="docs-actions">
+						<Link to={packagePath(locale, "musical-domain")}>
+							{copy.backToPackage}
+						</Link>
+					</div>
+				</header>
+
+				<section className="docs-teach-block docs-teach-block--lead">
+					<p>{concept.summary}</p>
+				</section>
+
+				<div className="docs-two-column">
+					<section className="docs-note">
+						<p className="docs-block-label">{copy.whyItMattersLabel}</p>
+						<p>{concept.whyItMatters}</p>
+					</section>
+					<section className="docs-note">
+						<p className="docs-block-label">{copy.sourceLabel}</p>
+						<p>{conceptDoc.source}</p>
+					</section>
+				</div>
+
+				<section className="docs-teach-block">
+					<p className="docs-block-label">{copy.stepsLabel}</p>
+					<ol className="docs-steps">
+						{concept.steps.map((step) => (
+							<li key={step}>{step}</li>
+						))}
+					</ol>
+				</section>
+
+				<section className="docs-teach-block">
+					<p className="docs-block-label">TypeScript</p>
+					<ConceptCodeBlock>{concept.code}</ConceptCodeBlock>
+				</section>
+
+				<section className="docs-memory-check">
+					<p className="docs-block-label">{copy.retrievalTitle}</p>
+					<p>{concept.memoryPrompt}</p>
+				</section>
+
+				<section className="docs-note">
+					<p className="docs-block-label">{copy.nextQuestionLabel}</p>
+					<p>{concept.nextQuestion}</p>
+				</section>
+
+				<footer className="docs-next">
+					<span>{locale === "pt-BR" ? "Próximo conceito" : "Next concept"}</span>
+					<Link to={musicalDomainConceptPath(locale, nextConcept.id)}>
+						{nextConcept.copy[locale].label}
+					</Link>
 				</footer>
 			</article>
 		</Shell>
@@ -330,8 +515,17 @@ const localeRoutes = (["pt-br", "en"] as const).flatMap((localeSegment) => {
 			component: () => <PackagePage locale={locale} packageDoc={packageDoc} />,
 		}),
 	);
+	const musicalDomainConceptRoutes = musicalDomainConceptDocs.map((conceptDoc) =>
+		createRoute({
+			getParentRoute: () => rootRoute,
+			path: `${localeSegment}/packages/musical-domain/concepts/${conceptDoc.id}`,
+			component: () => (
+				<MusicalDomainConceptPage locale={locale} conceptDoc={conceptDoc} />
+			),
+		}),
+	);
 
-	return [homeRoute, ...packageRoutes];
+	return [homeRoute, ...packageRoutes, ...musicalDomainConceptRoutes];
 });
 
 const routeTree = rootRoute.addChildren([indexRoute, ...localeRoutes]);

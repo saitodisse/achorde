@@ -27,6 +27,25 @@ export type PackageDoc = {
 	}>;
 };
 
+export type PackageSpecificConceptDoc = {
+	id: string;
+	source: string;
+	copy: Record<Locale, {
+		label: string;
+		title: string;
+		summary: string;
+		whyItMatters: string;
+		steps: string[];
+		code: string;
+		memoryPrompt: string;
+		nextQuestion: string;
+	}>;
+};
+
+export type PackageConceptDoc = PackageSpecificConceptDoc & {
+	packageId: PackageId;
+};
+
 export const locales = {
 	"pt-BR": {
 		route: "pt-br",
@@ -74,6 +93,16 @@ export const siteCopy = {
 		retrievalTitle: "Teste rápido de memória",
 		retrievalPrompt:
 			"Antes de seguir, tente responder sem olhar: este pacote guarda dados, desenha algo ou coordena ferramentas?",
+		readmeLabel: "README do pacote",
+		readmeLoading: "Preparando Markdown e syntax highlighting...",
+		coreConceptsTitle: "Conceitos centrais",
+		coreConceptsText:
+			"Cada rota abaixo ensina uma peça central deste pacote. Abra uma por vez e tente explicar a peça antes de olhar o código.",
+		conceptRoutes: "Rotas por conceito",
+		whyItMattersLabel: "Por que importa",
+		sourceLabel: "Fonte",
+		nextQuestionLabel: "Pergunte ao agente",
+		backToPackage: "Voltar ao pacote",
 	},
 	en: {
 		title: "ACHORDE Docs",
@@ -104,6 +133,16 @@ export const siteCopy = {
 		retrievalTitle: "Quick memory check",
 		retrievalPrompt:
 			"Before moving on, answer without looking: does this package store data, draw something, or coordinate tools?",
+		readmeLabel: "Package README",
+		readmeLoading: "Preparing Markdown and syntax highlighting...",
+		coreConceptsTitle: "Core concepts",
+		coreConceptsText:
+			"Each route below teaches one central piece of this package. Open one at a time and try to explain the piece before reading the code.",
+		conceptRoutes: "Concept routes",
+		whyItMattersLabel: "Why it matters",
+		sourceLabel: "Source",
+		nextQuestionLabel: "Ask the agent",
+		backToPackage: "Back to package",
 	},
 } as const;
 
@@ -114,7 +153,6 @@ export const packageDocs = [
 		scope: "contracts",
 		npm: "https://www.npmjs.com/package/@achorde/musical-domain",
 		demo: "https://achorde-musical-domain.vercel.app/",
-		storybook: "https://storybook-musical-domain.vercel.app/",
 		github: "https://github.com/saitodisse/achorde/tree/main/packages/musical-domain",
 		summary: {
 			"pt-BR": {
@@ -350,6 +388,369 @@ export const packageDocs = [
 		},
 	},
 ] as const satisfies PackageDoc[];
+
+export const musicalDomainConceptDocs = [
+	{
+		id: "contract-boundary",
+		source: "README.md, docs/architecture.md, src/versions.ts",
+		copy: {
+			"pt-BR": {
+				label: "Limite do pacote",
+				title: "O pacote define contratos, não produto.",
+				summary:
+					"@achorde/musical-domain é o vocabulário compartilhado entre parser, renderer, editor e app. Ele evita que cada pacote invente seu próprio formato para a mesma ideia musical.",
+				whyItMatters:
+					"Quando o limite fica claro, o pacote continua portátil: sem React, sem storage, sem rota e sem regra privada de aplicação.",
+				steps: [
+					"Use o pacote para nomes, tipos e helpers musicais reutilizáveis.",
+					"Deixe parsing completo, SVG, UI, banco e sync fora dele.",
+					"Trate a versão de contrato como sinal de mudança pública.",
+				],
+				code:
+					'import { ACHORDE_MUSICAL_DOMAIN_CONTRACT_VERSION } from "@achorde/musical-domain";\n\nconsole.log(ACHORDE_MUSICAL_DOMAIN_CONTRACT_VERSION);',
+				memoryPrompt:
+					"Sem olhar: cite duas coisas que este pacote não deve fazer.",
+				nextQuestion:
+					"Peça para o agente comparar o limite deste pacote com tab-renderer, svguitar-react ou AC15.",
+			},
+			en: {
+				label: "Package boundary",
+				title: "The package defines contracts, not product behavior.",
+				summary:
+					"@achorde/musical-domain is the shared vocabulary between parser, renderer, editor, and app. It keeps each package from inventing a separate shape for the same musical idea.",
+				whyItMatters:
+					"When the boundary is clear, the package stays portable: no React, storage, routing, or private application rules.",
+				steps: [
+					"Use the package for reusable musical names, types, and helpers.",
+					"Keep full parsing, SVG, UI, persistence, and sync outside it.",
+					"Treat the contract version as a public-change signal.",
+				],
+				code:
+					'import { ACHORDE_MUSICAL_DOMAIN_CONTRACT_VERSION } from "@achorde/musical-domain";\n\nconsole.log(ACHORDE_MUSICAL_DOMAIN_CONTRACT_VERSION);',
+				memoryPrompt:
+					"Without looking: name two things this package should not do.",
+				nextQuestion:
+					"Ask the agent to compare this package boundary with tab-renderer, svguitar-react, or AC15.",
+			},
+		},
+	},
+	{
+		id: "diagnostics",
+		source: "src/diagnostics.ts, docs/migration.md",
+		copy: {
+			"pt-BR": {
+				label: "Diagnósticos",
+				title: "ParseDiagnostic é o erro traduzível do parser.",
+				summary:
+					"Um diagnóstico descreve o que deu errado, onde aconteceu e qual severidade o consumidor deve mostrar.",
+				whyItMatters:
+					"O parser pode falhar sem quebrar a UI: ele entrega dados estruturados para o app localizar, traduzir e destacar o problema.",
+				steps: [
+					"Escolha um code estável para o caso de erro.",
+					"Inclua message, severity e posição quando existir.",
+					"Use severity error para autoria inválida nas regras novas.",
+				],
+				code:
+					'const diagnostic = {\n  code: "invalid-line",\n  message: "Line is not valid chord-chart content.",\n  severity: "error",\n  line: 3,\n  sourceRange: { startColumn: 0, endColumn: 27 },\n};',
+				memoryPrompt:
+					"Sem olhar: por que code é melhor que depender só de message?",
+				nextQuestion:
+					"Peça para o agente transformar um erro real de cifra em ParseDiagnostic.",
+			},
+			en: {
+				label: "Diagnostics",
+				title: "ParseDiagnostic is the parser's translatable error.",
+				summary:
+					"A diagnostic describes what went wrong, where it happened, and which severity the consumer should show.",
+				whyItMatters:
+					"The parser can fail without breaking the UI: it returns structured data so the app can localize, translate, and highlight the issue.",
+				steps: [
+					"Choose a stable code for the error case.",
+					"Include message, severity, and position when available.",
+					"Use severity error for invalid authoring under the new rules.",
+				],
+				code:
+					'const diagnostic = {\n  code: "invalid-line",\n  message: "Line is not valid chord-chart content.",\n  severity: "error",\n  line: 3,\n  sourceRange: { startColumn: 0, endColumn: 27 },\n};',
+				memoryPrompt:
+					"Without looking: why is code better than relying only on message?",
+				nextQuestion:
+					"Ask the agent to turn a real chord-sheet error into ParseDiagnostic.",
+			},
+		},
+	},
+	{
+		id: "chord-symbols",
+		source: "src/chord-symbol.ts, src/chord-label.ts, src/chord-spelling.ts",
+		copy: {
+			"pt-BR": {
+				label: "Símbolos de acorde",
+				title: "ParsedChordSymbol separa repetição de acorde tocável.",
+				summary:
+					"O símbolo pode ser um acorde com root, suffix e bass, ou um marcador de repetição. Helpers normalizam rótulos e extraem metadados de spelling.",
+				whyItMatters:
+					"Renderizadores, busca e diagramas precisam saber se o texto representa um acorde real ou só uma repetição.",
+				steps: [
+					"Normalize o rótulo antes de comparar ou procurar.",
+					"Leia root, suffix e bass quando o kind for chord.",
+					"Não coloque marcadores de repetição em chordsFound.",
+				],
+				code:
+					'normalizeChordSymbolLabel("C♯maj7"); // "C#maj7"\n\nconst chord = {\n  kind: "chord",\n  text: "Am/G",\n  root: "A",\n  suffix: "m",\n  bass: "G",\n};',
+				memoryPrompt:
+					"Sem olhar: qual campo diferencia acorde real de repetição?",
+				nextQuestion:
+					"Peça para o agente explicar a diferença entre suffix musical e quality de voicing.",
+			},
+			en: {
+				label: "Chord symbols",
+				title: "ParsedChordSymbol separates repeats from playable chords.",
+				summary:
+					"A symbol can be a chord with root, suffix, and bass, or a repeat marker. Helpers normalize labels and extract spelling metadata.",
+				whyItMatters:
+					"Renderers, search, and diagrams must know whether text is a real chord or only a repeat marker.",
+				steps: [
+					"Normalize the label before comparing or looking it up.",
+					"Read root, suffix, and bass when kind is chord.",
+					"Do not include repeat markers in chordsFound.",
+				],
+				code:
+					'normalizeChordSymbolLabel("C♯maj7"); // "C#maj7"\n\nconst chord = {\n  kind: "chord",\n  text: "Am/G",\n  root: "A",\n  suffix: "m",\n  bass: "G",\n};',
+				memoryPrompt:
+					"Without looking: which field separates a real chord from a repeat?",
+				nextQuestion:
+					"Ask the agent to explain the difference between musical suffix and voicing quality.",
+			},
+		},
+	},
+	{
+		id: "parsed-tabs",
+		source: "src/tab-ast.ts, docs/migration.md",
+		copy: {
+			"pt-BR": {
+				label: "ParsedTab",
+				title: "ParsedTab é a AST canônica de uma cifra textual.",
+				summary:
+					"Uma cifra vira seções, linhas e tokens. Cada linha tem exatamente um tipo estrito: section-header, chords, lyrics ou blank.",
+				whyItMatters:
+					"O renderer pode alinhar acordes, preservar espaços e mostrar diagnósticos sem reprocessar o texto cru.",
+				steps: [
+					"Separe o texto em seções.",
+					"Classifique cada linha com um dos quatro tipos.",
+					"Preserve tokens de acorde, letra, decoração e espaço.",
+					"Liste só acordes diagramáveis em chordsFound.",
+				],
+				code:
+					'const tab = {\n  body: "[Verse]\\nC    G7\\nA lyric line",\n  sections: [{ id: "s1", order: 0, title: "Verse", originalTitle: "Verse", lines: [] }],\n  diagnostics: [],\n  parserVersion: "1.0.0",\n  astVersion: "1.0.0",\n  chordsFound: ["C", "G7"],\n};',
+				memoryPrompt:
+					"Sem olhar: quais são os quatro tipos de linha de ParsedTab?",
+				nextQuestion:
+					"Peça para o agente classificar três linhas reais de cifra como ParsedTabLine.",
+			},
+			en: {
+				label: "ParsedTab",
+				title: "ParsedTab is the canonical AST for a text chord sheet.",
+				summary:
+					"A chord sheet becomes sections, lines, and tokens. Each line has exactly one strict kind: section-header, chords, lyrics, or blank.",
+				whyItMatters:
+					"The renderer can align chords, preserve spaces, and show diagnostics without parsing raw text again.",
+				steps: [
+					"Split the text into sections.",
+					"Classify each line with one of the four kinds.",
+					"Preserve chord, lyric, decoration, and space tokens.",
+					"List only diagrammable chords in chordsFound.",
+				],
+				code:
+					'const tab = {\n  body: "[Verse]\\nC    G7\\nA lyric line",\n  sections: [{ id: "s1", order: 0, title: "Verse", originalTitle: "Verse", lines: [] }],\n  diagnostics: [],\n  parserVersion: "1.0.0",\n  astVersion: "1.0.0",\n  chordsFound: ["C", "G7"],\n};',
+				memoryPrompt:
+					"Without looking: what are the four ParsedTab line kinds?",
+				nextQuestion:
+					"Ask the agent to classify three real chord-sheet lines as ParsedTabLine.",
+			},
+		},
+	},
+	{
+		id: "legacy-chart",
+		source: "src/chord-chart-ast.ts, docs/migration.md",
+		copy: {
+			"pt-BR": {
+				label: "Modelo legado",
+				title: "ChordChartAst existe para compatibilidade.",
+				summary:
+					"O modelo antigo usa segmentos dentro de linhas. Ele continua exportado, mas a documentação aponta novos consumidores para ParsedTab.",
+				whyItMatters:
+					"Integrações antigas não quebram de uma vez, e código novo evita carregar decisões antigas para frente.",
+				steps: [
+					"Leia dados antigos com ChordChartAst quando necessário.",
+					"Mapeie label para title, raw para text e segments para tokens.",
+					"Use ParsedTab como destino em novas integrações.",
+				],
+				code:
+					'// Legacy -> canonical\nChordChartSection.label -> ParsedTabSection.title\nChordChartLine.raw -> ParsedTabLine.text\nChordChartLine.segments -> ParsedTabLine.tokens',
+				memoryPrompt:
+					"Sem olhar: qual modelo deve ser usado por código novo?",
+				nextQuestion:
+					"Peça para o agente desenhar uma migração pequena de ChordChartAst para ParsedTab.",
+			},
+			en: {
+				label: "Legacy model",
+				title: "ChordChartAst exists for compatibility.",
+				summary:
+					"The old model uses segments inside lines. It remains exported, but the docs point new consumers to ParsedTab.",
+				whyItMatters:
+					"Old integrations do not break all at once, and new code avoids carrying old decisions forward.",
+				steps: [
+					"Read old data with ChordChartAst when necessary.",
+					"Map label to title, raw to text, and segments to tokens.",
+					"Use ParsedTab as the target for new integrations.",
+				],
+				code:
+					'// Legacy -> canonical\nChordChartSection.label -> ParsedTabSection.title\nChordChartLine.raw -> ParsedTabLine.text\nChordChartLine.segments -> ParsedTabLine.tokens',
+				memoryPrompt:
+					"Without looking: which model should new code use?",
+				nextQuestion:
+					"Ask the agent to sketch a small ChordChartAst to ParsedTab migration.",
+			},
+		},
+	},
+	{
+		id: "fretted-voicings",
+		source: "src/fretted-voicing.ts, docs/architecture.md",
+		copy: {
+			"pt-BR": {
+				label: "Voicings",
+				title: "FrettedInstrumentVoicing descreve como tocar um acorde.",
+				summary:
+					"O voicing guarda instrumento, afinação, símbolo do acorde, cordas, casas, dedos, pestanas, origem e qualidade.",
+				whyItMatters:
+					"Esse contrato atravessa editor, SVG e app sem depender de uma UI específica.",
+				steps: [
+					"Use stringIndex baixo-para-alto: 1 é Mi grave, 6 é Mi agudo.",
+					"Marque cada corda como muted, open ou fretted.",
+					"Use barres com a mesma ordem de cordas.",
+				],
+				code:
+					'const string = {\n  stringIndex: 1,\n  openNote: "E2",\n  fret: 3,\n  state: "fretted",\n  finger: 2,\n};',
+				memoryPrompt:
+					"Sem olhar: em guitarra padrão, stringIndex 1 é qual corda?",
+				nextQuestion:
+					"Peça para o agente revisar um voicing e verificar se a ordem das cordas está correta.",
+			},
+			en: {
+				label: "Voicings",
+				title: "FrettedInstrumentVoicing describes how to play a chord.",
+				summary:
+					"The voicing stores instrument, tuning, chord symbol, strings, frets, fingers, barres, source, and quality.",
+				whyItMatters:
+					"This contract crosses editor, SVG, and app code without depending on a specific UI.",
+				steps: [
+					"Use low-to-high stringIndex: 1 is low E, 6 is high E.",
+					"Mark each string as muted, open, or fretted.",
+					"Use barres with the same string order.",
+				],
+				code:
+					'const string = {\n  stringIndex: 1,\n  openNote: "E2",\n  fret: 3,\n  state: "fretted",\n  finger: 2,\n};',
+				memoryPrompt:
+					"Without looking: on standard guitar, which string is stringIndex 1?",
+				nextQuestion:
+					"Ask the agent to review a voicing and check whether string order is correct.",
+			},
+		},
+	},
+	{
+		id: "voicing-helpers",
+		source: "src/fret-notation-parse.ts, src/fretted-barre-inference.ts, src/voicing-editor-pipeline.ts",
+		copy: {
+			"pt-BR": {
+				label: "Helpers de voicing",
+				title: "Helpers transformam entrada curta em voicing consistente.",
+				summary:
+					"O pacote parseia notação de casas, formata de volta, escolhe voicings, infere pestanas e normaliza a base visual.",
+				whyItMatters:
+					"Editor e app podem salvar dados coerentes antes de qualquer renderizador tentar desenhar o acorde.",
+				steps: [
+					"Parseie fretNotation como x32010 em ordem baixo-para-alto.",
+					"Rode o pipeline para recalcular pestanas e baseFret.",
+					"Use seleção de voicing para escolher a melhor opção disponível.",
+				],
+				code:
+					'const voicing = parseFretNotationToVoicing({\n  fretNotation: "x32010",\n  chordSymbol: "C",\n  id: "c-major",\n});\n\nconst ready = applyVoicingEditorPipeline(voicing);',
+				memoryPrompt:
+					"Sem olhar: por que o pipeline deve rodar antes de salvar?",
+				nextQuestion:
+					"Peça para o agente converter uma fretNotation em FrettedInstrumentVoicing passo a passo.",
+			},
+			en: {
+				label: "Voicing helpers",
+				title: "Helpers turn compact input into a consistent voicing.",
+				summary:
+					"The package parses fret notation, formats it back, selects voicings, infers barres, and normalizes the display base.",
+				whyItMatters:
+					"Editor and app code can save coherent data before any renderer tries to draw the chord.",
+				steps: [
+					"Parse fretNotation such as x32010 in low-to-high order.",
+					"Run the pipeline to recompute barres and baseFret.",
+					"Use voicing selection to choose the best available option.",
+				],
+				code:
+					'const voicing = parseFretNotationToVoicing({\n  fretNotation: "x32010",\n  chordSymbol: "C",\n  id: "c-major",\n});\n\nconst ready = applyVoicingEditorPipeline(voicing);',
+				memoryPrompt:
+					"Without looking: why should the pipeline run before saving?",
+				nextQuestion:
+					"Ask the agent to convert fretNotation into FrettedInstrumentVoicing step by step.",
+			},
+		},
+	},
+	{
+		id: "theory-adapter",
+		source: "src/theory-adapter.ts, docs/architecture.md",
+		copy: {
+			"pt-BR": {
+				label: "Adapter musical",
+				title: "MusicTheoryAdapter é uma porta para motores externos.",
+				summary:
+					"O pacote define a interface para transpor notas, parsear símbolos, obter notas e detectar acordes, mas não embute um motor de teoria musical.",
+				whyItMatters:
+					"Consumidores escolhem a biblioteca musical que quiserem sem forçar dependências pesadas no contrato público.",
+				steps: [
+					"Implemente a interface no pacote consumidor.",
+					"Converta o resultado externo para ParsedChordSymbol.",
+					"Mantenha a dependência do motor fora de musical-domain.",
+				],
+				code:
+					'const adapter = {\n  transposePitchClass: (note, semitones) => transpose(note, semitones),\n  parseChordSymbol: (symbol) => parseChord(symbol),\n  getChordNotes: (symbol) => notesFor(symbol),\n  detectChord: (notes) => detect(notes),\n};',
+				memoryPrompt:
+					"Sem olhar: por que o pacote define a porta, mas não traz o motor?",
+				nextQuestion:
+					"Peça para o agente adaptar uma biblioteca de teoria musical para MusicTheoryAdapter.",
+			},
+			en: {
+				label: "Theory adapter",
+				title: "MusicTheoryAdapter is a port for external engines.",
+				summary:
+					"The package defines the interface for transposing notes, parsing symbols, getting notes, and detecting chords, but it does not bundle a music-theory engine.",
+				whyItMatters:
+					"Consumers choose whichever music library they want without forcing heavy dependencies into the public contract.",
+				steps: [
+					"Implement the interface in the consuming package.",
+					"Convert the external result to ParsedChordSymbol.",
+					"Keep the engine dependency outside musical-domain.",
+				],
+				code:
+					'const adapter = {\n  transposePitchClass: (note, semitones) => transpose(note, semitones),\n  parseChordSymbol: (symbol) => parseChord(symbol),\n  getChordNotes: (symbol) => notesFor(symbol),\n  detectChord: (notes) => detect(notes),\n};',
+				memoryPrompt:
+					"Without looking: why does the package define the port but not bring the engine?",
+				nextQuestion:
+					"Ask the agent to adapt a music-theory library to MusicTheoryAdapter.",
+			},
+		},
+	},
+] as const satisfies readonly PackageSpecificConceptDoc[];
+
+export function findMusicalDomainConceptDoc(
+	conceptId: string | undefined,
+) {
+	return musicalDomainConceptDocs.find((conceptDoc) => conceptDoc.id === conceptId);
+}
 
 export function localeFromRoute(value: string | undefined): Locale {
 	return value === "en" ? "en" : "pt-BR";

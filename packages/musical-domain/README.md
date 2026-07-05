@@ -2,7 +2,6 @@
 
 **npm `latest`:** `0.5.3` — [package page](https://www.npmjs.com/package/@achorde/musical-domain)
 - 🌐 **Live Demo**: [https://achorde-musical-domain.vercel.app/](https://achorde-musical-domain.vercel.app/)
-- 🌐 **Storybook**: [https://storybook-musical-domain.vercel.app/](https://storybook-musical-domain.vercel.app/)
 
 Shared TypeScript contracts for musical applications that need a common language for chord charts, parsed tabs, parser diagnostics, and fretted-instrument voicings.
 
@@ -42,12 +41,6 @@ pnpm add @achorde/musical-domain
 pnpm dev:site      # port 5286
 pnpm build:site
 pnpm preview:site  # port 4286
-```
-
-## Storybook
-
-```bash
-pnpm storybook   # port 6005
 ```
 
 ## Usage
@@ -112,5 +105,3 @@ selectPreferredFrettedVoicing([voicing /* ... */]);
 | `pnpm dev:site` | Demo site on port 5286 |
 | `pnpm build:site` | Demo site build |
 | `pnpm preview:site` | Preview built demo |
-| `pnpm storybook` | Storybook on port 6005 |
-| `pnpm build-storybook` | Storybook build |

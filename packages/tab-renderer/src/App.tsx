@@ -4,8 +4,8 @@ import { parseTab } from "./core";
 import {
   LiveDemoMobileTabs,
   LiveDemoWideDemo,
-  useLiveDemoSplitLayout,
 } from "./demo/live-demo-workspace";
+import { useLiveDemoSplitLayout } from "./demo/live-demo-layout";
 import { Tab } from "./react";
 import { tuaFlorBody } from "./test/stubs/tua-flor";
 import {

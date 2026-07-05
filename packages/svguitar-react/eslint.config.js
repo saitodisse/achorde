@@ -9,7 +9,7 @@ import tseslint from "typescript-eslint";
 import { defineConfig, globalIgnores } from "eslint/config";
 
 export default defineConfig([
-	globalIgnores(["dist", "dist-app", "storybook-static"]),
+	globalIgnores([".vercel", "dist", "dist-app", "storybook-static"]),
 	{
 		files: ["**/*.{ts,tsx}"],
 		extends: [

@@ -291,14 +291,14 @@ export function ParseTabInspector({
 }
 
 export function StorybookRuntimeHealthPanel() {
-  const [health, setHealth] = useState<StorybookRuntimeHealth | null>(null);
+  const [health] = useState<StorybookRuntimeHealth | null>(() =>
+    collectStorybookRuntimeHealth(),
+  );
   const [iframeStatus, setIframeStatus] = useState<number | "pending">(
     "pending",
   );
 
   useEffect(() => {
-    setHealth(collectStorybookRuntimeHealth());
-
     const storyId =
       typeof window !== "undefined"
         ? new URLSearchParams(window.location.search).get("id")

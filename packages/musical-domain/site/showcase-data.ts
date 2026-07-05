@@ -28,7 +28,6 @@ import {
 
 export const demoLinks = {
 	demo: "https://achorde-musical-domain.vercel.app/",
-	storybook: "https://storybook-musical-domain.vercel.app/",
 	github: "https://github.com/saitodisse/achorde/tree/main/packages/musical-domain",
 	npm: "https://www.npmjs.com/package/@achorde/musical-domain",
 } as const;
@@ -39,35 +38,35 @@ export const learningPath = [
 		title: "Comece pelo nome do acorde",
 		summary:
 			"Aqui a gente só olha para o símbolo. É a menor peça do pacote e a base para o resto.",
-		storybookTitle: "Fundamentos/Símbolo de acorde",
+		conceptLabel: "Símbolo de acorde",
 	},
 	{
 		step: "2",
 		title: "Depois vem a linha",
 		summary:
 			"Uma música tem linhas. Algumas mostram acordes, outras mostram letra. O pacote separa isso direitinho.",
-		storybookTitle: "Tab/Linha",
+		conceptLabel: "Linha de tab",
 	},
 	{
 		step: "3",
 		title: "A linha vira seção",
 		summary:
 			"Várias linhas juntas formam uma seção, como verso ou refrão.",
-		storybookTitle: "Tab/Seção",
+		conceptLabel: "Seção",
 	},
 	{
 		step: "4",
 		title: "Aí aparece a música inteira",
 		summary:
 			"Com seções, linhas, avisos e acordes encontrados, você tem a visão completa do texto.",
-		storybookTitle: "Tab/Tab completa",
+		conceptLabel: "Tab completa",
 	},
 	{
 		step: "5",
 		title: "Por fim entram os acordes no braço do instrumento",
 		summary:
 			"Esse é o lado mais visual: posições, pestanas, escolha da melhor digitação e desenho final.",
-		storybookTitle: "Voicing/Voicing completo",
+		conceptLabel: "Voicing completo",
 	},
 ] as const;
 
