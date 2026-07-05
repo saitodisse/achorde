@@ -746,6 +746,1159 @@ export const musicalDomainConceptDocs = [
 	},
 ] as const satisfies readonly PackageSpecificConceptDoc[];
 
+export const packageConceptDocs: readonly PackageConceptDoc[] = [
+	...musicalDomainConceptDocs.map((conceptDoc) => ({
+		...conceptDoc,
+		packageId: "musical-domain" as const,
+	})),
+	{
+		packageId: "source-catalog",
+		id: "pull-only-manifest",
+		source: "packages/source-catalog/README.md, docs/contract.md, src/index.ts",
+		copy: {
+			"pt-BR": {
+				label: "Manifesto pull-only",
+				title: "SourceCatalogManifest publica o que pode ser importado.",
+				summary:
+					"O manifesto descreve o catálogo estático: id, nome, versão, arquivos, schema e capacidades. Ele só é válido quando declara acesso público de leitura.",
+				whyItMatters:
+					"Um app offline-first pode confiar no manifesto sem acoplar importação a servidor, sessão, rota privada ou push remoto.",
+				steps: [
+					"Declare mode como readonly.",
+					"Liste arquivos JSON ou NDJSON com entityType e checksum quando existir.",
+					"Faça capabilities.pull ser true e todas as capacidades de escrita serem false.",
+					"Mantenha auth como none e conflictResolution como manual.",
+				],
+				code:
+					'assertSourceCatalogManifest({\n  id: "demo-portal",\n  name: "Demo Portal",\n  version: "2026-07-04T00:00:00.000Z",\n  schemaVersion: "1.0.0",\n  mode: "readonly",\n  generatedAt: createIsoDateTime("2026-07-04T00:00:00.000Z"),\n  files: [{ url: "entities/artists.ndjson", entityType: "artist", mediaType: "application/x-ndjson" }],\n  capabilities: { pull: true, push: false, batchPush: false, realtime: false, proposals: false, revisions: false, moderation: false, conflictResolution: "manual", auth: "none" },\n});',
+				memoryPrompt:
+					"Sem olhar: quais duas capacidades deixam um manifesto inválido?",
+				nextQuestion:
+					"Peça para o agente revisar um source-manifest.json antes de publicar um portal.",
+			},
+			en: {
+				label: "Pull-only manifest",
+				title: "SourceCatalogManifest publishes what can be imported.",
+				summary:
+					"The manifest describes the static catalog: id, name, version, files, schema, and capabilities. It is valid only when it declares public read access.",
+				whyItMatters:
+					"An offline-first app can trust the manifest without coupling import to a server, session, private route, or remote push.",
+				steps: [
+					"Declare mode as readonly.",
+					"List JSON or NDJSON files with entityType and checksum when present.",
+					"Set capabilities.pull to true and all write capabilities to false.",
+					"Keep auth as none and conflictResolution as manual.",
+				],
+				code:
+					'assertSourceCatalogManifest({\n  id: "demo-portal",\n  name: "Demo Portal",\n  version: "2026-07-04T00:00:00.000Z",\n  schemaVersion: "1.0.0",\n  mode: "readonly",\n  generatedAt: createIsoDateTime("2026-07-04T00:00:00.000Z"),\n  files: [{ url: "entities/artists.ndjson", entityType: "artist", mediaType: "application/x-ndjson" }],\n  capabilities: { pull: true, push: false, batchPush: false, realtime: false, proposals: false, revisions: false, moderation: false, conflictResolution: "manual", auth: "none" },\n});',
+				memoryPrompt:
+					"Without looking: which two capabilities make a manifest invalid?",
+				nextQuestion:
+					"Ask the agent to review a source-manifest.json before publishing a portal.",
+			},
+		},
+	},
+	{
+		packageId: "source-catalog",
+		id: "entity-envelopes",
+		source: "packages/source-catalog/README.md, src/index.ts",
+		copy: {
+			"pt-BR": {
+				label: "Envelopes de entidade",
+				title: "SourceCatalogEnvelope separa proveniência de payload.",
+				summary:
+					"Cada registro importável carrega sourceId, sourceRecordId, entityType e schemaVersion fora do payload real.",
+				whyItMatters:
+					"O consumidor sabe de onde o dado veio e como versionar a leitura sem exigir que cada tipo de entidade repita metadados.",
+				steps: [
+					"Escolha um entityType suportado, como artist, chordChart ou voicing.",
+					"Use sourceId para ligar o registro ao manifesto.",
+					"Use sourceRecordId como identidade estável dentro da fonte.",
+					"Coloque o conteúdo de domínio em payload.",
+				],
+				code:
+					'assertSourceCatalogEnvelope({\n  sourceId: "demo-portal",\n  sourceRecordId: "chart:1",\n  entityType: "chordChart",\n  schemaVersion: "1.0.0",\n  payload: { rawText: "C\\nLyrics" },\n});',
+				memoryPrompt:
+					"Sem olhar: qual campo identifica o registro dentro da fonte?",
+				nextQuestion:
+					"Peça para o agente modelar envelopes para artistas, obras e cifras.",
+			},
+			en: {
+				label: "Entity envelopes",
+				title: "SourceCatalogEnvelope separates provenance from payload.",
+				summary:
+					"Each importable record carries sourceId, sourceRecordId, entityType, and schemaVersion outside the real payload.",
+				whyItMatters:
+					"The consumer knows where the data came from and how to version the read without forcing every entity type to repeat metadata.",
+				steps: [
+					"Choose a supported entityType such as artist, chordChart, or voicing.",
+					"Use sourceId to connect the record to the manifest.",
+					"Use sourceRecordId as the stable identity inside the source.",
+					"Put the domain content in payload.",
+				],
+				code:
+					'assertSourceCatalogEnvelope({\n  sourceId: "demo-portal",\n  sourceRecordId: "chart:1",\n  entityType: "chordChart",\n  schemaVersion: "1.0.0",\n  payload: { rawText: "C\\nLyrics" },\n});',
+				memoryPrompt:
+					"Without looking: which field identifies the record inside the source?",
+				nextQuestion:
+					"Ask the agent to model envelopes for artists, works, and chord charts.",
+			},
+		},
+	},
+	{
+		packageId: "source-catalog",
+		id: "sensitive-key-guard",
+		source: "packages/source-catalog/README.md, src/index.ts, src/index.test.ts",
+		copy: {
+			"pt-BR": {
+				label: "Guarda de privacidade",
+				title: "Campos sensíveis são rejeitados em qualquer profundidade.",
+				summary:
+					"O validador percorre manifestos e envelopes recusando chaves de conta, sessão e identidade pessoal como email, access_token e owner_name.",
+				whyItMatters:
+					"Catálogos são artefatos públicos. A validação protege o portal de publicar credenciais ou dados pessoais por acidente.",
+				steps: [
+					"Valide manifesto e envelopes antes de escrever arquivos públicos.",
+					"Não permita tokens, sessões, emails ou ids de provedor.",
+					"Trate falha de validação como bloqueio de publicação.",
+				],
+				code:
+					'assertNoForbiddenSourceCatalogKeys({\n  payload: {\n    nested: [{ owner_name: "Do Not Publish" }],\n  },\n});\n// throws: Forbidden source catalog key: owner_name',
+				memoryPrompt:
+					"Sem olhar: por que a verificação precisa ser recursiva?",
+				nextQuestion:
+					"Peça para o agente criar um checklist de publicação segura de catálogo.",
+			},
+			en: {
+				label: "Privacy guard",
+				title: "Sensitive fields are rejected at any depth.",
+				summary:
+					"The validator walks manifests and envelopes and rejects account, session, and personal-identity keys such as email, access_token, and owner_name.",
+				whyItMatters:
+					"Catalogs are public artifacts. Validation protects the portal from publishing credentials or personal data by accident.",
+				steps: [
+					"Validate the manifest and envelopes before writing public files.",
+					"Do not allow tokens, sessions, emails, or provider ids.",
+					"Treat validation failure as a publication blocker.",
+				],
+				code:
+					'assertNoForbiddenSourceCatalogKeys({\n  payload: {\n    nested: [{ owner_name: "Do Not Publish" }],\n  },\n});\n// throws: Forbidden source catalog key: owner_name',
+				memoryPrompt:
+					"Without looking: why does the check need to be recursive?",
+				nextQuestion:
+					"Ask the agent to create a safe catalog publication checklist.",
+			},
+		},
+	},
+	{
+		packageId: "source-catalog",
+		id: "deterministic-checksums",
+		source: "packages/source-catalog/README.md, src/index.ts, src/index.test.ts",
+		copy: {
+			"pt-BR": {
+				label: "Checksums",
+				title: "Checksums tornam arquivos estáticos verificáveis.",
+				summary:
+					"O pacote cria hashes SHA-256 e monta um mapa determinístico por URL para que consumidores confirmem integridade de arquivos publicados.",
+				whyItMatters:
+					"Importação estática precisa de confiança barata: o app pode detectar arquivo trocado, truncado ou servido errado.",
+				steps: [
+					"Normalize o hash para hexadecimal de 64 caracteres.",
+					"Calcule SHA-256 do conteúdo quando estiver no browser ou runtime com Web Crypto.",
+					"Ordene arquivos por URL ao criar o mapa checksums.",
+				],
+				code:
+					'const sha256 = await createChecksumFromText("artist portal\\n");\n\nconst checksums = createSourceCatalogChecksums([\n  { url: "artists.ndjson", sha256 },\n]);',
+				memoryPrompt:
+					"Sem olhar: por que o mapa de checksums deve ser determinístico?",
+				nextQuestion:
+					"Peça para o agente verificar checksums de um catálogo local.",
+			},
+			en: {
+				label: "Checksums",
+				title: "Checksums make static files verifiable.",
+				summary:
+					"The package creates SHA-256 hashes and builds a deterministic URL map so consumers can confirm published file integrity.",
+				whyItMatters:
+					"Static import needs cheap trust: the app can detect a swapped, truncated, or wrongly served file.",
+				steps: [
+					"Normalize the hash to a 64-character hexadecimal string.",
+					"Calculate SHA-256 from content when Web Crypto is available.",
+					"Sort files by URL when creating the checksums map.",
+				],
+				code:
+					'const sha256 = await createChecksumFromText("artist portal\\n");\n\nconst checksums = createSourceCatalogChecksums([\n  { url: "artists.ndjson", sha256 },\n]);',
+				memoryPrompt:
+					"Without looking: why should the checksums map be deterministic?",
+				nextQuestion:
+					"Ask the agent to verify checksums for a local catalog.",
+			},
+		},
+	},
+	{
+		packageId: "source-catalog",
+		id: "static-file-shape",
+		source: "packages/source-catalog/docs/contract.md, README.md",
+		copy: {
+			"pt-BR": {
+				label: "Forma dos arquivos",
+				title: "O catálogo vive como arquivos públicos versionados.",
+				summary:
+					"A publicação esperada fica em /source-catalog/: source-manifest.json, checksums.json e arquivos de entidades em JSON ou NDJSON.",
+				whyItMatters:
+					"Esse formato funciona em hospedagem estática simples e deixa o consumidor importar sem API customizada.",
+				steps: [
+					"Publique source-manifest.json como ponto de entrada.",
+					"Coloque checksums.json ao lado para integridade.",
+					"Separe entidades em arquivos por tipo ou lote.",
+					"Mantenha URLs relativas e estáveis.",
+				],
+				code:
+					'/source-catalog/source-manifest.json\n/source-catalog/checksums.json\n/source-catalog/entities/artists.ndjson\n/source-catalog/entities/chord-charts.ndjson',
+				memoryPrompt:
+					"Sem olhar: qual arquivo é o ponto de entrada do catálogo?",
+				nextQuestion:
+					"Peça para o agente desenhar a árvore /source-catalog/ de um portal.",
+			},
+			en: {
+				label: "File shape",
+				title: "The catalog lives as versioned public files.",
+				summary:
+					"The expected publication lives under /source-catalog/: source-manifest.json, checksums.json, and entity files in JSON or NDJSON.",
+				whyItMatters:
+					"This shape works on simple static hosting and lets the consumer import without a custom API.",
+				steps: [
+					"Publish source-manifest.json as the entry point.",
+					"Place checksums.json beside it for integrity.",
+					"Split entities into files by type or batch.",
+					"Keep relative URLs stable.",
+				],
+				code:
+					'/source-catalog/source-manifest.json\n/source-catalog/checksums.json\n/source-catalog/entities/artists.ndjson\n/source-catalog/entities/chord-charts.ndjson',
+				memoryPrompt:
+					"Without looking: which file is the catalog entry point?",
+				nextQuestion:
+					"Ask the agent to design the /source-catalog/ tree for a portal.",
+			},
+		},
+	},
+	{
+		packageId: "tab-renderer",
+		id: "entrypoints",
+		source: "packages/tab-renderer/README.md, docs/rfc/0001-package-structure-and-public-api.md",
+		copy: {
+			"pt-BR": {
+				label: "Entrypoints",
+				title: "Core headless e React adapter têm responsabilidades separadas.",
+				summary:
+					"O pacote publica @achorde/tab-renderer para parse, transposição e preparo; @achorde/tab-renderer/react para componentes React.",
+				whyItMatters:
+					"Consumidores sem React podem usar o core, enquanto apps React recebem um viewer pronto sem misturar UI no parser.",
+				steps: [
+					"Use o entrypoint principal para transformar texto em estruturas.",
+					"Use /react quando precisar do componente Tab ou primitivas.",
+					"Mantenha CSS e composição visual fora do core.",
+				],
+				code:
+					'import { parseTab } from "@achorde/tab-renderer";\nimport { Tab } from "@achorde/tab-renderer/react";',
+				memoryPrompt:
+					"Sem olhar: qual entrypoint você usaria em um worker sem React?",
+				nextQuestion:
+					"Peça para o agente escolher o entrypoint certo para uma integração sua.",
+			},
+			en: {
+				label: "Entrypoints",
+				title: "Headless core and React adapter have separate responsibilities.",
+				summary:
+					"The package publishes @achorde/tab-renderer for parsing, transposition, and preparation; @achorde/tab-renderer/react for React components.",
+				whyItMatters:
+					"Non-React consumers can use the core, while React apps get a ready viewer without mixing UI into the parser.",
+				steps: [
+					"Use the main entrypoint to transform text into structures.",
+					"Use /react when you need the Tab component or primitives.",
+					"Keep CSS and visual composition out of the core.",
+				],
+				code:
+					'import { parseTab } from "@achorde/tab-renderer";\nimport { Tab } from "@achorde/tab-renderer/react";',
+				memoryPrompt:
+					"Without looking: which entrypoint would you use in a worker without React?",
+				nextQuestion:
+					"Ask the agent to choose the right entrypoint for one of your integrations.",
+			},
+		},
+	},
+	{
+		packageId: "tab-renderer",
+		id: "strict-parser",
+		source: "packages/tab-renderer/README.md, docs/README.md, src/core/parseTab.ts",
+		copy: {
+			"pt-BR": {
+				label: "Parser estrito",
+				title: "parseTab transforma texto cru em ParsedTab.",
+				summary:
+					"O parser separa seções, linhas, tokens, espaços e diagnósticos usando a AST compartilhada de musical-domain.",
+				whyItMatters:
+					"Renderização, busca e erros ficam baseados em colunas reais, não em heurísticas repetidas no app.",
+				steps: [
+					"Passe o corpo textual para parseTab.",
+					"Leia sections, lines e tokens na AST retornada.",
+					"Mostre diagnostics quando o texto violar a gramática.",
+				],
+				code:
+					'const parsed = parseTab("[Verse]\\nC    G\\nLyrics");\n\nconsole.log(parsed.sections[0]?.lines);\nconsole.log(parsed.diagnostics);',
+				memoryPrompt:
+					"Sem olhar: por que preservar espaços é importante para cifras?",
+				nextQuestion:
+					"Peça para o agente classificar uma cifra real usando parseTab.",
+			},
+			en: {
+				label: "Strict parser",
+				title: "parseTab turns raw text into ParsedTab.",
+				summary:
+					"The parser separates sections, lines, tokens, spaces, and diagnostics using the shared musical-domain AST.",
+				whyItMatters:
+					"Rendering, search, and errors are based on real columns instead of app-side repeated heuristics.",
+				steps: [
+					"Pass the text body to parseTab.",
+					"Read sections, lines, and tokens from the returned AST.",
+					"Show diagnostics when the text violates the grammar.",
+				],
+				code:
+					'const parsed = parseTab("[Verse]\\nC    G\\nLyrics");\n\nconsole.log(parsed.sections[0]?.lines);\nconsole.log(parsed.diagnostics);',
+				memoryPrompt:
+					"Without looking: why is preserving spaces important for chord sheets?",
+				nextQuestion:
+					"Ask the agent to classify a real chord sheet using parseTab.",
+			},
+		},
+	},
+	{
+		packageId: "tab-renderer",
+		id: "chord-detection",
+		source: "packages/tab-renderer/README.md, docs/plans/2026-06-03-chord-symbols-and-diagrammable-boundaries.md, src/core/collectDiagrammableChords.ts",
+		copy: {
+			"pt-BR": {
+				label: "Detecção de acordes",
+				title: "chordsFound vem do parser, não da letra crua.",
+				summary:
+					"O fluxo parseChordSymbol -> tokenizeContentWord -> tokenizeRawLine -> collectDiagrammableChords decide quais símbolos são acordes reais.",
+				whyItMatters:
+					"Apps consumidores podem mostrar diagramas faltantes sem redescobrir acordes e sem confundir decoração, letra ou repetição.",
+				steps: [
+					"Parseie cada token candidato com parseChordSymbol.",
+					"Guarde ChordToken apenas para símbolos tocáveis.",
+					"Use ParsedTab.chordsFound como contrato downstream.",
+				],
+				code:
+					'const parsed = parseTab("C    G7\\nA lyric line");\n\nconsole.log(parsed.chordsFound); // ["C", "G7"]',
+				memoryPrompt:
+					"Sem olhar: por que downstream não deve varrer a letra de novo?",
+				nextQuestion:
+					"Peça para o agente explicar por que um texto específico não entrou em chordsFound.",
+			},
+			en: {
+				label: "Chord detection",
+				title: "chordsFound comes from the parser, not raw lyrics.",
+				summary:
+					"The parseChordSymbol -> tokenizeContentWord -> tokenizeRawLine -> collectDiagrammableChords flow decides which symbols are real chords.",
+				whyItMatters:
+					"Consumer apps can show missing diagrams without rediscovering chords and without confusing decoration, lyrics, or repeats.",
+				steps: [
+					"Parse each candidate token with parseChordSymbol.",
+					"Store ChordToken only for playable symbols.",
+					"Use ParsedTab.chordsFound as the downstream contract.",
+				],
+				code:
+					'const parsed = parseTab("C    G7\\nA lyric line");\n\nconsole.log(parsed.chordsFound); // ["C", "G7"]',
+				memoryPrompt:
+					"Without looking: why should downstream not scan lyrics again?",
+				nextQuestion:
+					"Ask the agent to explain why a specific text did not enter chordsFound.",
+			},
+		},
+	},
+	{
+		packageId: "tab-renderer",
+		id: "transposition",
+		source: "packages/tab-renderer/README.md, src/core/transposeParsedTab.ts, src/core/transposeChordSymbol.ts",
+		copy: {
+			"pt-BR": {
+				label: "Transposição",
+				title: "transposeParsedTab muda acordes mantendo a estrutura.",
+				summary:
+					"A transposição aplica semitons aos símbolos de acorde e recalcula a lista diagramável sem perder seções, letras ou colunas.",
+				whyItMatters:
+					"O app consegue mudar tom para leitura ou performance sem alterar o texto original salvo.",
+				steps: [
+					"Parseie primeiro para obter uma AST confiável.",
+					"Aplique transposeParsedTab com o número de semitons.",
+					"Renderize ou prepare a AST transposta.",
+				],
+				code:
+					'const parsed = parseTab(body);\nconst transposed = transposeParsedTab(parsed, 2);\n\nconsole.log(transposed.chordsFound);',
+				memoryPrompt:
+					"Sem olhar: a transposição deve acontecer antes ou depois de preparar barras?",
+				nextQuestion:
+					"Peça para o agente transpor uma progressão e conferir chordsFound.",
+			},
+			en: {
+				label: "Transposition",
+				title: "transposeParsedTab changes chords while keeping structure.",
+				summary:
+					"Transposition applies semitones to chord symbols and recomputes the diagrammable list without losing sections, lyrics, or columns.",
+				whyItMatters:
+					"The app can change key for reading or performance without changing the saved original text.",
+				steps: [
+					"Parse first to get a reliable AST.",
+					"Apply transposeParsedTab with the semitone count.",
+					"Render or prepare the transposed AST.",
+				],
+				code:
+					'const parsed = parseTab(body);\nconst transposed = transposeParsedTab(parsed, 2);\n\nconsole.log(transposed.chordsFound);',
+				memoryPrompt:
+					"Without looking: should transposition happen before or after preparing bars?",
+				nextQuestion:
+					"Ask the agent to transpose a progression and check chordsFound.",
+			},
+		},
+	},
+	{
+		packageId: "tab-renderer",
+		id: "prepared-song",
+		source: "packages/tab-renderer/README.md, docs/rfc/0002-interleaved-bars-and-tab-style-config.md, src/core/prepareSongFromParsedTab.ts",
+		copy: {
+			"pt-BR": {
+				label: "PreparedSong",
+				title: "prepareSongFromParsedTab cria o stream visual da cifra.",
+				summary:
+					"O ParsedTab vira seções preparadas e barList intercalando letras, acordes, decoração e separadores para o viewer.",
+				whyItMatters:
+					"Esse passo concentra o truque de acorde-sobre-letra e evita que componentes React façam parse de novo.",
+				steps: [
+					"Receba ParsedTab já parseado e opcionalmente transposto.",
+					"Alinhe linhas de acorde com linhas de letra.",
+					"Gere BarSegment para letras, acordes e separadores.",
+				],
+				code:
+					'const prepared = prepareSongFromParsedTab(parsed, {\n  viewMode: "e",\n});\n\nconsole.log(prepared.sections[0]?.barList);',
+				memoryPrompt:
+					"Sem olhar: que objeto contém barList?",
+				nextQuestion:
+					"Peça para o agente comparar prepareSongFromParsedTab com prepareSong legado.",
+			},
+			en: {
+				label: "PreparedSong",
+				title: "prepareSongFromParsedTab creates the visual stream.",
+				summary:
+					"ParsedTab becomes prepared sections and a barList interleaving lyrics, chords, decoration, and separators for the viewer.",
+				whyItMatters:
+					"This step concentrates the chord-over-lyric trick and keeps React components from parsing again.",
+				steps: [
+					"Receive an already parsed and optionally transposed ParsedTab.",
+					"Align chord lines with lyric lines.",
+					"Generate BarSegment entries for lyrics, chords, and separators.",
+				],
+				code:
+					'const prepared = prepareSongFromParsedTab(parsed, {\n  viewMode: "e",\n});\n\nconsole.log(prepared.sections[0]?.barList);',
+				memoryPrompt:
+					"Without looking: which object contains barList?",
+				nextQuestion:
+					"Ask the agent to compare prepareSongFromParsedTab with legacy prepareSong.",
+			},
+		},
+	},
+	{
+		packageId: "tab-renderer",
+		id: "tab-style-config",
+		source: "packages/tab-renderer/README.md, docs/rfc/0002-interleaved-bars-and-tab-style-config.md, src/react/styled/defaultTabStyle.ts",
+		copy: {
+			"pt-BR": {
+				label: "TabStyleConfig",
+				title: "TabStyleConfig controla leitura, não produto.",
+				summary:
+					"O viewer expõe tipografia, cores, viewMode, displayMode e offsets de acorde sem incluir fullscreen, scroll ou preferências de app.",
+				whyItMatters:
+					"O pacote continua reutilizável: apps podem adaptar leitura visual sem transformar o renderer em uma feature de produto.",
+				steps: [
+					"Use displayMode para mostrar acordes, letras ou ambos.",
+					"Use viewMode o/e para espaçamento original ou estendido.",
+					"Altere fontSize, lineHeight, chordHeight e cores no componente Tab.",
+				],
+				code:
+					'<Tab\n  body={body}\n  style={{\n    displayMode: "both",\n    viewMode: "e",\n    transposeNumber: 0,\n    fontSize: 21,\n  }}\n/>',
+				memoryPrompt:
+					"Sem olhar: por que scrollSpeed não pertence a TabStyleConfig?",
+				nextQuestion:
+					"Peça para o agente montar uma configuração de leitura para palco.",
+			},
+			en: {
+				label: "TabStyleConfig",
+				title: "TabStyleConfig controls reading, not product behavior.",
+				summary:
+					"The viewer exposes typography, colors, viewMode, displayMode, and chord offsets without including fullscreen, scroll, or app preferences.",
+				whyItMatters:
+					"The package stays reusable: apps can adapt visual reading without turning the renderer into a product feature.",
+				steps: [
+					"Use displayMode to show chords, lyrics, or both.",
+					"Use viewMode o/e for original or extended spacing.",
+					"Adjust fontSize, lineHeight, chordHeight, and colors on the Tab component.",
+				],
+				code:
+					'<Tab\n  body={body}\n  style={{\n    displayMode: "both",\n    viewMode: "e",\n    transposeNumber: 0,\n    fontSize: 21,\n  }}\n/>',
+				memoryPrompt:
+					"Without looking: why does scrollSpeed not belong in TabStyleConfig?",
+				nextQuestion:
+					"Ask the agent to build a stage-reading configuration.",
+			},
+		},
+	},
+	{
+		packageId: "svguitar-react",
+		id: "voicing-first-api",
+		source: "packages/svguitar-react/README.md, specs/001-guitar-svg/data-model.md, docs/plans/2026-06-03-voicing-render-adapter-boundaries.md",
+		copy: {
+			"pt-BR": {
+				label: "API voicing-first",
+				title: "ChordDiagram prefere FrettedInstrumentVoicing.",
+				summary:
+					"O renderer recebe o contrato musical compartilhado e converte internamente para dedos, pestanas e primeira casa visual.",
+				whyItMatters:
+					"Editor, app e renderer usam a mesma ordem de cordas: stringIndex 1 é a corda mais grave, não uma escolha visual.",
+				steps: [
+					"Monte ou receba um FrettedInstrumentVoicing.",
+					"Passe em voicing para ChordDiagram.",
+					"Deixe a visualização mapear a ordem para SVG.",
+				],
+				code:
+					'<ChordDiagram\n  voicing={cMajorVoicing}\n  view="vertical-right"\n/>',
+				memoryPrompt:
+					"Sem olhar: stringIndex 1 representa qual corda na guitarra padrão?",
+				nextQuestion:
+					"Peça para o agente revisar um voicing antes de renderizar.",
+			},
+			en: {
+				label: "Voicing-first API",
+				title: "ChordDiagram prefers FrettedInstrumentVoicing.",
+				summary:
+					"The renderer receives the shared musical contract and converts it internally to fingers, barres, and the visible first fret.",
+				whyItMatters:
+					"Editor, app, and renderer use the same string order: stringIndex 1 is the lowest-pitched string, not a visual choice.",
+				steps: [
+					"Build or receive a FrettedInstrumentVoicing.",
+					"Pass it as voicing to ChordDiagram.",
+					"Let the selected view map order to SVG.",
+				],
+				code:
+					'<ChordDiagram\n  voicing={cMajorVoicing}\n  view="vertical-right"\n/>',
+				memoryPrompt:
+					"Without looking: which standard guitar string does stringIndex 1 represent?",
+				nextQuestion:
+					"Ask the agent to review a voicing before rendering.",
+			},
+		},
+	},
+	{
+		packageId: "svguitar-react",
+		id: "legacy-inputs",
+		source: "packages/svguitar-react/README.md, specs/001-guitar-svg/data-model.md, src/components/ChordDiagram/types.ts",
+		copy: {
+			"pt-BR": {
+				label: "Entradas legadas",
+				title: "Chord e fretNotation ainda são formas de entrada.",
+				summary:
+					"Além de voicing, o componente aceita dedos/pestanas estruturados ou fretNotation como x32010 para compatibilidade e exemplos simples.",
+				whyItMatters:
+					"Consumidores antigos continuam funcionando, mas integrações novas podem migrar gradualmente para o contrato compartilhado.",
+				steps: [
+					"Use fingers e barres quando já tiver geometria de diagrama.",
+					"Use fretNotation para exemplos compactos.",
+					"Prefira voicing quando o dado cru vem do domínio musical.",
+				],
+				code:
+					'<ChordDiagram\n  fretNotation="x32010"\n  tuning={["E2", "A2", "D3", "G3", "B3", "E4"]}\n/>',
+				memoryPrompt:
+					"Sem olhar: qual entrada tem precedência como contrato público preferido?",
+				nextQuestion:
+					"Peça para o agente converter fretNotation para voicing.",
+			},
+			en: {
+				label: "Legacy inputs",
+				title: "Chord and fretNotation are still input shapes.",
+				summary:
+					"Besides voicing, the component accepts structured fingers/barres or fretNotation such as x32010 for compatibility and simple examples.",
+				whyItMatters:
+					"Older consumers keep working, while new integrations can gradually migrate to the shared contract.",
+				steps: [
+					"Use fingers and barres when you already have diagram geometry.",
+					"Use fretNotation for compact examples.",
+					"Prefer voicing when raw data comes from the musical domain.",
+				],
+				code:
+					'<ChordDiagram\n  fretNotation="x32010"\n  tuning={["E2", "A2", "D3", "G3", "B3", "E4"]}\n/>',
+				memoryPrompt:
+					"Without looking: which input has precedence as the preferred public contract?",
+				nextQuestion:
+					"Ask the agent to convert fretNotation to voicing.",
+			},
+		},
+	},
+	{
+		packageId: "svguitar-react",
+		id: "layout-engines",
+		source: "packages/svguitar-react/README.md, src/components/ChordDiagram/layout.ts, src/components/ChordDiagram/types.ts",
+		copy: {
+			"pt-BR": {
+				label: "Layout engines",
+				title: "Views são estratégias de mapeamento para SVG.",
+				summary:
+					"horizontal-right, horizontal-left, vertical-right e vertical-left implementam LayoutEngine para transformar cordas e casas em coordenadas.",
+				whyItMatters:
+					"A orientação muda sem mudar o contrato musical. Labels continuam legíveis e uma estratégia customizada pode ser registrada.",
+				steps: [
+					"Escolha view para uma estratégia pronta.",
+					"Passe layoutEngine quando precisar de mapeamento próprio.",
+					"Use layoutRegistry para registrar engines adicionais.",
+				],
+				code:
+					'layoutRegistry.register(customEngine);\n\n<ChordDiagram voicing={voicing} layoutEngine={customEngine} />',
+				memoryPrompt:
+					"Sem olhar: view muda o dado musical ou só o mapeamento visual?",
+				nextQuestion:
+					"Peça para o agente explicar a diferença entre vertical-right e horizontal-left.",
+			},
+			en: {
+				label: "Layout engines",
+				title: "Views are SVG mapping strategies.",
+				summary:
+					"horizontal-right, horizontal-left, vertical-right, and vertical-left implement LayoutEngine to turn strings and frets into coordinates.",
+				whyItMatters:
+					"Orientation changes without changing the musical contract. Labels stay readable and a custom strategy can be registered.",
+				steps: [
+					"Choose view for a built-in strategy.",
+					"Pass layoutEngine when you need custom mapping.",
+					"Use layoutRegistry to register additional engines.",
+				],
+				code:
+					'layoutRegistry.register(customEngine);\n\n<ChordDiagram voicing={voicing} layoutEngine={customEngine} />',
+				memoryPrompt:
+					"Without looking: does view change musical data or only visual mapping?",
+				nextQuestion:
+					"Ask the agent to explain the difference between vertical-right and horizontal-left.",
+			},
+		},
+	},
+	{
+		packageId: "svguitar-react",
+		id: "auto-first-fret",
+		source: "packages/svguitar-react/README.md, specs/001-guitar-svg/spec.md, src/components/ChordDiagram/utils/autoFirstFret.ts",
+		copy: {
+			"pt-BR": {
+				label: "Auto first fret",
+				title: "autoFirstFret enquadra acordes em posições altas.",
+				summary:
+					"Quando dedos ficam fora da faixa visível, o componente pode ajustar firstFret e ampliar fretCount até um limite.",
+				whyItMatters:
+					"Diagramas de regiões altas continuam legíveis sem exigir que o consumidor calcule a janela visual manualmente.",
+				steps: [
+					"Ative autoFirstFret explicitamente.",
+					"Deixe firstFret manual ter precedência quando informado.",
+					"Confirme se o range de dedos cabe no fretCount resultante.",
+				],
+				code:
+					'<ChordDiagram\n  autoFirstFret\n  fretCount={4}\n  fingers={[{ string: 1, fret: 7, is_muted: false }]}\n/>',
+				memoryPrompt:
+					"Sem olhar: firstFret manual perde ou ganha de autoFirstFret?",
+				nextQuestion:
+					"Peça para o agente testar se um acorde alto cabe em quatro casas.",
+			},
+			en: {
+				label: "Auto first fret",
+				title: "autoFirstFret frames high-position chords.",
+				summary:
+					"When fingers are outside the visible range, the component can adjust firstFret and expand fretCount up to a limit.",
+				whyItMatters:
+					"High-position diagrams stay readable without forcing the consumer to calculate the visual window manually.",
+				steps: [
+					"Enable autoFirstFret explicitly.",
+					"Let manual firstFret take precedence when provided.",
+					"Confirm whether the finger range fits in the resulting fretCount.",
+				],
+				code:
+					'<ChordDiagram\n  autoFirstFret\n  fretCount={4}\n  fingers={[{ string: 1, fret: 7, is_muted: false }]}\n/>',
+				memoryPrompt:
+					"Without looking: does manual firstFret lose or win against autoFirstFret?",
+				nextQuestion:
+					"Ask the agent to test whether a high-position chord fits in four frets.",
+			},
+		},
+	},
+	{
+		packageId: "svguitar-react",
+		id: "renderer-boundary",
+		source: "packages/svguitar-react/docs/plans/2026-06-03-voicing-render-adapter-boundaries.md, specs/001-guitar-svg/spec.md",
+		copy: {
+			"pt-BR": {
+				label: "Limite do renderer",
+				title: "svguitar-react desenha; não resolve identidade musical.",
+				summary:
+					"O pacote não procura acordes, aliases, catálogos, rotas, persistência ou regras de produto. Ele transforma entrada de acorde em SVG.",
+				whyItMatters:
+					"Manter esse limite evita que uma biblioteca visual fique acoplada ao AC15 ou a bancos privados de acordes.",
+				steps: [
+					"Resolva qual voicing usar antes de chamar ChordDiagram.",
+					"Deixe aliases e lookup para musical-domain ou app consumidor.",
+					"Use o renderer apenas para layout, estilo e SVG.",
+				],
+				code:
+					'const voicing = selectPreferredVoicing(chordEntry.voicings);\n\nreturn <ChordDiagram voicing={voicing} />;',
+				memoryPrompt:
+					"Sem olhar: qual pacote deve decidir qual voicing é preferido?",
+				nextQuestion:
+					"Peça para o agente separar responsabilidades entre app, musical-domain e svguitar-react.",
+			},
+			en: {
+				label: "Renderer boundary",
+				title: "svguitar-react draws; it does not resolve musical identity.",
+				summary:
+					"The package does not look up chords, aliases, catalogs, routes, persistence, or product rules. It turns chord input into SVG.",
+				whyItMatters:
+					"Keeping this boundary avoids coupling a visual library to AC15 or private chord databases.",
+				steps: [
+					"Resolve which voicing to use before calling ChordDiagram.",
+					"Leave aliases and lookup to musical-domain or the consuming app.",
+					"Use the renderer only for layout, styling, and SVG.",
+				],
+				code:
+					'const voicing = selectPreferredVoicing(chordEntry.voicings);\n\nreturn <ChordDiagram voicing={voicing} />;',
+				memoryPrompt:
+					"Without looking: which package should decide which voicing is preferred?",
+				nextQuestion:
+					"Ask the agent to separate responsibilities between app, musical-domain, and svguitar-react.",
+			},
+		},
+	},
+	{
+		packageId: "interactive-fretboard",
+		id: "controlled-voicing",
+		source: "packages/interactive-fretboard/README.md, src/components/InteractiveFretboard/types.ts",
+		copy: {
+			"pt-BR": {
+				label: "Voicing controlado",
+				title: "InteractiveFretboard edita um FrettedInstrumentVoicing controlado.",
+				summary:
+					"O componente recebe value e devolve mudanças por onChange. O app continua dono do estado, persistência e validação de produto.",
+				whyItMatters:
+					"Esse padrão permite desfazer, salvar, sincronizar ou comparar versões fora da biblioteca visual.",
+				steps: [
+					"Crie um voicing inicial no formato de musical-domain.",
+					"Passe value para InteractiveFretboard.",
+					"Atualize seu estado com details.voicing em onChange.",
+				],
+				code:
+					'<InteractiveFretboard\n  value={voicing}\n  onChange={(details) => setVoicing(details.voicing)}\n/>',
+				memoryPrompt:
+					"Sem olhar: quem é dono do estado final, o componente ou o app?",
+				nextQuestion:
+					"Peça para o agente desenhar um fluxo salvar/desfazer usando details.voicing.",
+			},
+			en: {
+				label: "Controlled voicing",
+				title: "InteractiveFretboard edits a controlled FrettedInstrumentVoicing.",
+				summary:
+					"The component receives value and returns changes through onChange. The app still owns state, persistence, and product validation.",
+				whyItMatters:
+					"This pattern allows undo, save, sync, or version comparison outside the visual library.",
+				steps: [
+					"Create an initial voicing in the musical-domain shape.",
+					"Pass value to InteractiveFretboard.",
+					"Update your state with details.voicing in onChange.",
+				],
+				code:
+					'<InteractiveFretboard\n  value={voicing}\n  onChange={(details) => setVoicing(details.voicing)}\n/>',
+				memoryPrompt:
+					"Without looking: who owns the final state, the component or the app?",
+				nextQuestion:
+					"Ask the agent to design a save/undo flow using details.voicing.",
+			},
+		},
+	},
+	{
+		packageId: "interactive-fretboard",
+		id: "viewbox-hit-testing",
+		source: "packages/interactive-fretboard/README.md, specs/001-interactive-fretboard/research.md, src/interaction/screenToSvgPoint.ts, src/interaction/hitTestFretCell.ts",
+		copy: {
+			"pt-BR": {
+				label: "Hit-test SVG",
+				title: "O clique vira corda/casa via viewBox, não pixels frágeis.",
+				summary:
+					"O pacote converte clientX/clientY com getScreenCTM().inverse() e usa geometria do frame para achar a célula tocada.",
+				whyItMatters:
+					"Escala CSS, zoom e responsividade não quebram edição porque o cálculo usa coordenadas SVG estáveis.",
+				steps: [
+					"Converta o PointerEvent para ponto no SVG.",
+					"Use hitTestFretCell contra o frame calculado.",
+					"Renderize áreas invisíveis de hit para alvos confortáveis.",
+				],
+				code:
+					'const point = screenToSvgPoint(svg, event);\nconst target = hitTestFretCell(frame, point);\n\nif (target) applyTapToEditorState(state, target);',
+				memoryPrompt:
+					"Sem olhar: por que getBoundingClientRect em linhas finas foi rejeitado?",
+				nextQuestion:
+					"Peça para o agente depurar um clique que cai na casa errada.",
+			},
+			en: {
+				label: "SVG hit-testing",
+				title: "A click becomes string/fret through viewBox, not fragile pixels.",
+				summary:
+					"The package converts clientX/clientY with getScreenCTM().inverse() and uses frame geometry to find the touched cell.",
+				whyItMatters:
+					"CSS scale, zoom, and responsiveness do not break editing because the calculation uses stable SVG coordinates.",
+				steps: [
+					"Convert the PointerEvent into an SVG point.",
+					"Use hitTestFretCell against the computed frame.",
+					"Render invisible hit areas for comfortable targets.",
+				],
+				code:
+					'const point = screenToSvgPoint(svg, event);\nconst target = hitTestFretCell(frame, point);\n\nif (target) applyTapToEditorState(state, target);',
+				memoryPrompt:
+					"Without looking: why was getBoundingClientRect on thin lines rejected?",
+				nextQuestion:
+					"Ask the agent to debug a click that lands on the wrong fret.",
+			},
+		},
+	},
+	{
+		packageId: "interactive-fretboard",
+		id: "view-modes",
+		source: "packages/interactive-fretboard/README.md, src/layout/viewMode.ts, src/layout/types.ts",
+		copy: {
+			"pt-BR": {
+				label: "Modos de visualização",
+				title: "Orientação e mão mudam o mapa visual, não o contrato.",
+				summary:
+					"horizontal/vertical e right/left resolvem para quatro modos. createVisualToStringIndex traduz posição visual para stringIndex canônico.",
+				whyItMatters:
+					"O usuário pode editar em orientações diferentes sem inverter a semântica de cordas salva no voicing.",
+				steps: [
+					"Escolha orientation horizontal ou vertical.",
+					"Escolha handedness right ou left.",
+					"Use o mapeamento visual para atualizar stringIndex correto.",
+				],
+				code:
+					'const viewMode = resolveViewMode("vertical", "left");\nconst toStringIndex = createVisualToStringIndex(viewMode, 6);\n\nconsole.log(toStringIndex(0));',
+				memoryPrompt:
+					"Sem olhar: view mode deve alterar stringIndex salvo?",
+				nextQuestion:
+					"Peça para o agente explicar a inversão de cordas em left-handed.",
+			},
+			en: {
+				label: "View modes",
+				title: "Orientation and handedness change the visual map, not the contract.",
+				summary:
+					"horizontal/vertical and right/left resolve to four modes. createVisualToStringIndex translates visual position into canonical stringIndex.",
+				whyItMatters:
+					"The user can edit in different orientations without inverting the saved string semantics in the voicing.",
+				steps: [
+					"Choose horizontal or vertical orientation.",
+					"Choose right or left handedness.",
+					"Use the visual mapping to update the correct stringIndex.",
+				],
+				code:
+					'const viewMode = resolveViewMode("vertical", "left");\nconst toStringIndex = createVisualToStringIndex(viewMode, 6);\n\nconsole.log(toStringIndex(0));',
+				memoryPrompt:
+					"Without looking: should view mode change saved stringIndex?",
+				nextQuestion:
+					"Ask the agent to explain string inversion in left-handed mode.",
+			},
+		},
+	},
+	{
+		packageId: "interactive-fretboard",
+		id: "finger-gestures",
+		source: "packages/interactive-fretboard/README.md, src/adapters/applyFinger.ts, src/interaction/resolvePointerButton.ts",
+		copy: {
+			"pt-BR": {
+				label: "Gestos de dedo",
+				title: "Botões do ponteiro controlam toque, ciclo e dedo fixo.",
+				summary:
+					"primary alterna a célula, secondary cicla dedos 1-4 e middle aplica o dedo fixo, todos retornando pointerButton em details.",
+				whyItMatters:
+					"Editar digitação fica rápido em desktop sem quebrar toque/caneta, que continuam no caminho primary.",
+				steps: [
+					"Normalize o botão com resolvePointerButton.",
+					"Use applyTap para alternar casa.",
+					"Use applyFingerCycle ou applyFingerStick para digitação.",
+				],
+				code:
+					'if (details.pointerButton === "secondary") {\n  console.log("finger cycled", details.voicing);\n}',
+				memoryPrompt:
+					"Sem olhar: qual botão cicla dedos 1 a 4?",
+				nextQuestion:
+					"Peça para o agente simular três cliques em uma célula fretted.",
+			},
+			en: {
+				label: "Finger gestures",
+				title: "Pointer buttons control tap, cycle, and sticky finger.",
+				summary:
+					"primary toggles the cell, secondary cycles fingers 1-4, and middle applies the sticky finger, all returning pointerButton in details.",
+				whyItMatters:
+					"Fingering edits become fast on desktop without breaking touch/pen, which stay on the primary path.",
+				steps: [
+					"Normalize the button with resolvePointerButton.",
+					"Use applyTap to toggle the fret.",
+					"Use applyFingerCycle or applyFingerStick for fingering.",
+				],
+				code:
+					'if (details.pointerButton === "secondary") {\n  console.log("finger cycled", details.voicing);\n}',
+				memoryPrompt:
+					"Without looking: which button cycles fingers 1 through 4?",
+				nextQuestion:
+					"Ask the agent to simulate three clicks on a fretted cell.",
+			},
+		},
+	},
+	{
+		packageId: "interactive-fretboard",
+		id: "change-pipeline",
+		source: "packages/interactive-fretboard/README.md, src/adapters/applyChangePipeline.ts",
+		copy: {
+			"pt-BR": {
+				label: "Pipeline de mudança",
+				title: "applyChangePipeline transforma gesto em voicing, notas e acorde detectado.",
+				summary:
+					"Depois do tap, o pipeline reconstrói o voicing, infere pestanas quando configurado, calcula notas pressionadas e opcionalmente detecta acorde.",
+				whyItMatters:
+					"A UI recebe um pacote de mudança completo em vez de juntar estado visual, teoria musical e formatação em lugares diferentes.",
+				steps: [
+					"Converta estado visual para FrettedInstrumentVoicing.",
+					"Rode inferBarresFromFrettedVoicing quando inferBarresOnChange estiver ativo.",
+					"Devolva fretNotation, pressedNotes e detectedChord conforme configuração.",
+				],
+				code:
+					'<InteractiveFretboard\n  value={voicing}\n  inferBarresOnChange\n  detectChord\n  onChange={(details) => console.log(details.detectedChord)}\n/>',
+				memoryPrompt:
+					"Sem olhar: quais três dados além de voicing podem vir em onChange?",
+				nextQuestion:
+					"Peça para o agente explicar quando ativar inferBarresOnChange.",
+			},
+			en: {
+				label: "Change pipeline",
+				title: "applyChangePipeline turns gesture into voicing, notes, and detected chord.",
+				summary:
+					"After the tap, the pipeline rebuilds the voicing, infers barres when configured, calculates pressed notes, and optionally detects the chord.",
+				whyItMatters:
+					"The UI receives one complete change package instead of stitching visual state, music theory, and formatting in different places.",
+				steps: [
+					"Convert visual state to FrettedInstrumentVoicing.",
+					"Run inferBarresFromFrettedVoicing when inferBarresOnChange is active.",
+					"Return fretNotation, pressedNotes, and detectedChord based on configuration.",
+				],
+				code:
+					'<InteractiveFretboard\n  value={voicing}\n  inferBarresOnChange\n  detectChord\n  onChange={(details) => console.log(details.detectedChord)}\n/>',
+				memoryPrompt:
+					"Without looking: which three fields besides voicing can arrive in onChange?",
+				nextQuestion:
+					"Ask the agent to explain when to enable inferBarresOnChange.",
+			},
+		},
+	},
+	{
+		packageId: "storybook-config",
+		id: "main-factory",
+		source: "packages/storybook-config/README.md, src/viteFinal.ts, package.json",
+		copy: {
+			"pt-BR": {
+				label: "Main factory",
+				title: "createStorybookMain centraliza setup de Storybook.",
+				summary:
+					"O subpath /vite monta framework, addons e viteFinal compartilhado para cada biblioteca com stories próprias.",
+				whyItMatters:
+					"Cada pacote mantém exemplos locais sem copiar configuração frágil de Storybook, Vite e docgen.",
+				steps: [
+					"Importe createStorybookMain apenas em .storybook/main.ts.",
+					"Passe stories e overrides específicos do pacote.",
+					"Deixe addons e framework virem da configuração compartilhada.",
+				],
+				code:
+					'import { createStorybookMain } from "@achorde/storybook-config/vite";\n\nexport default createStorybookMain({\n  stories: ["../src/**/*.stories.@(ts|tsx)"],\n});',
+				memoryPrompt:
+					"Sem olhar: por que /vite não deve ser importado em stories?",
+				nextQuestion:
+					"Peça para o agente revisar um .storybook/main.ts de pacote.",
+			},
+			en: {
+				label: "Main factory",
+				title: "createStorybookMain centralizes Storybook setup.",
+				summary:
+					"The /vite subpath assembles framework, addons, and shared viteFinal for each library with its own stories.",
+				whyItMatters:
+					"Each package keeps local examples without copying fragile Storybook, Vite, and docgen configuration.",
+				steps: [
+					"Import createStorybookMain only in .storybook/main.ts.",
+					"Pass package-specific stories and overrides.",
+					"Let addons and framework come from the shared config.",
+				],
+				code:
+					'import { createStorybookMain } from "@achorde/storybook-config/vite";\n\nexport default createStorybookMain({\n  stories: ["../src/**/*.stories.@(ts|tsx)"],\n});',
+				memoryPrompt:
+					"Without looking: why should /vite not be imported in stories?",
+				nextQuestion:
+					"Ask the agent to review a package .storybook/main.ts.",
+			},
+		},
+	},
+	{
+		packageId: "storybook-config",
+		id: "vite-final",
+		source: "packages/storybook-config/README.md, src/viteFinal.ts",
+		copy: {
+			"pt-BR": {
+				label: "Vite final",
+				title: "applyStorybookViteFinal protege o iframe do Storybook.",
+				summary:
+					"O helper deduplica React, exclui dependências problemáticas de optimizeDeps e remove o plugin de mocker que quebrava vite-app.js.",
+				whyItMatters:
+					"Problemas de runtime em Storybook aparecem como iframe 500; centralizar o ajuste evita correções divergentes por pacote.",
+				steps: [
+					"Receba a configuração base do Storybook.",
+					"Filtre plugins incompatíveis conhecidos.",
+					"Mescle resolve.dedupe e optimizeDeps.exclude.",
+				],
+				code:
+					'async viteFinal(config, options) {\n  const withBase = applyStorybookViteFinal(config);\n  return userViteFinal ? userViteFinal(withBase, options) : withBase;\n}',
+				memoryPrompt:
+					"Sem olhar: qual dependência visual precisa ser deduplicada?",
+				nextQuestion:
+					"Peça para o agente diagnosticar um iframe.html 500 no Storybook.",
+			},
+			en: {
+				label: "Vite final",
+				title: "applyStorybookViteFinal protects the Storybook iframe.",
+				summary:
+					"The helper dedupes React, excludes problematic dependencies from optimizeDeps, and removes the mocker plugin that broke vite-app.js.",
+				whyItMatters:
+					"Storybook runtime issues appear as iframe 500; centralizing the tweak avoids divergent fixes per package.",
+				steps: [
+					"Receive Storybook's base config.",
+					"Filter known incompatible plugins.",
+					"Merge resolve.dedupe and optimizeDeps.exclude.",
+				],
+				code:
+					'async viteFinal(config, options) {\n  const withBase = applyStorybookViteFinal(config);\n  return userViteFinal ? userViteFinal(withBase, options) : withBase;\n}',
+				memoryPrompt:
+					"Without looking: which visual dependency must be deduped?",
+				nextQuestion:
+					"Ask the agent to diagnose a Storybook iframe.html 500.",
+			},
+		},
+	},
+	{
+		packageId: "storybook-config",
+		id: "preview-observability",
+		source: "packages/storybook-config/README.md, src/preview.tsx, src/StorybookErrorBoundary.tsx",
+		copy: {
+			"pt-BR": {
+				label: "Observabilidade",
+				title: "Preview decorators capturam erro de renderização e janela.",
+				summary:
+					"createObservabilityDecorator envolve stories em ErrorBoundary e installStorybookPreviewObservability registra window.error e unhandledrejection.",
+				whyItMatters:
+					"Quando uma story quebra, o pacote registra camada, stack e contexto sem depender da UI padrão do Storybook.",
+				steps: [
+					"Instale observabilidade no preview do pacote.",
+					"Adicione o decorator compartilhado.",
+					"Leia logs com prefixos [layer/story-render] e [layer/window-error].",
+				],
+				code:
+					'import {\n  createObservabilityDecorator,\n  installStorybookPreviewObservability,\n} from "@achorde/storybook-config/preview";\n\ninstallStorybookPreviewObservability("tab-renderer");\nexport default { decorators: [createObservabilityDecorator("tab-renderer")] };',
+				memoryPrompt:
+					"Sem olhar: qual prefixo aparece quando uma story quebra durante render?",
+				nextQuestion:
+					"Peça para o agente instrumentar o preview de uma biblioteca nova.",
+			},
+			en: {
+				label: "Observability",
+				title: "Preview decorators capture render and window errors.",
+				summary:
+					"createObservabilityDecorator wraps stories in an ErrorBoundary and installStorybookPreviewObservability registers window.error and unhandledrejection.",
+				whyItMatters:
+					"When a story breaks, the package logs layer, stack, and context without depending on Storybook's default UI.",
+				steps: [
+					"Install observability in the package preview.",
+					"Add the shared decorator.",
+					"Read logs with [layer/story-render] and [layer/window-error] prefixes.",
+				],
+				code:
+					'import {\n  createObservabilityDecorator,\n  installStorybookPreviewObservability,\n} from "@achorde/storybook-config/preview";\n\ninstallStorybookPreviewObservability("tab-renderer");\nexport default { decorators: [createObservabilityDecorator("tab-renderer")] };',
+				memoryPrompt:
+					"Without looking: which prefix appears when a story breaks during render?",
+				nextQuestion:
+					"Ask the agent to instrument the preview for a new library.",
+			},
+		},
+	},
+	{
+		packageId: "storybook-config",
+		id: "runtime-health",
+		source: "packages/storybook-config/README.md, src/runtimeHealth.ts",
+		copy: {
+			"pt-BR": {
+				label: "Runtime health",
+				title: "collectStorybookRuntimeHealth transforma sintomas em pistas.",
+				summary:
+					"O helper captura versão de Vite, modo, URL, userAgent, issues e hints para diagnosticar Storybook em runtime.",
+				whyItMatters:
+					"Erros de integração podem depender da versão de Vite ou da URL do iframe; o snapshot reduz adivinhação.",
+				steps: [
+					"Coleta health no preview.",
+					"Registre com logStorybookRuntimeHealth.",
+					"Use issues e hints antes de alterar configuração local.",
+				],
+				code:
+					'const health = collectStorybookRuntimeHealth();\nlogStorybookRuntimeHealth("svguitar-react", health);',
+				memoryPrompt:
+					"Sem olhar: por que registrar location ajuda no Storybook?",
+				nextQuestion:
+					"Peça para o agente interpretar um StorybookRuntimeHealth real.",
+			},
+			en: {
+				label: "Runtime health",
+				title: "collectStorybookRuntimeHealth turns symptoms into hints.",
+				summary:
+					"The helper captures Vite version, mode, URL, userAgent, issues, and hints to diagnose Storybook at runtime.",
+				whyItMatters:
+					"Integration errors can depend on Vite version or iframe URL; the snapshot reduces guesswork.",
+				steps: [
+					"Collect health in preview.",
+					"Log it with logStorybookRuntimeHealth.",
+					"Use issues and hints before changing local configuration.",
+				],
+				code:
+					'const health = collectStorybookRuntimeHealth();\nlogStorybookRuntimeHealth("svguitar-react", health);',
+				memoryPrompt:
+					"Without looking: why does recording location help in Storybook?",
+				nextQuestion:
+					"Ask the agent to interpret a real StorybookRuntimeHealth object.",
+			},
+		},
+	},
+] as const;
+
+export function getConceptDocsForPackage(
+	packageId: PackageId,
+) {
+	return packageConceptDocs.filter((conceptDoc) => conceptDoc.packageId === packageId);
+}
+
+export function findPackageConceptDoc(
+	packageId: string | undefined,
+	conceptId: string | undefined,
+) {
+	return packageConceptDocs.find(
+		(conceptDoc) => conceptDoc.packageId === packageId && conceptDoc.id === conceptId,
+	);
+}
+
 export function findMusicalDomainConceptDoc(
 	conceptId: string | undefined,
 ) {
