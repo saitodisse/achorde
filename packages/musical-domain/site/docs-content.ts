@@ -437,7 +437,7 @@ export const appDocs = [
 		id: "artist-portal-base",
 		name: "Artist Portal Base",
 		scope: "portal",
-		demo: "http://127.0.0.1:5287/",
+		demo: "https://saitodisse.github.io/artist-portal-base/",
 		github: "https://github.com/saitodisse/artist-portal-base",
 		sources: [
 			"../artist-portal-base/README.md",
