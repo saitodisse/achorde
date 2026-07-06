@@ -6,7 +6,7 @@
   "scripts": {
     "build": "turbo run build",
     "dev": "pnpm dev:all",
-    "dev:all": "sh -c 'pnpm dev:musical-domain & pnpm dev:tab-renderer & pnpm dev:svguitar-react & pnpm dev:interactive-fretboard & pnpm storybook:tab-renderer & pnpm storybook:svguitar & pnpm storybook:interactive-fretboard & wait'",
+    "dev:all": "sh -c 'pnpm dev:musical-domain & pnpm dev:tab-renderer & pnpm dev:svguitar-react & pnpm dev:interactive-fretboard & pnpm storybook:tab-renderer & pnpm storybook:tab-editor & pnpm storybook:svguitar & pnpm storybook:interactive-fretboard & wait'",
     "dev:musical-domain": "pnpm --filter @achorde/musical-domain dev -- --host 127.0.0.1 --port 5286 --strictPort",
     "dev:tab-renderer": "pnpm --filter @achorde/tab-renderer dev -- --host 127.0.0.1 --port 5283 --strictPort",
     "dev:svguitar-react": "pnpm --filter @achorde/svguitar-react dev -- --host 127.0.0.1 --port 5284 --strictPort",
@@ -15,6 +15,7 @@
     "typecheck": "turbo run typecheck",
     "lint": "turbo run lint",
     "storybook:tab-renderer": "pnpm --filter @achorde/tab-renderer storybook",
+    "storybook:tab-editor": "pnpm --filter @achorde/tab-editor storybook",
     "storybook:svguitar": "pnpm --filter @achorde/svguitar-react storybook",
     "storybook:svguitar-react": "pnpm storybook:svguitar",
     "storybook:interactive-fretboard": "pnpm --filter @achorde/interactive-fretboard storybook"

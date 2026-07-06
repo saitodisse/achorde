@@ -50,5 +50,6 @@ export default {
 | Pacote           | Porta (padrão) | Script raiz                   |
 | ---------------- | -------------- | ----------------------------- |
 | `tab-renderer`   | 6007           | `pnpm storybook:tab-renderer` |
+| `tab-editor`     | 6012           | `pnpm storybook:tab-editor`   |
 | `svguitar-react` | 6006           | `pnpm storybook:svguitar`     |
 | `interactive-fretboard` | 6010 | `pnpm storybook:interactive-fretboard` |
