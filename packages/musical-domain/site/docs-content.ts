@@ -4,6 +4,7 @@ export type RouteLocale = "pt-br" | "en";
 export type PackageId =
 	| "musical-domain"
 	| "source-catalog"
+	| "tab-editor"
 	| "tab-renderer"
 	| "svguitar-react"
 	| "interactive-fretboard";
@@ -257,6 +258,47 @@ export const packageDocs = [
 				whenToUse:
 					"Use it when a static site needs to serve data for another app to import.",
 				remember: "It is the catalog delivery receipt: what exists and whether it is safe.",
+			},
+		},
+	},
+	{
+		id: "tab-editor",
+		name: "@achorde/tab-editor",
+		scope: "editor",
+		npm: "https://www.npmjs.com/package/@achorde/tab-editor",
+		github: "https://github.com/saitodisse/achorde/tree/main/packages/tab-editor",
+		summary: {
+			"pt-BR": {
+				label: "Editor de cifra",
+				headline: "O pacote para editar cifras com diagnóstico e preview.",
+				paragraph:
+					"Ele compõe análise de texto, editor React, fallback textarea e preview do tab-renderer. O pacote gera payloads de save/export, mas não sabe nada sobre Markdown, Git, storage ou AC15.",
+				steps: [
+					"Receba o texto bruto da cifra e o valor original.",
+					"Analise o texto com o parser público para derivar diagnósticos e acordes encontrados.",
+					"Edite com Monaco carregado sob demanda ou textarea quando Monaco não estiver disponível.",
+					"Renderize o preview e devolva payloads para o consumidor decidir como salvar ou exportar.",
+				],
+				whenToUse:
+					"Use quando um portal ou app React precisa oferecer edição de cifra sem implementar parser, preview e diagnóstico do zero.",
+				remember:
+					"Ele edita o texto da cifra; quem consome decide onde guardar, versionar ou publicar.",
+			},
+			en: {
+				label: "Chord chart editor",
+				headline: "The package for editing chord charts with diagnostics and preview.",
+				paragraph:
+					"It composes text analysis, a React editor, textarea fallback, and tab-renderer preview. The package emits save/export payloads, but knows nothing about Markdown, Git, storage, or AC15.",
+				steps: [
+					"Receive raw chart text and the original value.",
+					"Analyze the text through the public parser to derive diagnostics and found chords.",
+					"Edit with lazily loaded Monaco or textarea when Monaco is unavailable.",
+					"Render the preview and return payloads for the consumer to decide how to save or export.",
+				],
+				whenToUse:
+					"Use it when a portal or React app needs chord-chart editing without rebuilding parsing, preview, and diagnostics from scratch.",
+				remember:
+					"It edits chart text; the consumer decides where to store, version, or publish it.",
 			},
 		},
 	},
@@ -1072,6 +1114,96 @@ export const packageConceptDocs: readonly PackageConceptDoc[] = [
 					"Without looking: which file is the catalog entry point?",
 				nextQuestion:
 					"Ask the agent to design the /source-catalog/ tree for a portal.",
+			},
+		},
+	},
+	{
+		packageId: "tab-editor",
+		id: "editor-boundary",
+		source: "packages/tab-editor/README.md, packages/tab-editor/AGENTS.md, src/index.ts",
+		copy: {
+			"pt-BR": {
+				label: "Limite do editor",
+				title: "O editor devolve payloads, não persiste dados.",
+				summary:
+					"@achorde/tab-editor analisa texto e monta UI reutilizável, mas não conhece Markdown, Git, Dexie, sync, Astro ou AC15.",
+				whyItMatters:
+					"Esse limite deixa o mesmo editor servir portal estático, app privado ou outra UI sem carregar regra de produto para dentro do pacote público.",
+				steps: [
+					"Passe value, originalValue, title e sourceKey para o componente.",
+					"Use onChange para controlar o texto no consumidor.",
+					"Use onSave apenas como payload derivado, sem assumir persistência.",
+				],
+				code:
+					'<ChordChartEditor\n  value={value}\n  originalValue={original}\n  sourceKey="C"\n  onChange={setValue}\n  onSave={(payload) => exportPayload(payload)}\n/>',
+				memoryPrompt:
+					"Sem olhar: cite duas coisas que o tab-editor não deve fazer.",
+				nextQuestion:
+					"Peça para o agente desenhar o adapter entre tab-editor e Artist Portal Base.",
+			},
+			en: {
+				label: "Editor boundary",
+				title: "The editor returns payloads; it does not persist data.",
+				summary:
+					"@achorde/tab-editor analyzes text and provides reusable UI, but it does not know Markdown, Git, Dexie, sync, Astro, or AC15.",
+				whyItMatters:
+					"This boundary lets the same editor serve a static portal, private app, or another UI without pulling product rules into the public package.",
+				steps: [
+					"Pass value, originalValue, title, and sourceKey to the component.",
+					"Use onChange to control text in the consumer.",
+					"Use onSave only as a derived payload, without assuming persistence.",
+				],
+				code:
+					'<ChordChartEditor\n  value={value}\n  originalValue={original}\n  sourceKey="C"\n  onChange={setValue}\n  onSave={(payload) => exportPayload(payload)}\n/>',
+				memoryPrompt:
+					"Without looking: name two things tab-editor must not do.",
+				nextQuestion:
+					"Ask the agent to design the adapter between tab-editor and Artist Portal Base.",
+			},
+		},
+	},
+	{
+		packageId: "tab-editor",
+		id: "analysis-proposals",
+		source: "packages/tab-editor/README.md, src/index.ts",
+		copy: {
+			"pt-BR": {
+				label: "Análise e proposta",
+				title: "Helpers headless transformam texto em diagnóstico e diff copiável.",
+				summary:
+					"analyzeChordChartText retorna parsed, diagnostics, status, chordsFound e isValid. createTextChangeProposal empacota before/after/path para consumidores gerarem export ou revisão.",
+				whyItMatters:
+					"Portais estáticos podem oferecer edição local sem backend: o navegador guarda rascunho e gera Markdown ou proposta para alguém aplicar no Git.",
+				steps: [
+					"Rode a análise a cada mudança de texto.",
+					"Mostre status válido, com avisos ou inválido a partir dos diagnósticos.",
+					"Monte a proposta de alteração no consumidor, preservando o formato do arquivo original.",
+				],
+				code:
+					'const analysis = analyzeChordChartText(rawText);\nconst proposal = createTextChangeProposal({ path, before, after });',
+				memoryPrompt:
+					"Sem olhar: por que o helper de proposta recebe before e after?",
+				nextQuestion:
+					"Peça para o agente revisar se uma proposta de alteração preserva frontmatter.",
+			},
+			en: {
+				label: "Analysis and proposal",
+				title: "Headless helpers turn text into diagnostics and copyable diffs.",
+				summary:
+					"analyzeChordChartText returns parsed, diagnostics, status, chordsFound, and isValid. createTextChangeProposal packages before/after/path so consumers can generate exports or reviews.",
+				whyItMatters:
+					"Static portals can offer local editing without a backend: the browser keeps drafts and generates Markdown or a proposal for someone to apply in Git.",
+				steps: [
+					"Run analysis on every text change.",
+					"Show valid, warning, or invalid status from diagnostics.",
+					"Build the change proposal in the consumer while preserving the original file shape.",
+				],
+				code:
+					'const analysis = analyzeChordChartText(rawText);\nconst proposal = createTextChangeProposal({ path, before, after });',
+				memoryPrompt:
+					"Without looking: why does the proposal helper receive before and after?",
+				nextQuestion:
+					"Ask the agent to review whether a change proposal preserves frontmatter.",
 			},
 		},
 	},
