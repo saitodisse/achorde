@@ -1,0 +1,97 @@
+{
+  "name": "@achorde/tab-editor",
+  "private": false,
+  "version": "0.1.0",
+  "description": "Reusable chord chart editor with analysis, lazy Monaco editing, textarea fallback, and tab preview.",
+  "keywords": [
+    "react",
+    "chord",
+    "chart",
+    "editor",
+    "monaco",
+    "music",
+    "achorde"
+  ],
+  "homepage": "https://achorde-musical-domain.vercel.app/en/packages/tab-editor",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/saitodisse/achorde.git",
+    "directory": "packages/tab-editor"
+  },
+  "bugs": {
+    "url": "https://github.com/saitodisse/achorde/issues"
+  },
+  "license": "MIT",
+  "type": "module",
+  "scripts": {
+    "build": "vite build && tsc -b tsconfig.build.json --force",
+    "lint": "eslint .",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "storybook": "storybook dev -p 6012 --no-open",
+    "build-storybook": "storybook build",
+    "prepublishOnly": "pnpm build"
+  },
+  "dependencies": {
+    "@achorde/tab-renderer": "workspace:*",
+    "@monaco-editor/react": "^4.7.0",
+    "monaco-editor": "^0.55.1"
+  },
+  "peerDependencies": {
+    "react": "^18.0.0 || ^19.0.0",
+    "react-dom": "^18.0.0 || ^19.0.0"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "sideEffects": [
+    "*.css"
+  ],
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    },
+    "./react": {
+      "types": "./dist/react.d.ts",
+      "default": "./dist/react.js"
+    },
+    "./style.css": "./dist/style.css"
+  },
+  "files": [
+    "dist",
+    "README.md",
+    "CHANGELOG.md"
+  ],
+  "devDependencies": {
+    "@achorde/storybook-config": "workspace:*",
+    "@chromatic-com/storybook": "^5.2.1",
+    "@eslint/js": "^10.0.1",
+    "@storybook/addon-a11y": "^10.4.1",
+    "@storybook/addon-docs": "^10.4.1",
+    "@storybook/addon-mcp": "^0.6.0",
+    "@storybook/addon-vitest": "^10.4.1",
+    "@storybook/react-vite": "^10.4.1",
+    "@testing-library/jest-dom": "^6.9.1",
+    "@testing-library/react": "^16.3.2",
+    "@types/node": "^24.12.3",
+    "@types/react": "^19.2.14",
+    "@types/react-dom": "^19.2.3",
+    "@vitejs/plugin-react": "^5.0.0",
+    "@vitest/browser-playwright": "^4.1.7",
+    "@vitest/coverage-v8": "^4.1.7",
+    "eslint": "^10.3.0",
+    "eslint-plugin-react-hooks": "^7.1.1",
+    "eslint-plugin-react-refresh": "^0.5.2",
+    "eslint-plugin-storybook": "^10.4.1",
+    "globals": "^17.6.0",
+    "jsdom": "^29.1.1",
+    "react": "19.2.6",
+    "react-dom": "19.2.6",
+    "storybook": "^10.4.1",
+    "typescript": "~6.0.2",
+    "typescript-eslint": "^8.59.2",
+    "vite": "^7.3.1",
+    "vitest": "^4.1.7"
+  }
+}

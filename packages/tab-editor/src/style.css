@@ -1,0 +1,193 @@
+.achorde-tab-editor {
+  --tab-editor-border: #d8dee8;
+  --tab-editor-panel: #ffffff;
+  --tab-editor-panel-muted: #f7f9fc;
+  --tab-editor-text: #1d232d;
+  --tab-editor-muted: #5f6b7a;
+  --tab-editor-blue: #2452a3;
+  --tab-editor-red: #b42318;
+  --tab-editor-yellow: #a15c00;
+  --tab-editor-green: #227a4b;
+  color: var(--tab-editor-text);
+  display: grid;
+  gap: 16px;
+  width: 100%;
+}
+
+.achorde-tab-editor *,
+.achorde-tab-editor *::before,
+.achorde-tab-editor *::after {
+  box-sizing: border-box;
+}
+
+.achorde-tab-editor__header,
+.achorde-tab-editor__pane,
+.achorde-tab-editor__footer,
+.achorde-tab-editor__diagnostics {
+  border: 1px solid var(--tab-editor-border);
+  border-radius: 8px;
+  background: var(--tab-editor-panel);
+}
+
+.achorde-tab-editor__header {
+  align-items: center;
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 14px 16px;
+}
+
+.achorde-tab-editor__header h2,
+.achorde-tab-editor__pane-header h3,
+.achorde-tab-editor__diagnostics h3 {
+  font-size: 16px;
+  line-height: 1.25;
+  margin: 0;
+}
+
+.achorde-tab-editor__eyebrow {
+  color: var(--tab-editor-muted);
+  font-size: 12px;
+  margin: 0 0 4px;
+  text-transform: uppercase;
+}
+
+.achorde-tab-editor__status {
+  align-items: center;
+  border: 1px solid var(--tab-editor-border);
+  border-radius: 999px;
+  display: flex;
+  gap: 8px;
+  min-height: 32px;
+  padding: 4px 10px;
+  white-space: nowrap;
+}
+
+.achorde-tab-editor__status[data-status="valid"] {
+  color: var(--tab-editor-green);
+}
+
+.achorde-tab-editor__status[data-status="warning"] {
+  color: var(--tab-editor-yellow);
+}
+
+.achorde-tab-editor__status[data-status="invalid"] {
+  color: var(--tab-editor-red);
+}
+
+.achorde-tab-editor__layout {
+  display: grid;
+  gap: 16px;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+}
+
+.achorde-tab-editor__pane {
+  min-width: 0;
+  overflow: hidden;
+}
+
+.achorde-tab-editor__pane-header {
+  align-items: center;
+  border-bottom: 1px solid var(--tab-editor-border);
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  min-height: 48px;
+  padding: 12px 14px;
+}
+
+.achorde-tab-editor__pane-header span,
+.achorde-tab-editor__engine,
+.achorde-tab-editor__loading {
+  color: var(--tab-editor-muted);
+  font-size: 13px;
+}
+
+.achorde-tab-editor__textarea {
+  border: 0;
+  display: block;
+  font: 14px/1.55 ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  min-height: 420px;
+  outline: none;
+  padding: 14px;
+  resize: vertical;
+  width: 100%;
+}
+
+.achorde-tab-editor__loading {
+  min-height: 420px;
+  margin: 0;
+  padding: 14px;
+}
+
+.achorde-tab-editor__preview {
+  background: var(--tab-editor-panel-muted);
+  min-height: 420px;
+  overflow: auto;
+  padding: 14px;
+}
+
+.achorde-tab-editor__footer {
+  align-items: end;
+  display: grid;
+  gap: 16px;
+  grid-template-columns: minmax(0, 1fr) auto;
+  padding: 14px;
+}
+
+.achorde-tab-editor__diagnostics {
+  background: var(--tab-editor-panel-muted);
+  padding: 12px;
+}
+
+.achorde-tab-editor__diagnostics p {
+  color: var(--tab-editor-muted);
+  margin: 8px 0 0;
+}
+
+.achorde-tab-editor__diagnostics ul {
+  display: grid;
+  gap: 8px;
+  list-style: none;
+  margin: 10px 0 0;
+  padding: 0;
+}
+
+.achorde-tab-editor__diagnostics li {
+  border-left: 3px solid var(--tab-editor-yellow);
+  padding-left: 10px;
+}
+
+.achorde-tab-editor__diagnostics li[data-severity="error"] {
+  border-left-color: var(--tab-editor-red);
+}
+
+.achorde-tab-editor__diagnostics li strong,
+.achorde-tab-editor__diagnostics li span {
+  display: inline-block;
+  font-size: 13px;
+  margin-right: 8px;
+}
+
+.achorde-tab-editor__save {
+  background: var(--tab-editor-blue);
+  border: 0;
+  border-radius: 8px;
+  color: #ffffff;
+  cursor: pointer;
+  font: inherit;
+  min-height: 40px;
+  padding: 8px 14px;
+}
+
+@media (max-width: 860px) {
+  .achorde-tab-editor__layout,
+  .achorde-tab-editor__footer {
+    grid-template-columns: 1fr;
+  }
+
+  .achorde-tab-editor__header {
+    align-items: start;
+    flex-direction: column;
+  }
+}
