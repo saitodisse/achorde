@@ -16,6 +16,7 @@ The main documentation hub for this monorepo is the ACHORDE Docs site. It explai
 | ----------------------------------------------------------- | ------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------- |
 | [`musical-domain`](./packages/musical-domain)               | [`@achorde/musical-domain`](https://www.npmjs.com/package/@achorde/musical-domain)               | [docs](https://achorde-musical-domain.vercel.app/en/packages/musical-domain)                                  | [demo](https://achorde-musical-domain.vercel.app/)                                                            |
 | [`source-catalog`](./packages/source-catalog)               | [`@achorde/source-catalog`](https://www.npmjs.com/package/@achorde/source-catalog)               | [docs](https://achorde-musical-domain.vercel.app/en/packages/source-catalog)                                  | Read-only static catalog contracts and validators                                                  |
+| [`tab-editor`](./packages/tab-editor)                       | [`@achorde/tab-editor`](https://www.npmjs.com/package/@achorde/tab-editor)                       | [docs](https://achorde-musical-domain.vercel.app/en/packages/tab-editor)                                      | Chord chart editor with parser diagnostics, export payloads, lazy Monaco, and preview              |
 | [`tab-renderer`](./packages/tab-renderer)                   | [`@achorde/tab-renderer`](https://www.npmjs.com/package/@achorde/tab-renderer)                   | [docs](https://achorde-musical-domain.vercel.app/en/packages/tab-renderer)                                    | [demo](https://tab-renderer-react.vercel.app/) · [storybook](https://storybook-tab-renderer.vercel.app/) |
 | [`svguitar-react`](./packages/svguitar-react)               | [`@achorde/svguitar-react`](https://www.npmjs.com/package/@achorde/svguitar-react)               | [docs](https://achorde-musical-domain.vercel.app/en/packages/svguitar-react)                                  | [demo](https://svguitar-react.vercel.app/) · [storybook](https://storybook-svguitar-react.vercel.app/?path=/docs/components-chorddiagram--docs) |
 | [`interactive-fretboard`](./packages/interactive-fretboard) | [`@achorde/interactive-fretboard`](https://www.npmjs.com/package/@achorde/interactive-fretboard) | [docs](https://achorde-musical-domain.vercel.app/en/packages/interactive-fretboard)                           | [demo](https://interactive-fretboard.vercel.app/) · [storybook](https://storybook-interactive-fretboard.vercel.app/) |
@@ -41,6 +42,7 @@ pnpm typecheck
 | -------------------------------- | ------------ |
 | `@achorde/musical-domain`        | `0.5.3`      |
 | `@achorde/source-catalog`        | `0.1.0`      |
+| `@achorde/tab-editor`            | _(pending)_  |
 | `@achorde/tab-renderer`          | `0.8.5`      |
 | `@achorde/svguitar-react`        | `2.5.3`      |
 | `@achorde/interactive-fretboard` | `0.1.11`     |
@@ -48,7 +50,7 @@ pnpm typecheck
 ## Install (consumers)
 
 ```bash
-pnpm add @achorde/musical-domain @achorde/source-catalog @achorde/tab-renderer @achorde/svguitar-react @achorde/interactive-fretboard
+pnpm add @achorde/musical-domain @achorde/source-catalog @achorde/tab-editor @achorde/tab-renderer @achorde/svguitar-react @achorde/interactive-fretboard
 ```
 
 Use the version ranges documented in each package `README.md` and `CHANGELOG.md`. After publishing, bump dependents (including `ac15`) and run their install + test + build.
