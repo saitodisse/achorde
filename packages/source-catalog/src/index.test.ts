@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
 import {
   assertSourceCatalogEnvelope,
+  assertSourceCatalogDataset,
   assertSourceCatalogManifest,
   createChecksum,
   createChecksumFromText,
@@ -71,6 +72,12 @@ describe("source catalog contracts", () => {
     };
 
     expect(assertSourceCatalogEnvelope(envelope)).toBe(envelope);
+  });
+
+  it("rejects a complete dataset whose envelope belongs to another source", () => {
+    expect(() => assertSourceCatalogDataset(manifest, {
+      "entities/artists.ndjson": [{ sourceId: "other", sourceRecordId: "artist", entityType: "artist", schemaVersion: "1.0.0", payload: {} }],
+    })).toThrow("Source catalog envelope does not match entities/artists.ndjson.");
   });
 
   it("rejects forbidden sensitive keys anywhere in a source envelope", () => {

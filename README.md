@@ -41,7 +41,7 @@ pnpm typecheck
 | Package                          | npm `latest` |
 | -------------------------------- | ------------ |
 | `@achorde/musical-domain`        | `0.5.3`      |
-| `@achorde/source-catalog`        | `0.1.0`      |
+| `@achorde/source-catalog`        | `0.2.0`      |
 | `@achorde/tab-editor`            | `0.1.0`      |
 | `@achorde/tab-renderer`          | `0.8.5`      |
 | `@achorde/svguitar-react`        | `2.5.3`      |

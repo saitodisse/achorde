@@ -25,6 +25,7 @@ pnpm add @achorde/source-catalog
 - `SourceCatalogFile`
 - `SyncCapabilities`
 - manifest and envelope validators
+- complete snapshot validation with manifest, envelope, and checksum agreement
 - deterministic checksum helpers
 - forbidden sensitive key validation at any object depth
 
@@ -32,6 +33,7 @@ pnpm add @achorde/source-catalog
 
 ```ts
 import {
+  assertSourceCatalogDataset,
   assertSourceCatalogEnvelope,
   assertSourceCatalogManifest,
   createChecksum,
@@ -73,7 +75,16 @@ const envelope = assertSourceCatalogEnvelope({
   schemaVersion: "1.0.0",
   payload: { name: "Demo Artist", slug: "demo-artist" },
 });
+
+assertSourceCatalogDataset(
+  manifest,
+  {
+    "entities/artists.ndjson": [envelope],
+  },
+);
 ```
+
+`assertSourceCatalogDataset()` accepts schemas `1.0.0` and `1.1.0`, rejects unsafe relative file paths, and requires each envelope to match the manifest source, schema, and declared entity file. A separate checksum map is optional only when every manifest file already declares `sha256`; values present in both places must agree.
 
 ## Contract
 

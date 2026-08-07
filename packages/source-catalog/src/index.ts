@@ -63,6 +63,8 @@ export type SourceCatalogEnvelope<TPayload = unknown> = {
   payload: TPayload;
 };
 
+export type SourceCatalogDataset = Record<string, ReadonlyArray<SourceCatalogEnvelope>>;
+
 export const SOURCE_CATALOG_FORBIDDEN_KEYS = [
   "access_token",
   "refresh_token",
@@ -186,6 +188,12 @@ function assertPullOnlyCapabilities(value: unknown): asserts value is SyncCapabi
   }
 }
 
+function assertSafeRelativeUrl(value: string): void {
+  if (/^[a-z][a-z0-9+.-]*:/i.test(value) || value.startsWith("//") || value.startsWith("/") || value.split("/").includes("..")) {
+    throw new Error("SourceCatalogFile.url must be a safe relative URL.");
+  }
+}
+
 export function assertSourceCatalogManifest(value: unknown): SourceCatalogManifest {
   const manifest = assertObjectRecord(value, "SourceCatalogManifest");
 
@@ -201,6 +209,9 @@ export function assertSourceCatalogManifest(value: unknown): SourceCatalogManife
   if (!isNonEmptyString(manifest.schemaVersion)) {
     throw new Error("SourceCatalogManifest.schemaVersion must be a non-empty string.");
   }
+  if (manifest.schemaVersion !== "1.0.0" && manifest.schemaVersion !== "1.1.0") {
+    throw new Error("SourceCatalogManifest.schemaVersion is unsupported.");
+  }
   if (manifest.mode !== "readonly") {
     throw new Error("SourceCatalogManifest.mode must be readonly.");
   }
@@ -215,6 +226,7 @@ export function assertSourceCatalogManifest(value: unknown): SourceCatalogManife
     if (!isNonEmptyString(sourceFile.url)) {
       throw new Error("SourceCatalogFile.url must be a non-empty string.");
     }
+    assertSafeRelativeUrl(sourceFile.url);
     if (!isSourceCatalogEntityType(sourceFile.entityType)) {
       throw new Error("SourceCatalogFile.entityType is unsupported.");
     }
@@ -235,6 +247,38 @@ export function assertSourceCatalogManifest(value: unknown): SourceCatalogManife
   assertPullOnlyCapabilities(manifest.capabilities);
   assertNoForbiddenSourceCatalogKeys(manifest);
   return value as SourceCatalogManifest;
+}
+
+/** Validates the complete, already-downloaded snapshot before it is persisted. */
+export function assertSourceCatalogDataset(
+  manifestValue: unknown,
+  files: Record<string, unknown>,
+  checksums?: Record<string, string>,
+): SourceCatalogDataset {
+  const manifest = assertSourceCatalogManifest(manifestValue);
+  const allManifestChecksums = manifest.files.every((file) => file.sha256 !== undefined);
+  if (!allManifestChecksums && !checksums) {
+    throw new Error("Source catalog checksums.json is required when a manifest checksum is missing.");
+  }
+  const dataset: SourceCatalogDataset = {};
+  for (const file of manifest.files) {
+    const manifestChecksum = file.sha256;
+    const checksumFileValue = checksums?.[file.url];
+    if (!manifestChecksum && !checksumFileValue) throw new Error(`Source catalog checksum missing for ${file.url}.`);
+    if (manifestChecksum && checksumFileValue && manifestChecksum !== createChecksum(checksumFileValue)) {
+      throw new Error(`Source catalog checksum disagreement for ${file.url}.`);
+    }
+    const rows = files[file.url];
+    if (!Array.isArray(rows)) throw new Error(`Source catalog dataset missing ${file.url}.`);
+    dataset[file.url] = rows.map((value) => {
+      const envelope = assertSourceCatalogEnvelope(value);
+      if (envelope.sourceId !== manifest.id || envelope.schemaVersion !== manifest.schemaVersion || envelope.entityType !== file.entityType) {
+        throw new Error(`Source catalog envelope does not match ${file.url}.`);
+      }
+      return envelope;
+    });
+  }
+  return dataset;
 }
 
 export function assertSourceCatalogEnvelope<TPayload = unknown>(value: unknown): SourceCatalogEnvelope<TPayload> {
