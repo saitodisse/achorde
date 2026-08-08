@@ -19,3 +19,8 @@ The manifest is valid only when it advertises pull-only public access:
 - conflict resolution is `manual`
 
 Sensitive account and session fields are rejected anywhere in manifests and entity envelopes.
+
+Contribution packages and any optional forge gateway are outside this contract.
+They may help a person propose a source change, but they do not add write,
+authentication, proposal, revision, or moderation capabilities to a published
+source catalog.
