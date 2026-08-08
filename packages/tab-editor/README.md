@@ -52,3 +52,11 @@ export function Editor() {
 
 `onSave` receives a derived payload only. This package does not persist data,
 write Markdown, call Git, use IndexedDB, or know about AC15.
+
+## Focused editing surface
+
+Consumers that need a simple authoring flow may opt into the focused layout:
+plain text writing, a separate preview tab, and collapsible diagnostics. The
+package keeps its existing split Monaco layout as the backwards-compatible
+default. The consumer owns labels, local drafts, content metadata, validation,
+and the final save action.

@@ -81,6 +81,43 @@
   grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
 }
 
+.achorde-tab-editor__layout--tabs {
+  grid-template-columns: minmax(0, 1fr);
+}
+
+.achorde-tab-editor__tabs {
+  display: inline-flex;
+  align-self: start;
+  border: 1px solid var(--tab-editor-border);
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.achorde-tab-editor__tabs button {
+  background: var(--tab-editor-panel);
+  border: 0;
+  color: var(--tab-editor-text);
+  cursor: pointer;
+  font: inherit;
+  min-height: 44px;
+  padding: 0 16px;
+}
+
+.achorde-tab-editor__tabs button + button {
+  border-left: 1px solid var(--tab-editor-border);
+}
+
+.achorde-tab-editor__tabs button.is-active {
+  background: var(--tab-editor-blue);
+  color: #fff;
+}
+
+.achorde-tab-editor__tabs button:focus-visible,
+.achorde-tab-editor__save:focus-visible {
+  outline: 3px solid color-mix(in srgb, var(--tab-editor-blue) 42%, transparent);
+  outline-offset: 2px;
+}
+
 .achorde-tab-editor__pane {
   min-width: 0;
   overflow: hidden;

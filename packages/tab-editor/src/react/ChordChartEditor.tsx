@@ -8,6 +8,7 @@ import {
 import "../style.css";
 
 export type ChordChartEditorEngine = "monaco-lazy" | "textarea";
+export type ChordChartEditorLayout = "split" | "tabs";
 
 export type ChordChartEditorLabels = {
   editorTitle: string;
@@ -31,6 +32,7 @@ export type ChordChartEditorProps = {
   onChange: (value: string) => void;
   onSave?: (payload: ChordChartSavePayload) => void;
   editorEngine?: ChordChartEditorEngine;
+  layout?: ChordChartEditorLayout;
   previewStyle?: Partial<TabStyleConfig>;
   labels?: Partial<ChordChartEditorLabels>;
 };
@@ -153,11 +155,13 @@ export function ChordChartEditor({
   onChange,
   onSave,
   editorEngine = "monaco-lazy",
+  layout = "split",
   previewStyle,
   labels: labelsPartial,
 }: ChordChartEditorProps) {
   const labels = { ...DEFAULT_LABELS, ...labelsPartial };
   const analysis = useMemo(() => analyzeChordChartText(value), [value]);
+  const [activeTab, setActiveTab] = useState<"write" | "preview">("write");
   const hasChanges = originalValue === undefined ? false : originalValue !== value;
   const statusText = statusLabel(labels, analysis);
   const shouldUseTextarea = editorEngine === "textarea";
@@ -184,8 +188,31 @@ export function ChordChartEditor({
         </div>
       </header>
 
-      <div className="achorde-tab-editor__layout">
-        <div className="achorde-tab-editor__pane">
+      {layout === "tabs" ? (
+        <div className="achorde-tab-editor__tabs" role="tablist" aria-label={title ?? labels.editorTitle}>
+          <button
+            type="button"
+            role="tab"
+            aria-selected={activeTab === "write"}
+            className={activeTab === "write" ? "is-active" : ""}
+            onClick={() => setActiveTab("write")}
+          >
+            {labels.editorTitle}
+          </button>
+          <button
+            type="button"
+            role="tab"
+            aria-selected={activeTab === "preview"}
+            className={activeTab === "preview" ? "is-active" : ""}
+            onClick={() => setActiveTab("preview")}
+          >
+            {labels.previewTitle}
+          </button>
+        </div>
+      ) : null}
+
+      <div className={`achorde-tab-editor__layout achorde-tab-editor__layout--${layout}`}>
+        <div className="achorde-tab-editor__pane" hidden={layout === "tabs" && activeTab !== "write"}>
           <div className="achorde-tab-editor__pane-header">
             <h3>{labels.editorTitle}</h3>
             {shouldUseTextarea ? (
@@ -204,7 +231,7 @@ export function ChordChartEditor({
           )}
         </div>
 
-        <div className="achorde-tab-editor__pane">
+        <div className="achorde-tab-editor__pane" hidden={layout === "tabs" && activeTab !== "preview"}>
           <div className="achorde-tab-editor__pane-header">
             <h3>{labels.previewTitle}</h3>
             <span>{labels.chordsFound}: {analysis.chordsFound.length}</span>
