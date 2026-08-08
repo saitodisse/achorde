@@ -25,6 +25,7 @@
 - SVG rendering
 - complete text parser implementations
 - bundled music-theory engines
+- authored catalog metadata, contribution packages, Git workflows, or forge authorization
 
 ## Dependency Rule
 
