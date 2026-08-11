@@ -48,6 +48,18 @@ describe("source catalog contracts", () => {
     expect(assertSourceCatalogManifest(manifest)).toBe(manifest);
   });
 
+  it("keeps the reserved 1.1.0 manifest and envelope readable", () => {
+    const nextManifest = { ...manifest, schemaVersion: "1.1.0" };
+    expect(assertSourceCatalogManifest(nextManifest)).toBe(nextManifest);
+    expect(assertSourceCatalogEnvelope({
+      sourceId: "demo-portal",
+      sourceRecordId: "artist:demo",
+      entityType: "artist",
+      schemaVersion: "1.1.0",
+      payload: { name: "Demo Artist", slug: "demo-artist" },
+    })).toMatchObject({ schemaVersion: "1.1.0" });
+  });
+
   it.each([
     ["push", { push: true }],
     ["batch push", { batchPush: true }],
