@@ -1,5 +1,5 @@
 # @achorde/catalog-portal
 
-Núcleo sem framework para portais de catálogo AC12/achorde. O entrypoint raiz contém o modelo editorial, busca normalizada, monogramas, projeção determinística para Source Catalog `1.2.0` e aplicação segura de propostas. Os entrypoints `/react` e `/browser` são adapters opcionais para UI e IndexedDB.
+Framework-free core for AC12/achorde catalog portals. The root entrypoint contains the editorial model, normalized search, deterministic monograms, deterministic Source Catalog `1.2.0` projection, and safe contribution application. The `/react` and `/browser` entrypoints are optional adapters for UI and IndexedDB.
 
-O pacote não publica cifras sem `SourceCatalogRightsBasis` e evidência sanitizada. Rascunhos locais não entram na projeção pública.
+The package never publishes charts without a `SourceCatalogRightsBasis` and sanitized evidence. Local drafts are excluded from the public projection.

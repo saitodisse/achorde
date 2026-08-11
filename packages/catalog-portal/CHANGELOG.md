@@ -4,6 +4,6 @@
 
 ### Added
 
-- Modelo editorial compartilhado para Catalog Portal e Artist Portal.
-- Busca local, monogramas determinísticos e projeção metadata-only.
-- Adapters React acessíveis e repositório de rascunhos IndexedDB.
+- Shared editorial model for Catalog Portal and Artist Portal.
+- Local search, deterministic monograms, and metadata-only projection.
+- Accessible React adapters and an IndexedDB draft repository.
