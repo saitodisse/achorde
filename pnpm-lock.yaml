@@ -16,6 +16,28 @@ importers:
         specifier: ^2.6.1
         version: 2.9.15
 
+  packages/catalog-portal:
+    dependencies:
+      '@achorde/contribution-protocol':
+        specifier: workspace:^0.2.0
+        version: link:../contribution-protocol
+      '@achorde/source-catalog':
+        specifier: workspace:^0.3.0
+        version: link:../source-catalog
+    devDependencies:
+      '@types/react':
+        specifier: ^19.2.7
+        version: 19.2.15
+      react:
+        specifier: ^19.2.1
+        version: 19.2.6
+      typescript:
+        specifier: ^5.9.3
+        version: 5.9.3
+      vitest:
+        specifier: ^4.1.6
+        version: 4.1.7(@types/node@24.12.4)(@vitest/browser-playwright@4.1.7)(@vitest/coverage-v8@4.1.7)(jsdom@29.1.1)(vite@7.3.3(@types/node@24.12.4)(jiti@2.7.0)(lightningcss@1.32.0)(terser@5.48.0))
+
   packages/contribution-protocol:
     devDependencies:
       typescript:

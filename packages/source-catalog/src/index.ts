@@ -34,6 +34,57 @@ export const SOURCE_CATALOG_ENTITY_TYPES = [
   "chordAlias",
 ] as const satisfies readonly SourceCatalogEntityType[];
 
+/** A real license that a rightsholder or authorized representative can grant. */
+export type SourceCatalogContentLicense =
+  | { kind: "spdx"; id: string }
+  | { kind: "custom"; name: string; url: string };
+
+export type SourceCatalogRightsEvidenceRef = {
+  id: string;
+  /** Relative path to a sanitized public summary. */
+  url: string;
+  sha256: Checksum;
+};
+
+export type SourceCatalogRightsBasis =
+  | { kind: "rightsholder-contribution"; evidence: SourceCatalogRightsEvidenceRef }
+  | { kind: "direct-permission"; evidence: SourceCatalogRightsEvidenceRef }
+  | { kind: "platform-repertoire-license"; evidence: SourceCatalogRightsEvidenceRef }
+  | {
+      kind: "public-license";
+      evidence: SourceCatalogRightsEvidenceRef;
+      license: SourceCatalogContentLicense;
+    }
+  | { kind: "public-domain"; evidence: SourceCatalogRightsEvidenceRef };
+
+export type SourceCatalogArtistPayload = {
+  name: string;
+  slug: string;
+  summary?: string;
+  links?: ReadonlyArray<{ label: string; url: string }>;
+};
+
+export type SourceCatalogMusicalWorkPayload = {
+  title: string;
+  slug: string;
+  artistSlug: string;
+  identityKey?: string;
+};
+
+export type SourceCatalogPlayableVersionPayload = {
+  title: string;
+  musicalWorkKey: string;
+  artistSlug?: string;
+};
+
+export type SourceCatalogChordChartPayload = {
+  playableVersionSourceRecordId: string;
+  rawText: string;
+  /** Public catalogs must provide this for every published chart. */
+  rights: SourceCatalogRightsBasis;
+  published?: boolean;
+};
+
 export type SourceCatalogFile = {
   url: string;
   entityType: SourceCatalogEntityType;
@@ -75,6 +126,10 @@ export const SOURCE_CATALOG_FORBIDDEN_KEYS = [
   "owner_id",
   "owner_name",
   "owner_username",
+  "identity",
+  "contract",
+  "agreement",
+  "document",
 ] as const;
 
 const NON_EMPTY = /\S/;
@@ -194,6 +249,76 @@ function assertSafeRelativeUrl(value: string): void {
   }
 }
 
+function assertRightsEvidence(value: unknown): asserts value is SourceCatalogRightsEvidenceRef {
+  const evidence = assertObjectRecord(value, "SourceCatalogRightsEvidenceRef");
+  if (!isNonEmptyString(evidence.id)) {
+    throw new Error("Rights evidence id must be a non-empty string.");
+  }
+  if (!isNonEmptyString(evidence.url)) {
+    throw new Error("Rights evidence url must be a non-empty string.");
+  }
+  assertSafeRelativeUrl(evidence.url);
+  if (!evidence.url.startsWith("rights/evidence/")) {
+    throw new Error("Rights evidence url must be under rights/evidence/.");
+  }
+  createChecksum(String(evidence.sha256));
+}
+
+function assertContentLicense(value: unknown): asserts value is SourceCatalogContentLicense {
+  const license = assertObjectRecord(value, "SourceCatalogContentLicense");
+  if (license.kind === "spdx") {
+    if (!isNonEmptyString(license.id)) throw new Error("SPDX license id is required.");
+    return;
+  }
+  if (license.kind === "custom") {
+    if (!isNonEmptyString(license.name) || !isNonEmptyString(license.url)) {
+      throw new Error("Custom content license requires name and url.");
+    }
+    const parsed = new URL(String(license.url));
+    if (parsed.protocol !== "https:") throw new Error("Custom content license url must use https.");
+    return;
+  }
+  throw new Error("Unsupported content license.");
+}
+
+export function assertSourceCatalogRightsBasis(value: unknown): asserts value is SourceCatalogRightsBasis {
+  const basis = assertObjectRecord(value, "SourceCatalogRightsBasis");
+  if (basis.kind === "review-required") {
+    throw new Error("review-required rights basis is not public.");
+  }
+  const kinds = [
+    "rightsholder-contribution",
+    "direct-permission",
+    "platform-repertoire-license",
+    "public-license",
+    "public-domain",
+  ];
+  if (typeof basis.kind !== "string" || !kinds.includes(basis.kind)) {
+    throw new Error("Unsupported source catalog rights basis.");
+  }
+  assertRightsEvidence(basis.evidence);
+  if (basis.kind === "public-license") {
+    assertContentLicense(basis.license);
+  } else if ("license" in basis) {
+    throw new Error("license is only valid for public-license rights basis.");
+  }
+}
+
+function assertPublishedChartRights(envelope: SourceCatalogEnvelope): void {
+  if (envelope.schemaVersion !== "1.2.0" || envelope.entityType !== "chordChart") return;
+  const payload = assertObjectRecord(envelope.payload, "SourceCatalogChordChartPayload");
+  if (!isNonEmptyString(payload.rawText)) {
+    throw new Error("Published chord chart rawText is required.");
+  }
+  if (!("rights" in payload)) {
+    throw new Error("Published chord chart rights basis is required.");
+  }
+  assertSourceCatalogRightsBasis(payload.rights);
+  if (payload.published !== undefined && typeof payload.published !== "boolean") {
+    throw new Error("Chord chart published must be boolean when present.");
+  }
+}
+
 export function assertSourceCatalogManifest(value: unknown): SourceCatalogManifest {
   const manifest = assertObjectRecord(value, "SourceCatalogManifest");
 
@@ -209,7 +334,7 @@ export function assertSourceCatalogManifest(value: unknown): SourceCatalogManife
   if (!isNonEmptyString(manifest.schemaVersion)) {
     throw new Error("SourceCatalogManifest.schemaVersion must be a non-empty string.");
   }
-  if (manifest.schemaVersion !== "1.0.0" && manifest.schemaVersion !== "1.1.0") {
+  if (manifest.schemaVersion !== "1.0.0" && manifest.schemaVersion !== "1.1.0" && manifest.schemaVersion !== "1.2.0") {
     throw new Error("SourceCatalogManifest.schemaVersion is unsupported.");
   }
   if (manifest.mode !== "readonly") {
@@ -304,5 +429,150 @@ export function assertSourceCatalogEnvelope<TPayload = unknown>(value: unknown):
   }
 
   assertNoForbiddenSourceCatalogKeys(envelope);
+  assertPublishedChartRights(envelope as SourceCatalogEnvelope);
   return value as SourceCatalogEnvelope<TPayload>;
+}
+
+export function canonicalSourceCatalogJson(value: unknown): string {
+  if (value === null || typeof value !== "object") return JSON.stringify(value);
+  if (Array.isArray(value)) return `[${value.map(canonicalSourceCatalogJson).join(",")}]`;
+  const record = value as Record<string, unknown>;
+  return `{${Object.keys(record)
+    .sort()
+    .map((key) => `${JSON.stringify(key)}:${canonicalSourceCatalogJson(record[key])}`)
+    .join(",")}}`;
+}
+
+export type SourceCatalogBuildRecord = {
+  entityType: SourceCatalogEntityType;
+  sourceRecordId: string;
+  payload: unknown;
+  updatedAt?: IsoDateTime;
+};
+
+export type SourceCatalogBuildInput = {
+  id: string;
+  name: string;
+  schemaVersion?: "1.0.0" | "1.1.0" | "1.2.0";
+  records: ReadonlyArray<SourceCatalogBuildRecord>;
+  /** Sanitized public evidence files keyed by their relative URL. */
+  evidenceFiles?: Readonly<Record<string, string>>;
+};
+
+export type SourceCatalogBuildOutput = {
+  manifest: SourceCatalogManifest;
+  files: Readonly<Record<string, string>>;
+  checksums: Readonly<Record<string, Checksum>>;
+};
+
+function maxUpdatedAt(records: ReadonlyArray<SourceCatalogBuildRecord>): IsoDateTime {
+  const dates = records.map((record) => record.updatedAt).filter((value): value is IsoDateTime => Boolean(value));
+  return dates.length > 0
+    ? dates.reduce((latest, value) => (value > latest ? value : latest))
+    : createIsoDateTime("1970-01-01T00:00:00.000Z");
+}
+
+/**
+ * Builds a byte-stable, pull-only snapshot. The caller can write `files` to
+ * `/source-catalog/` without adding a second serializer in a portal.
+ */
+export async function generateSourceCatalog(input: SourceCatalogBuildInput): Promise<SourceCatalogBuildOutput> {
+  const schemaVersion = input.schemaVersion ?? "1.2.0";
+  const generatedAt = maxUpdatedAt(input.records);
+  const grouped = new Map<SourceCatalogEntityType, SourceCatalogBuildRecord[]>();
+  for (const record of input.records) {
+    if (record.entityType === "chordChart") {
+      const payload = assertObjectRecord(record.payload, "SourceCatalogChordChartPayload");
+      assertPublishedChartRights({
+        sourceId: input.id,
+        sourceRecordId: record.sourceRecordId,
+        entityType: record.entityType,
+        schemaVersion,
+        updatedAt: record.updatedAt,
+        payload,
+      });
+      const basis = payload.rights as SourceCatalogRightsBasis;
+      const evidenceUrl = basis.evidence.url;
+      const evidenceContent = input.evidenceFiles?.[evidenceUrl];
+      if (evidenceContent === undefined) throw new Error(`Rights evidence missing for ${record.sourceRecordId}.`);
+      const evidenceChecksum = await createChecksumFromText(evidenceContent);
+      if (evidenceChecksum !== basis.evidence.sha256) throw new Error(`Rights evidence checksum mismatch for ${record.sourceRecordId}.`);
+      try {
+        assertNoForbiddenSourceCatalogKeys(JSON.parse(evidenceContent));
+      } catch (error) {
+        throw new Error(`Rights evidence is not a sanitized JSON summary: ${error instanceof Error ? error.message : "invalid JSON"}`);
+      }
+    }
+    const list = grouped.get(record.entityType) ?? [];
+    list.push(record);
+    grouped.set(record.entityType, list);
+  }
+
+  const files: Record<string, string> = {};
+  const fileMetadata: SourceCatalogFile[] = [];
+  for (const entityType of SOURCE_CATALOG_ENTITY_TYPES) {
+    const rows = grouped.get(entityType);
+    if (!rows?.length) continue;
+    const sorted = [...rows].sort((left, right) => left.sourceRecordId.localeCompare(right.sourceRecordId));
+    const content = `${sorted
+      .map((record) => JSON.stringify({
+        sourceId: input.id,
+        sourceRecordId: record.sourceRecordId,
+        entityType,
+        schemaVersion,
+        ...(record.updatedAt ? { updatedAt: record.updatedAt } : {}),
+        payload: record.payload,
+      }))
+      .join("\n")}\n`;
+    const url = `entities/${entityType}.ndjson`;
+    const checksum = await createChecksumFromText(content);
+    files[url] = content;
+    fileMetadata.push({
+      url,
+      entityType,
+      mediaType: "application/x-ndjson",
+      sizeBytes: new TextEncoder().encode(content).byteLength,
+      sha256: checksum,
+      updatedAt: generatedAt,
+    });
+  }
+
+  if (fileMetadata.length === 0) throw new Error("Source catalog must contain at least one entity file.");
+  const evidenceFiles = input.evidenceFiles ?? {};
+  for (const [url, content] of Object.entries(evidenceFiles)) files[url] = content;
+  const version = (await createChecksumFromText(canonicalSourceCatalogJson({
+    id: input.id,
+    name: input.name,
+    schemaVersion,
+    generatedAt,
+    files: fileMetadata,
+    content: files,
+  }))).slice(0, 16);
+  const manifest: SourceCatalogManifest = {
+    id: input.id,
+    name: input.name,
+    version,
+    schemaVersion,
+    mode: "readonly",
+    generatedAt,
+    files: fileMetadata.sort((left, right) => left.url.localeCompare(right.url)),
+    capabilities: {
+      pull: true,
+      push: false,
+      batchPush: false,
+      realtime: false,
+      proposals: false,
+      revisions: false,
+      moderation: false,
+      conflictResolution: "manual",
+      auth: "none",
+    },
+  };
+  assertSourceCatalogManifest(manifest);
+  const evidenceChecksums = Object.fromEntries(await Promise.all(Object.entries(evidenceFiles).map(async ([url, content]) => [url, await createChecksumFromText(content)] as const)));
+  const checksums = createSourceCatalogChecksums([
+    ...fileMetadata.map((file) => ({ url: file.url, sha256: String(file.sha256) })),
+    ...Object.entries(evidenceChecksums).map(([url, sha256]) => ({ url, sha256: String(sha256) })),
+  ]);
+  return { manifest, files, checksums };
 }

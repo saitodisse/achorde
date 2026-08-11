@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.3.0 - 2026-08-11
+
+### Added
+
+- Source Catalog schema `1.2.0` rights-basis and sanitized-evidence contracts.
+- Deterministic, metadata-safe catalog generation helpers.
+- Public-chart validation that rejects missing or pending rights evidence.
+
 ## 0.2.0 - 2026-08-06
 
 ### Added

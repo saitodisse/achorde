@@ -1,6 +1,6 @@
 # @achorde/source-catalog
 
-Runtime-light TypeScript contracts and validators for static, read-only source catalogs.
+Runtime-light TypeScript contracts and validators for static, read-only source catalogs. Version `0.3.0` adds the public `1.2.0` rights-basis contract and a deterministic metadata-safe generator.
 
 The package is designed for artist portals, static catalog publishers, discovery indexes, and offline-first readers that need a common import format without depending on React, storage engines, routing, or a specific hosting provider.
 
@@ -27,6 +27,8 @@ pnpm add @achorde/source-catalog
 - manifest and envelope validators
 - complete snapshot validation with manifest, envelope, and checksum agreement
 - deterministic checksum helpers
+- `SourceCatalogRightsBasis` and sanitized evidence references
+- deterministic metadata-safe catalog generation
 - forbidden sensitive key validation at any object depth
 
 ## Usage

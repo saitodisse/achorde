@@ -7,6 +7,8 @@ import {
   createChecksumFromText,
   createIsoDateTime,
   createSourceCatalogChecksums,
+  assertSourceCatalogRightsBasis,
+  generateSourceCatalog,
   type SourceCatalogEnvelope,
   type SourceCatalogManifest,
 } from "./index";
@@ -117,5 +119,57 @@ describe("source catalog contracts", () => {
       "a.ndjson": "a".repeat(64),
       "z.ndjson": "b".repeat(64),
     });
+  });
+
+  it("validates public rights evidence and rejects review-required", () => {
+    const evidence = { id: "permission-1", url: "rights/evidence/permission-1.json", sha256: "a".repeat(64) };
+    expect(() => assertSourceCatalogRightsBasis({ kind: "direct-permission", evidence })).not.toThrow();
+    expect(() => assertSourceCatalogRightsBasis({ kind: "review-required" })).toThrow("not public");
+    expect(() => assertSourceCatalogRightsBasis({
+      kind: "direct-permission",
+      evidence,
+      license: { kind: "spdx", id: "CC-BY-4.0" },
+    })).toThrow("only valid");
+  });
+
+  it("requires rights for 1.2 published charts while allowing metadata-only records", async () => {
+    const metadata = await generateSourceCatalog({
+      id: "ac12",
+      name: "Acervo AC12",
+      records: [{
+        entityType: "artist",
+        sourceRecordId: "artist:demo",
+        payload: { name: "Demo", slug: "demo" },
+        updatedAt: createIsoDateTime("2026-08-11T00:00:00.000Z"),
+      }],
+    });
+    expect(metadata.manifest.schemaVersion).toBe("1.2.0");
+    expect(metadata.manifest.generatedAt).toBe("2026-08-11T00:00:00.000Z");
+    expect(Object.keys(metadata.files)).toEqual(["entities/artist.ndjson"]);
+
+    const chart = {
+      sourceId: "ac12",
+      sourceRecordId: "chart:demo",
+      entityType: "chordChart",
+      schemaVersion: "1.2.0",
+      payload: { playableVersionSourceRecordId: "version:demo", rawText: "C" },
+    };
+    expect(() => assertSourceCatalogEnvelope(chart)).toThrow("rights basis");
+    const evidence = JSON.stringify({ id: "permission-1", summary: "sanitized" });
+    const rights = { kind: "direct-permission" as const, evidence: { id: "permission-1", url: "rights/evidence/permission-1.json", sha256: await createChecksumFromText(evidence) } };
+    await expect(generateSourceCatalog({ id: "ac12", name: "Acervo AC12", records: [{ entityType: "chordChart", sourceRecordId: "chart:demo", payload: { playableVersionSourceRecordId: "version:demo", rawText: "C", rights, published: true } }], evidenceFiles: { "rights/evidence/permission-1.json": evidence } })).resolves.toMatchObject({ manifest: { schemaVersion: "1.2.0" } });
+    await expect(generateSourceCatalog({ id: "ac12", name: "Acervo AC12", records: [{ entityType: "chordChart", sourceRecordId: "chart:demo", payload: { playableVersionSourceRecordId: "version:demo", rawText: "C", rights, published: true } }] })).rejects.toThrow("evidence missing");
+  });
+
+  it("produces byte-identical output when records arrive in another order", async () => {
+    const records = [
+      { entityType: "artist" as const, sourceRecordId: "artist:z", payload: { name: "Z", slug: "z" } },
+      { entityType: "artist" as const, sourceRecordId: "artist:a", payload: { name: "A", slug: "a" } },
+    ];
+    const first = await generateSourceCatalog({ id: "demo", name: "Demo", records });
+    const second = await generateSourceCatalog({ id: "demo", name: "Demo", records: [...records].reverse() });
+    expect(second.manifest).toEqual(first.manifest);
+    expect(second.files).toEqual(first.files);
+    expect(second.checksums).toEqual(first.checksums);
   });
 });
