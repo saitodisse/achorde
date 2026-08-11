@@ -136,6 +136,10 @@ const NON_EMPTY = /\S/;
 const ISO_DATE_TIME = /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(?:\.\d{3})?Z$/;
 const CHECKSUM = /^[a-f0-9]{64}$/i;
 
+function stableCompare(left: string, right: string): number {
+  return left < right ? -1 : left > right ? 1 : 0;
+}
+
 function brand<T, Name extends string>(value: T): Brand<T, Name> {
   return value as Brand<T, Name>;
 }
@@ -183,7 +187,7 @@ export async function createChecksumFromText(content: string): Promise<Checksum>
 export function createSourceCatalogChecksums(
   files: ReadonlyArray<{ url: string; sha256: string }>,
 ): Record<string, Checksum> {
-  const sortedFiles = [...files].sort((a, b) => a.url.localeCompare(b.url));
+  const sortedFiles = [...files].sort((a, b) => stableCompare(a.url, b.url));
   const checksums: Record<string, Checksum> = {};
 
   for (const file of sortedFiles) {
@@ -529,7 +533,7 @@ export async function generateSourceCatalog(input: SourceCatalogBuildInput): Pro
   for (const entityType of SOURCE_CATALOG_ENTITY_TYPES) {
     const rows = grouped.get(entityType);
     if (!rows?.length) continue;
-    const sorted = [...rows].sort((left, right) => left.sourceRecordId.localeCompare(right.sourceRecordId));
+    const sorted = [...rows].sort((left, right) => stableCompare(left.sourceRecordId, right.sourceRecordId));
     const content = `${sorted
       .map((record) => JSON.stringify({
         sourceId: input.id,
@@ -570,7 +574,7 @@ export async function generateSourceCatalog(input: SourceCatalogBuildInput): Pro
     schemaVersion,
     mode: "readonly",
     generatedAt,
-    files: fileMetadata.sort((left, right) => left.url.localeCompare(right.url)),
+    files: fileMetadata.sort((left, right) => stableCompare(left.url, right.url)),
     capabilities: {
       pull: true,
       push: false,

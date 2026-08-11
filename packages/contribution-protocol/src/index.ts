@@ -67,6 +67,10 @@ const SHA_256 = /^[a-f0-9]{64}$/i;
 const SAFE_PATH = /^(?!\/)(?!.*(?:^|\/)\.\.(?:\/|$))[A-Za-z0-9._/-]+$/;
 const EDITORIAL_PATH = /^(?:catalog\/(?:artists\/[^/]+|works\/[^/]+\/[^/]+|charts\/[^/]+\/[^/]+\/[^/]+)\.md|rights\/evidence\/[^/]+\.json|manifest\.json|proposal\.md)$/;
 
+function stableCompare(left: string, right: string): number {
+  return left < right ? -1 : left > right ? 1 : 0;
+}
+
 export function canonicalJson(value: unknown): string {
   if (value === null || typeof value !== "object") return JSON.stringify(value);
   if (Array.isArray(value)) return `[${value.map(canonicalJson).join(",")}]`;
@@ -162,7 +166,7 @@ export function assertContributionManifestV2(value: unknown): asserts value is C
 
 /** Stable entry order used by ZIP writers in browser, CLI, and gateway adapters. */
 export function canonicalContributionEntryOrder(entries: ReadonlyArray<ContributionManifestEntryV2>): ContributionManifestEntryV2[] {
-  return [...entries].sort((left, right) => left.path.localeCompare(right.path));
+  return [...entries].sort((left, right) => stableCompare(left.path, right.path));
 }
 
 export function contributionIdempotencyKey(contributionId: string, zipSha256: string): string {
