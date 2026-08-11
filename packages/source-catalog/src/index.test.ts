@@ -172,4 +172,19 @@ describe("source catalog contracts", () => {
     expect(second.files).toEqual(first.files);
     expect(second.checksums).toEqual(first.checksums);
   });
+
+  it("rejects evidence outside the public sanitized-summary directory", async () => {
+    await expect(generateSourceCatalog({
+      id: "ac12",
+      name: "Acervo AC12",
+      records: [{ entityType: "artist", sourceRecordId: "artist:demo", payload: { name: "Demo", slug: "demo" } }],
+      evidenceFiles: { "private/contract.json": "{}" },
+    })).rejects.toThrow("rights/evidence");
+    await expect(generateSourceCatalog({
+      id: "ac12",
+      name: "Acervo AC12",
+      records: [{ entityType: "artist", sourceRecordId: "artist:demo", payload: { name: "Demo", slug: "demo" } }],
+      evidenceFiles: { "rights/evidence/e.json": JSON.stringify({ contract: "secret" }) },
+    })).rejects.toThrow("Forbidden source catalog key: contract");
+  });
 });

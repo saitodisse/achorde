@@ -172,6 +172,10 @@ export function contributionIdempotencyKey(contributionId: string, zipSha256: st
 }
 
 export function assertContributionBundleLimits(input: { entryCount: number; compressedBytes: number; expandedBytes: number; textBytes: ReadonlyArray<number> }): void {
+  const values = [input.entryCount, input.compressedBytes, input.expandedBytes, ...input.textBytes];
+  if (values.some((value) => !Number.isFinite(value) || value < 0 || !Number.isInteger(value))) {
+    throw new Error("Contribution bundle sizes must be finite non-negative integers.");
+  }
   if (input.entryCount < 1 || input.entryCount > CONTRIBUTION_LIMITS.maxEntries) throw new Error("Contribution entry count exceeds limit.");
   if (input.compressedBytes > CONTRIBUTION_LIMITS.maxCompressedBytes) throw new Error("Contribution compressed size exceeds limit.");
   if (input.expandedBytes > CONTRIBUTION_LIMITS.maxExpandedBytes) throw new Error("Contribution expanded size exceeds limit.");

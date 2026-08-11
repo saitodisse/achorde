@@ -7,6 +7,7 @@ import {
   canonicalContributionEntryOrder,
   canonicalJson,
   contributionIdempotencyKey,
+  assertContributionBundleLimits,
   sha256Text,
 } from "./index";
 
@@ -87,5 +88,10 @@ describe("contribution protocol", () => {
 
   it("creates an idempotency key from contribution and ZIP hashes", () => {
     expect(contributionIdempotencyKey("c-1", "A".repeat(64))).toBe(`c-1:${"a".repeat(64)}`);
+  });
+
+  it("rejects malformed bundle size metadata", () => {
+    expect(() => assertContributionBundleLimits({ entryCount: Number.NaN, compressedBytes: 1, expandedBytes: 1, textBytes: [1] })).toThrow("finite");
+    expect(() => assertContributionBundleLimits({ entryCount: 1, compressedBytes: -1, expandedBytes: 1, textBytes: [1] })).toThrow("finite");
   });
 });

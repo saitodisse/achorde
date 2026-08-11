@@ -264,6 +264,22 @@ function assertRightsEvidence(value: unknown): asserts value is SourceCatalogRig
   createChecksum(String(evidence.sha256));
 }
 
+function assertSanitizedEvidenceFile(url: string, content: string): void {
+  assertSafeRelativeUrl(url);
+  if (!url.startsWith("rights/evidence/") || !url.endsWith(".json")) {
+    throw new Error("Rights evidence files must be JSON under rights/evidence/.");
+  }
+  try {
+    const parsed = JSON.parse(content) as unknown;
+    if (!parsed || typeof parsed !== "object" || Array.isArray(parsed)) {
+      throw new Error("Evidence summary must be a JSON object.");
+    }
+    assertNoForbiddenSourceCatalogKeys(parsed);
+  } catch (error) {
+    throw new Error(`Rights evidence is not a sanitized JSON summary: ${error instanceof Error ? error.message : "invalid JSON"}`);
+  }
+}
+
 function assertContentLicense(value: unknown): asserts value is SourceCatalogContentLicense {
   const license = assertObjectRecord(value, "SourceCatalogContentLicense");
   if (license.kind === "spdx") {
@@ -479,6 +495,10 @@ function maxUpdatedAt(records: ReadonlyArray<SourceCatalogBuildRecord>): IsoDate
 export async function generateSourceCatalog(input: SourceCatalogBuildInput): Promise<SourceCatalogBuildOutput> {
   const schemaVersion = input.schemaVersion ?? "1.2.0";
   const generatedAt = maxUpdatedAt(input.records);
+  const evidenceFiles = input.evidenceFiles ?? {};
+  for (const [url, content] of Object.entries(evidenceFiles)) {
+    assertSanitizedEvidenceFile(url, content);
+  }
   const grouped = new Map<SourceCatalogEntityType, SourceCatalogBuildRecord[]>();
   for (const record of input.records) {
     if (record.entityType === "chordChart") {
@@ -497,11 +517,7 @@ export async function generateSourceCatalog(input: SourceCatalogBuildInput): Pro
       if (evidenceContent === undefined) throw new Error(`Rights evidence missing for ${record.sourceRecordId}.`);
       const evidenceChecksum = await createChecksumFromText(evidenceContent);
       if (evidenceChecksum !== basis.evidence.sha256) throw new Error(`Rights evidence checksum mismatch for ${record.sourceRecordId}.`);
-      try {
-        assertNoForbiddenSourceCatalogKeys(JSON.parse(evidenceContent));
-      } catch (error) {
-        throw new Error(`Rights evidence is not a sanitized JSON summary: ${error instanceof Error ? error.message : "invalid JSON"}`);
-      }
+      assertSanitizedEvidenceFile(evidenceUrl, evidenceContent);
     }
     const list = grouped.get(record.entityType) ?? [];
     list.push(record);
@@ -538,7 +554,6 @@ export async function generateSourceCatalog(input: SourceCatalogBuildInput): Pro
   }
 
   if (fileMetadata.length === 0) throw new Error("Source catalog must contain at least one entity file.");
-  const evidenceFiles = input.evidenceFiles ?? {};
   for (const [url, content] of Object.entries(evidenceFiles)) files[url] = content;
   const version = (await createChecksumFromText(canonicalSourceCatalogJson({
     id: input.id,
