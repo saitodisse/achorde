@@ -86,7 +86,7 @@ assertSourceCatalogDataset(
 );
 ```
 
-`assertSourceCatalogDataset()` accepts schemas `1.0.0` and `1.1.0`, rejects unsafe relative file paths, and requires each envelope to match the manifest source, schema, and declared entity file. A separate checksum map is optional only when every manifest file already declares `sha256`; values present in both places must agree.
+`assertSourceCatalogDataset()` accepts schemas `1.0.0`, `1.1.0`, and `1.2.0`, rejects unsafe relative file paths, and requires each envelope to match the manifest source, schema, and declared entity file. A separate checksum map is optional only when every manifest file already declares `sha256`; values present in both places must agree.
 
 ## Contract
 
