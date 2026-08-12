@@ -1,10 +1,11 @@
 # Changelog
 
+Package releases are recorded in `packages/<name>/CHANGELOG.md`.
+
 ## Unreleased
 
-### Added
+- Reworked the repository and package documentation around quickstarts, normative references, and honest capability limits.
+- Added Contribution Protocol and Catalog Portal to the root package map and Docs Hub.
+- Removed completed plans, duplicate specs, release-note copies, and broken references; Git remains the historical archive.
 
-- Added `@achorde/tab-editor` as the public reusable chord chart editor package
-  with headless analysis helpers, React editor, diagnostics, lazy Monaco, and
-  textarea fallback.
-- Added `@achorde/source-catalog` as the public read-only source catalog contract package for artist portals and importers.
+This root changelog covers monorepo-wide changes only. Do not duplicate package release notes here.

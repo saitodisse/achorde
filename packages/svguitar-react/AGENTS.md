@@ -14,7 +14,7 @@ Central instructions for AI agents and IDE assistants working in this repository
 
 **Package manager:** always use **pnpm**. Do not use npm or yarn for repository tasks.
 
-**Specs:** read `specs/` before behavior changes. For formal review, use the [`specs-audit`](.cursor/skills/specs-audit/SKILL.md) skill.
+Before behavior changes, read the public types, tests, README, and changelog.
 
 ## Stack
 
@@ -35,7 +35,6 @@ src/
 ├── stories/                   # Storybook stories
 ├── App.tsx, main.tsx          # Demo application
 └── index.ts                   # Library entrypoint
-specs/001-guitar-svg/          # Product and API specifications
 ```
 
 ## Commands
@@ -63,25 +62,9 @@ specs/001-guitar-svg/          # Product and API specifications
 - Keep imports grouped with external imports before internal imports.
 - Before committing, run formatting and keep lint clean.
 
-## Project Specs
-
-Read these files before implementation or behavior changes:
-
-| File                                 | Content              |
-| ------------------------------------ | -------------------- |
-| `specs/001-guitar-svg/spec.md`       | Feature requirements |
-| `specs/001-guitar-svg/plan.md`       | Implementation plan  |
-| `specs/001-guitar-svg/tasks.md`      | Task checklist       |
-| `specs/001-guitar-svg/research.md`   | Technical decisions  |
-| `specs/001-guitar-svg/data-model.md` | Public data model    |
-| `specs/001-guitar-svg/quickstart.md` | Usage guide          |
-| `specs/001-guitar-svg/contracts/`    | API contracts        |
-
-Do not add significant features outside the documented specs without updating the specs first.
-
 ## Shared Domain
 
-`achorde-musical-domain` owns the shared fretted voicing contracts used by this package. Keep those contracts outside React-specific code. `svguitar-react` owns SVG rendering, layout, and React integration only.
+`@achorde/musical-domain` owns the shared fretted voicing contracts used by this package. Keep those contracts outside React-specific code. `@achorde/svguitar-react` owns SVG rendering, layout, and React integration only.
 
 ## Downstream Consumers
 
@@ -91,13 +74,6 @@ Published npm releases are consumed by external applications. After publishing a
 2. Run the consumer's install command to refresh the lockfile.
 3. Run tests and build in each consumer to confirm compatibility.
 4. Commit and push the consumer update.
-
-## Repository Skills
-
-| Skill                                                | Use                                                                                |
-| ---------------------------------------------------- | ---------------------------------------------------------------------------------- |
-| [`finalizar`](.cursor/skills/finalizar/SKILL.md)     | Release workflow: tests, build, version, changelog, commit, push, Storybook deploy |
-| [`specs-audit`](.cursor/skills/specs-audit/SKILL.md) | Review specs, plan, and acceptance checklist before major changes                  |
 
 ## MCP Tools
 
@@ -116,9 +92,8 @@ Published npm releases are consumed by external applications. After publishing a
 3. Ignore ESLint warnings.
 4. Add components without corresponding stories.
 5. Use spaces for indentation in formatted source files.
-6. Make significant changes without reading `specs/`.
-7. Add undocumented features.
-8. Integrate external libraries without checking current documentation.
+6. Add undocumented features.
+7. Integrate external libraries without checking current documentation.
 
 ## Configuration
 

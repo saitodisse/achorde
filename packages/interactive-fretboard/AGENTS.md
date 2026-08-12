@@ -23,17 +23,17 @@ Publishable React library for **pointer-based fretboard editing**. Owns SVG layo
 
 ## Commands
 
-Use **pnpm** only. Read `specs/001-interactive-fretboard/` before behavior changes.
+Use **pnpm** only. Read the public types, tests, README, and changelog before behavior changes.
 
-| Script           | Purpose                      |
-| ---------------- | ---------------------------- |
-| `pnpm dev:app`   | Demo site on port 6011       |
-| `pnpm build:app` | Demo site build              |
-| `pnpm preview:app` | Preview demo site          |
-| `pnpm test:run`  | Vitest unit tests            |
-| `pnpm build`     | Library build (Vite + `tsc`) |
-| `pnpm lint`      | ESLint                       |
-| `pnpm storybook` | Demos on port **6010**       |
+| Script             | Purpose                      |
+| ------------------ | ---------------------------- |
+| `pnpm dev:app`     | Demo site on port 6011       |
+| `pnpm build:app`   | Demo site build              |
+| `pnpm preview:app` | Preview demo site            |
+| `pnpm test:run`    | Vitest unit tests            |
+| `pnpm build`       | Library build (Vite + `tsc`) |
+| `pnpm lint`        | ESLint                       |
+| `pnpm storybook`   | Demos on port **6010**       |
 
 ## Conventions
 

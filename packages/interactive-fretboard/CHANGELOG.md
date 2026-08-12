@@ -2,6 +2,12 @@
 
 All notable changes to `@achorde/interactive-fretboard` are documented in this file.
 
+## Unreleased
+
+### Fixed
+
+- Register DOM matchers against this package's Vitest instance so workspace installs with more than one Vitest major version keep the component tests valid.
+
 ## [0.2.0] - 2026-06-23
 
 ### Changed

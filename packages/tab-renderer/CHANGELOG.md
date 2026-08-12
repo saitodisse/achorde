@@ -2,6 +2,12 @@
 
 All notable changes to this project are documented in this file.
 
+## [0.8.5] - 2026-06-12
+
+### Fixed
+
+- Prevent the strict parser from treating lyric lines that start with words such as `Amor` as chord lines.
+
 ## [0.8.4] - 2026-06-12
 
 ### Changed
@@ -59,7 +65,7 @@ All notable changes to this project are documented in this file.
 
 ### Documentation
 
-- README, RFC/plan index, `CONTEXT.md`, and [`docs/plans/2026-05-28-decoration-markers-parsed-tab-bridge.md`](./docs/plans/2026-05-28-decoration-markers-parsed-tab-bridge.md) describe the ParsedTab bridge and decoration marker rendering.
+- README, RFC, and `CONTEXT.md` describe the ParsedTab bridge and decoration marker rendering.
 - Shared fixture `so-quero-esse-amor.txt` for extensions and parenthesized chord rows.
 
 ## [0.6.0] - 2026-05-28
@@ -143,7 +149,7 @@ All notable changes to this project are documented in this file.
 - Added Storybook for isolated UI development and Storybook stories driven by the shared `tua-flor.txt` fixture.
 - Added Vitest and Testing Library with TDD coverage for the core transformation path and the public React adapter.
 - Added package exports for `.` and `./react` to support npm and git-based consumption.
-- Added documentation artifacts in `docs/prd/`, `docs/rfc/`, and `docs/plans/`.
+- Added the first design documents; completed plans remain available in Git history.
 - Added a shared real-world fixture at `src/test/stubs/tua-flor.txt` and wired it into tests, stories, and the demo app.
 - Added repository guidance files (`AGENTS.md`) for the root, docs, `src/`, `src/core/`, `src/react/`, and `src/test/`.
 

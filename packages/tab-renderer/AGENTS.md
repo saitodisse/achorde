@@ -38,16 +38,16 @@ The order of responsibility inside the core is:
 
 ## Documentation Contract
 
-- Keep `README.md`, `docs/prd/`, `docs/rfc/`, and `docs/plans/` aligned with public API changes.
-- If the package shape changes, update the PRD and RFC before changing implementation.
+- Keep `README.md`, `CONTEXT.md`, durable RFCs, and `CHANGELOG.md` aligned with public API changes.
+- If the package shape changes, update the relevant RFC alongside implementation.
 - If a decision is hard to reverse, document it in RFC form, not only in code comments.
 
 ## Validation
 
-- Prefer `npm test` for behavior.
-- Use `npm run build` for package output and declaration emit.
-- Use `npm run build-storybook` for Storybook coverage.
-- Keep `npm run lint` clean before committing.
+- Prefer `pnpm test` for behavior.
+- Use `pnpm build` for package output and declaration emit.
+- Use `pnpm build-storybook` for Storybook coverage.
+- Keep `pnpm lint` clean before committing.
 - When a parsing rule changes, update `src/core/__tests__/` and the docs that describe `ParsedTab.chordsFound`.
 
 ## Publishing
@@ -58,7 +58,7 @@ The order of responsibility inside the core is:
 
 ## Downstream Consumers
 
-Primary integration app: [`ac15`](../../../ac15) (`apps/web` imports `tab-renderer/core` directly; `packages/ui` uses `tab-renderer/react`).
+Primary integration app: the private AC15 product (`apps/web` imports the headless entrypoint; `packages/ui` uses `@achorde/tab-renderer/react`).
 
 Published npm releases are consumed by external applications. After publishing a new version:
 

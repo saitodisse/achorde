@@ -1,55 +1,43 @@
-# achorde-storybook-config
+# @achorde/storybook-config
 
-Configuração compartilhada de Storybook para o monorepo **achorde**.
+Private workspace helpers shared by Achorde Storybook projects. This package is not published to npm.
 
-Segue o padrão descrito na [discussão Turborepo #6879](https://github.com/vercel/turborepo/discussions/6879): um pacote leve tipo `tsconfig` + `.storybook/` mínimo em cada biblioteca que publica stories.
-
-## Uso
+## Vite configuration
 
 ```ts
-// packages/<lib>/.storybook/main.ts
-import { createStorybookMain } from "achorde-storybook-config/vite";
+// packages/<library>/.storybook/main.ts
+import { createStorybookMain } from "@achorde/storybook-config/vite";
 
 export default createStorybookMain({
   stories: ["../src/**/*.stories.@(ts|tsx)"],
-  viteConfigPath: undefined,
-  typescript: {
-    reactDocgen: "react-docgen-typescript",
-    reactDocgenTypescriptOptions: {
-      include: ["../src/**/*.tsx", "../../outro-pacote-workspace/src/**/*.ts"],
-    },
-  },
 });
 ```
 
-Importe utilitários de runtime apenas pelo entry principal (`achorde-storybook-config`), nunca `achorde-storybook-config/vite` em arquivos de story — o subpath `/vite` é só para `.storybook/main.ts`.
+Use the `/vite` entrypoint only from Storybook configuration.
+
+## Preview observability
 
 ```tsx
-// packages/<lib>/.storybook/preview.tsx
+// packages/<library>/.storybook/preview.tsx
 import {
   createObservabilityDecorator,
   installStorybookPreviewObservability,
-} from "achorde-storybook-config/preview";
+} from "@achorde/storybook-config/preview";
 
-installStorybookPreviewObservability("minha-lib");
+installStorybookPreviewObservability("my-library");
 
 export default {
-  decorators: [createObservabilityDecorator("minha-lib")],
+  decorators: [createObservabilityDecorator("my-library")],
 };
 ```
 
-## O que inclui
+The helpers provide Storybook 10 and Vite 7 setup, story error boundaries, browser error logging, and runtime health collection.
 
-- `viteFinal` compatível com Storybook 10 + **Vite 7** (evita iframe 500 `Missing field moduleType`)
-- Error boundary nas stories com log `[layer/story-render]`
-- `window.error` / `unhandledrejection` → console
-- `collectStorybookRuntimeHealth()` para painéis de diagnóstico
+## Storybook ports
 
-## Pacotes com Storybook
-
-| Pacote           | Porta (padrão) | Script raiz                   |
-| ---------------- | -------------- | ----------------------------- |
-| `tab-renderer`   | 6007           | `pnpm storybook:tab-renderer` |
-| `tab-editor`     | 6012           | `pnpm storybook:tab-editor`   |
-| `svguitar-react` | 6006           | `pnpm storybook:svguitar`     |
+| Package | Port | Root command |
+| --- | ---: | --- |
+| `tab-renderer` | 6007 | `pnpm storybook:tab-renderer` |
+| `tab-editor` | 6012 | `pnpm storybook:tab-editor` |
+| `svguitar-react` | 6006 | `pnpm storybook:svguitar` |
 | `interactive-fretboard` | 6010 | `pnpm storybook:interactive-fretboard` |

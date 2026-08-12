@@ -1,48 +1,87 @@
-# tab-renderer — strict chord chart parsing
+# How a chord-chart line gets its meaning
 
-Headless parser and React adapter for Brazilian-style chord charts (`ParsedTab` AST).
+`tab-renderer` uses a small vocabulary to distinguish chords, lyrics, spacing, and visual decoration while preserving the author's original columns.
 
-## Language
+## In this note
+
+- Chord and lyric lines
+- Decorations versus chord extensions
+- Slash alterations versus slash bass
+- The chord-line majority rule
+
+---
+
+A chart line is like a row of labeled boxes. Some boxes hold chords, some hold sung words, and some only keep space so everything stays aligned. The parser labels each box before the renderer decides how to show it.
+
+## Core vocabulary
 
 **Chord line**:
-A physical line whose content is mostly chord symbols and spacing; may include parenthesis decorations that are not lyrics.
+A physical line made mostly of chord symbols and spacing. It may include parenthesis decorations that are not lyrics.
 
 _Avoid_: chord row, harmony line
 
 **Lyric line**:
-A physical line whose content is sung or spoken text, not a chord chart row.
+A physical line of sung or spoken text. A real lyric word must not become a chord only because it starts with A through G.
+
+_Avoid_: treating note-shaped lyric words as chords
 
 **DecorationToken**:
-A parenthesis character tokenized separately from a chord symbol when it is not glued into the chord spelling (e.g. `( C7` → `(` + `C7`).
+A parenthesis stored separately when it is not part of a chord spelling. For example, `( C7` becomes a decoration `(` followed by the chord `C7`.
 
-_Avoid_: punctuation token, annotation token (for other marks)
+_Avoid_: punctuation token, annotation token
 
 **Chord extension parentheses**:
-Parentheses that spell an alteration inside the symbol (e.g. `C7(13)`, `B7(9-)`) stay inside a single **ChordToken** and are not **DecorationToken**.
+Parentheses inside a chord spelling stay in one `ChordToken`. `C7(13)` and `B7(9-)` are chords, not stage directions.
 
-_Avoid_: treating `(13)` as stage direction
+_Avoid_: treating `(13)` as a visual direction
 
 **Slash alteration**:
-A slash followed by a figure (e.g. `D7/9`) is part of the chord spelling, not a bass note. Contrast with **Slash bass** (`E7/G#`) where the right-hand note is `A`–`G`.
+A slash followed by a number, as in `D7/9`, belongs to the chord extension. A slash followed by a note, as in `E7/G#`, describes a bass note.
 
-_Avoid_: parsing `D7/9` as `D7` with bass `9`
+_Avoid_: parsing `D7/9` as a slash bass
 
-**Chord line majority rule**:
-A line is classified as `chords` when it has more chord tokens than lyric tokens, or when lyric tokens are absent and only chords and decorations remain.
+**Chord-line majority rule**:
+A line is a chord line when it has more chord tokens than lyric tokens, or when it contains only chords, decorations, and spacing.
 
-_Avoid_: chord density heuristic (legacy pairer only)
+_Avoid_: calling any line with one chord a chord line
 
 ## Relationships
 
-- A **Chord line** contains one or more **ChordToken** values and may contain **DecorationToken** values
-- A **Lyric line** contains **LyricToken** values and must not be classified as `chords` when real lyric words outnumber chords
-- **DecorationToken** is never transposed and never listed in `chordsFound`
+- A **Chord line** contains `ChordToken` values and may contain `DecorationToken` values.
+- A **Lyric line** contains sung or spoken text and must not win classification through a note-shaped word.
+- **DecorationToken** is never transposed and never appears in `chordsFound`.
+- **Chord extension parentheses** and **Slash alteration** remain inside their chord symbol.
 
-## Example dialogue
+## A concrete line
 
-> **Dev:** "Should `             ( C7          B7 )        Em7      E7` be a chord line?"
-> **Domain expert:** "Yes — the parentheses are stage directions around chords, not lyrics. Only actual words should force `lyrics`."
+Consider this input:
+
+```text
+             ( C7          B7 )        Em7      E7
+```
+
+The parentheses are visual directions around chords. They become `DecorationToken` values, while `C7`, `B7`, `Em7`, and `E7` become chord tokens. Decorations are never transposed and never appear in `chordsFound`.
+
+> **Developer:** “Is this a chord line even with parentheses?”
+>
+> **Domain expert:** “Yes. The parentheses are visual directions around real chords, not lyrics.”
 
 ## Flagged ambiguities
 
-- Legacy `isChordLine()` in the styled pairer uses character-density heuristics; strict `parseTab()` uses token-majority instead.
+- A line with the same number of chord and lyric tokens is not a chord line under the majority rule.
+- A slash followed by text outside A through G or a number needs separate validation before it is called an alteration or bass note.
+
+---
+
+## Main ideas
+
+- Meaning is assigned before rendering.
+- Extensions stay inside chord symbols; visual parentheses do not.
+- `chordsFound` contains only real, diagrammable chord symbols.
+- Spacing remains part of the chart because it carries alignment.
+
+## Vault connections
+
+- [[../musical-domain/README|Musical Domain]] — defines the token and `ParsedTab` contracts used here.
+- [[README|Tab Renderer]] — parses, transposes, prepares, and renders these lines.
+- [[../svguitar-react/README|Chord Diagrams]] — consumes `chordsFound` without rescanning lyric text.

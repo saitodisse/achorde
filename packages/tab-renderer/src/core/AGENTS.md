@@ -8,7 +8,7 @@ The core is the framework-agnostic heart of the library.
 - **`prepareSongFromParsedTab()`** — styled `Tab` pipeline: align chord/lyric lines → `extractChordLineMarkers` → `generateBarList` → interleaved segments.
 - **`prepareSong()`** — legacy pairer pipeline: split sections → pair lines → `extractChords` → transpose → `barList`.
 - Export shared types: `ParsedTab`, `ParsedTabSection`, `ParsedTabLine`, `ParsedTabToken`, `PreparedSong`, `TabStyleConfig`, `DEFAULT_TAB_STYLE`, parser/transposer types.
-- Shared parser symbols and diagnostics come from `achorde-musical-domain`.
+- Shared parser symbols and diagnostics come from `@achorde/musical-domain`.
 - `ParsedTab.chordsFound` must stay in sync with the AST and is built from real `ChordToken` values only.
 
 ## Parser Order

@@ -4,10 +4,13 @@ export type RouteLocale = "pt-br" | "en";
 export type PackageId =
 	| "musical-domain"
 	| "source-catalog"
+	| "contribution-protocol"
+	| "catalog-portal"
 	| "tab-editor"
 	| "tab-renderer"
 	| "svguitar-react"
-	| "interactive-fretboard";
+	| "interactive-fretboard"
+	| "storybook-config";
 
 export type AppId = "ac15" | "artist-portal-base";
 
@@ -92,12 +95,12 @@ export const siteCopy = {
 		kicker: "Documentação geral",
 		headline: "Entenda o ACHORDE por pacote, sem pular etapas.",
 		intro:
-			"ACHORDE é um conjunto de pacotes para representar, renderizar e editar músicas com acordes. Cada página abaixo ensina uma parte em três níveis: manchete, um parágrafo e passo a passo.",
+			"ACHORDE reúne pacotes para representar, publicar, editar e renderizar música com acordes. Cada página explica uma responsabilidade de forma progressiva.",
 		allPackages: "Todos os pacotes",
 		allApps: "Apps principais",
 		startHere: "Comece aqui",
 		startHereText:
-			"Leia primeiro o pacote de contratos. Depois siga para parser/renderização, desenho de diagramas, edição interativa e infraestrutura.",
+			"Comece pelos contratos musicais e de catálogo. Depois veja contribuições, portais, parser, renderização e edição.",
 		packageRoutes: "Rotas por pacote",
 		packageRoutesText:
 			"Cada rota tem uma explicação fácil e cumulativa. A ideia é você conseguir lembrar o papel de cada pacote antes de olhar a API.",
@@ -138,12 +141,12 @@ export const siteCopy = {
 		kicker: "General documentation",
 		headline: "Understand ACHORDE package by package, one step at a time.",
 		intro:
-			"ACHORDE is a set of packages for representing, rendering, and editing chord-based music. Each page teaches one part at three levels: headline, one paragraph, and step by step.",
+			"ACHORDE provides packages for representing, publishing, editing, and rendering chord-based music. Each page explains one responsibility in simple steps.",
 		allPackages: "All packages",
 		allApps: "Main apps",
 		startHere: "Start here",
 		startHereText:
-			"Read the contracts package first. Then move through parsing/rendering, diagram drawing, interactive editing, and infrastructure.",
+			"Start with the musical and catalog contracts. Then explore contributions, portals, parsing, rendering, and editing.",
 		packageRoutes: "Package routes",
 		packageRoutesText:
 			"Each route gives a simple cumulative explanation. The goal is to remember each package role before reading the API.",
@@ -231,9 +234,9 @@ export const packageDocs = [
 		summary: {
 			"pt-BR": {
 				label: "Catálogos estáticos",
-				headline: "O contrato para importar repertórios públicos.",
+				headline: "O contrato para importar catálogos públicos somente leitura.",
 				paragraph:
-					"Este pacote valida manifestos e envelopes de catálogos somente leitura. Ele ajuda um portal de artista a publicar músicas, artistas e versões de forma segura para um app consumidor puxar.",
+					"Este pacote valida manifestos e registros de catálogos somente leitura. O schema 1.2 também separa licença pública do fundamento que autoriza publicar uma cifra.",
 				steps: [
 					"Publique um manifesto com a lista de arquivos disponíveis.",
 					"Coloque cada registro dentro de um envelope com origem, tipo e versão de schema.",
@@ -246,9 +249,9 @@ export const packageDocs = [
 			},
 			en: {
 				label: "Static catalogs",
-				headline: "The contract for importing public repertoires.",
+				headline: "The contract for importing public read-only catalogs.",
 				paragraph:
-					"This package validates read-only catalog manifests and envelopes. It lets an artist portal publish songs, artists, and versions safely for a consuming app to pull.",
+					"This package validates read-only catalog manifests and records. Schema 1.2 also separates a public license from the rights basis that permits a chart publication.",
 				steps: [
 					"Publish a manifest listing the available files.",
 					"Wrap each record in an envelope with source, type, and schema version.",
@@ -258,6 +261,114 @@ export const packageDocs = [
 				whenToUse:
 					"Use it when a static site needs to serve data for another app to import.",
 				remember: "It is the catalog delivery receipt: what exists and whether it is safe.",
+			},
+		},
+	},
+	{
+		id: "contribution-protocol",
+		name: "@achorde/contribution-protocol",
+		scope: "contracts",
+		npm: "https://www.npmjs.com/package/@achorde/contribution-protocol",
+		github: "https://github.com/saitodisse/achorde/tree/main/packages/contribution-protocol",
+		summary: {
+			"pt-BR": {
+				label: "Pacotes de contribuição",
+				headline: "O recibo portátil de uma proposta editorial.",
+				paragraph:
+					"Este pacote valida manifests de contribuição com arquivos, hashes, termos aceitos e declaração de direitos. Ele não lê ZIP, autentica pessoas nem cria pull requests.",
+				steps: [
+					"Escolha uma operação, como atualizar uma cifra ou criar uma obra.",
+					"Liste somente caminhos editoriais permitidos e seus hashes.",
+					"Registre os termos aceitos e a declaração de direitos.",
+					"Deixe o portal ou gateway cuidar de ZIP, rede e Git.",
+				],
+				whenToUse: "Use quando sistemas diferentes precisam concordar sobre o formato de uma contribuição.",
+				remember: "Ele valida o recibo; não transporta nem publica o pacote.",
+			},
+			en: {
+				label: "Contribution bundles",
+				headline: "The portable receipt for an editorial proposal.",
+				paragraph:
+					"This package validates contribution manifests with files, hashes, accepted terms, and a rights attestation. It does not read ZIP files, authenticate people, or create pull requests.",
+				steps: [
+					"Choose an operation, such as updating a chart or creating a work.",
+					"List only allowed editorial paths and their hashes.",
+					"Record the accepted terms and rights attestation.",
+					"Let a portal or gateway handle ZIP, network, and Git.",
+				],
+				whenToUse: "Use it when separate systems need to agree on a contribution format.",
+				remember: "It validates the receipt; it does not transport or publish the bundle.",
+			},
+		},
+	},
+	{
+		id: "catalog-portal",
+		name: "@achorde/catalog-portal",
+		scope: "infrastructure",
+		npm: "https://www.npmjs.com/package/@achorde/catalog-portal",
+		github: "https://github.com/saitodisse/achorde/tree/main/packages/catalog-portal",
+		summary: {
+			"pt-BR": {
+				label: "Núcleo de portal",
+				headline: "Peças compartilhadas para portais de catálogo.",
+				paragraph:
+					"Este pacote reúne busca, monogramas, projeção de metadados, pequenos componentes React e armazenamento local de rascunhos. O app ainda precisa cuidar de rotas, conteúdo, tradução e publicação.",
+				steps: [
+					"Modele artistas e obras no catálogo editorial.",
+					"Use busca e monogramas sem duplicar regras entre portais.",
+					"Projete metadados públicos no contrato Source Catalog 1.2.",
+					"Salve rascunhos locais por meio do adapter de navegador.",
+				],
+				whenToUse: "Use como base compartilhada, não como portal pronto.",
+				remember: "Ele entrega as peças; o produto monta a experiência.",
+			},
+			en: {
+				label: "Portal core",
+				headline: "Shared pieces for catalog portals.",
+				paragraph:
+					"This package provides search, monograms, metadata projection, small React components, and local draft storage. The app still owns routes, content, localization, and publication.",
+				steps: [
+					"Model artists and works in the editorial catalog.",
+					"Reuse search and monograms across portals.",
+					"Project public metadata to Source Catalog 1.2.",
+					"Store local drafts through the browser adapter.",
+				],
+				whenToUse: "Use it as a shared base, not as a finished portal.",
+				remember: "It provides the pieces; the product builds the experience.",
+			},
+		},
+	},
+	{
+		id: "storybook-config",
+		name: "@achorde/storybook-config",
+		scope: "infrastructure",
+		github: "https://github.com/saitodisse/achorde/tree/main/packages/storybook-config",
+		summary: {
+			"pt-BR": {
+				label: "Infraestrutura interna",
+				headline: "Configuração compartilhada para os Storybooks do monorepo.",
+				paragraph:
+					"Este pacote privado reduz a duplicação da configuração Vite, dos decorators de erro e dos diagnósticos usados pelos Storybooks do ACHORDE.",
+				steps: [
+					"Importe o helper Vite no arquivo main do Storybook.",
+					"Instale observabilidade e decorators no preview.",
+					"Mantenha particularidades das stories no próprio pacote visual.",
+				],
+				whenToUse: "Use apenas dentro deste workspace ao configurar Storybook.",
+				remember: "Ele compartilha ferramentas de documentação; não faz parte da API musical pública.",
+			},
+			en: {
+				label: "Internal infrastructure",
+				headline: "Shared configuration for the monorepo Storybooks.",
+				paragraph:
+					"This private package reduces duplication in the Vite setup, error decorators, and diagnostics used by ACHORDE Storybooks.",
+				steps: [
+					"Import the Vite helper from the Storybook main file.",
+					"Install observability and decorators in the preview.",
+					"Keep story-specific behavior in each visual package.",
+				],
+				whenToUse: "Use it only inside this workspace when configuring Storybook.",
+				remember: "It shares documentation tools; it is not part of the public musical API.",
 			},
 		},
 	},
@@ -435,10 +546,8 @@ export const appDocs = [
 		demo: "http://127.0.0.1:5285/",
 		github: "https://github.com/saitodisse/ac15",
 		sources: [
-			"../ac15/README.md",
-			"../ac15/AGENTS.md",
-			"../ac15/docs/rfc/0001-offline-first-agent-friendly-chord-platform.md",
-			"../ac15/docs/prd/0020-artist-portal-base-e-importacao-portal-aware.md",
+			"AC15 README and architecture documentation",
+			"AC15 RFC 0001 and PRD 0020",
 		],
 		summary: {
 			"pt-BR": {
@@ -905,7 +1014,7 @@ export const packageConceptDocs: readonly PackageConceptDoc[] = [
 					"Mantenha auth como none e conflictResolution como manual.",
 				],
 				code:
-					'assertSourceCatalogManifest({\n  id: "demo-portal",\n  name: "Demo Portal",\n  version: "2026-07-04T00:00:00.000Z",\n  schemaVersion: "1.0.0",\n  mode: "readonly",\n  generatedAt: createIsoDateTime("2026-07-04T00:00:00.000Z"),\n  files: [{ url: "entities/artists.ndjson", entityType: "artist", mediaType: "application/x-ndjson" }],\n  capabilities: { pull: true, push: false, batchPush: false, realtime: false, proposals: false, revisions: false, moderation: false, conflictResolution: "manual", auth: "none" },\n});',
+					'assertSourceCatalogManifest({\n  id: "demo-portal",\n  name: "Demo Portal",\n  version: "2d69b40d9898c542",\n  schemaVersion: "1.2.0",\n  mode: "readonly",\n  generatedAt: createIsoDateTime("2026-08-11T00:00:00.000Z"),\n  files: [{ url: "entities/artist.ndjson", entityType: "artist", mediaType: "application/x-ndjson" }],\n  capabilities: { pull: true, push: false, batchPush: false, realtime: false, proposals: false, revisions: false, moderation: false, conflictResolution: "manual", auth: "none" },\n});',
 				memoryPrompt:
 					"Sem olhar: quais duas capacidades deixam um manifesto inválido?",
 				nextQuestion:
@@ -925,7 +1034,7 @@ export const packageConceptDocs: readonly PackageConceptDoc[] = [
 					"Keep auth as none and conflictResolution as manual.",
 				],
 				code:
-					'assertSourceCatalogManifest({\n  id: "demo-portal",\n  name: "Demo Portal",\n  version: "2026-07-04T00:00:00.000Z",\n  schemaVersion: "1.0.0",\n  mode: "readonly",\n  generatedAt: createIsoDateTime("2026-07-04T00:00:00.000Z"),\n  files: [{ url: "entities/artists.ndjson", entityType: "artist", mediaType: "application/x-ndjson" }],\n  capabilities: { pull: true, push: false, batchPush: false, realtime: false, proposals: false, revisions: false, moderation: false, conflictResolution: "manual", auth: "none" },\n});',
+					'assertSourceCatalogManifest({\n  id: "demo-portal",\n  name: "Demo Portal",\n  version: "2d69b40d9898c542",\n  schemaVersion: "1.2.0",\n  mode: "readonly",\n  generatedAt: createIsoDateTime("2026-08-11T00:00:00.000Z"),\n  files: [{ url: "entities/artist.ndjson", entityType: "artist", mediaType: "application/x-ndjson" }],\n  capabilities: { pull: true, push: false, batchPush: false, realtime: false, proposals: false, revisions: false, moderation: false, conflictResolution: "manual", auth: "none" },\n});',
 				memoryPrompt:
 					"Without looking: which two capabilities make a manifest invalid?",
 				nextQuestion:
@@ -1089,7 +1198,7 @@ export const packageConceptDocs: readonly PackageConceptDoc[] = [
 					"Mantenha URLs relativas e estáveis.",
 				],
 				code:
-					'/source-catalog/source-manifest.json\n/source-catalog/checksums.json\n/source-catalog/entities/artists.ndjson\n/source-catalog/entities/chord-charts.ndjson',
+					'/source-catalog/source-manifest.json\n/source-catalog/checksums.json\n/source-catalog/entities/artist.ndjson\n/source-catalog/entities/chordChart.ndjson',
 				memoryPrompt:
 					"Sem olhar: qual arquivo é o ponto de entrada do catálogo?",
 				nextQuestion:
@@ -1109,11 +1218,58 @@ export const packageConceptDocs: readonly PackageConceptDoc[] = [
 					"Keep relative URLs stable.",
 				],
 				code:
-					'/source-catalog/source-manifest.json\n/source-catalog/checksums.json\n/source-catalog/entities/artists.ndjson\n/source-catalog/entities/chord-charts.ndjson',
+					'/source-catalog/source-manifest.json\n/source-catalog/checksums.json\n/source-catalog/entities/artist.ndjson\n/source-catalog/entities/chordChart.ndjson',
 				memoryPrompt:
 					"Without looking: which file is the catalog entry point?",
 				nextQuestion:
 					"Ask the agent to design the /source-catalog/ tree for a portal.",
+			},
+		},
+	},
+	{
+		packageId: "source-catalog",
+		id: "rights-basis",
+		source: "packages/source-catalog/docs/contract.md, src/index.ts, src/index.test.ts",
+		copy: {
+			"pt-BR": {
+				label: "Fundamento de direitos",
+				title: "Toda cifra pública no schema 1.2 aponta para evidência sanitizada.",
+				summary:
+					"SourceCatalogRightsBasis registra por que uma cifra pode ser publicada e liga esse fundamento a um resumo JSON público protegido por SHA-256.",
+				whyItMatters:
+					"O catálogo não confunde termos de plataforma com licença pública e não envia contratos completos ou identidade pessoal para o deploy.",
+				steps: [
+					"Escolha um fundamento público aceito.",
+					"Publique apenas um resumo sanitizado em rights/evidence/.",
+					"Faça o checksum do resumo e registre a referência na cifra.",
+					"Use license somente quando o fundamento for public-license.",
+				],
+				code:
+					'const rights = {\n  kind: "direct-permission",\n  evidence: {\n    id: "permission-123",\n    url: "rights/evidence/permission-123.json",\n    sha256,\n  },\n};',
+				memoryPrompt:
+					"Sem olhar: em qual fundamento o campo license é permitido?",
+				nextQuestion:
+					"Peça para o agente revisar uma cifra e sua evidência antes do build público.",
+			},
+			en: {
+				label: "Rights basis",
+				title: "Every public schema 1.2 chart points to sanitized evidence.",
+				summary:
+					"SourceCatalogRightsBasis records why a chart can be published and connects that basis to a public JSON summary protected by SHA-256.",
+				whyItMatters:
+					"The catalog does not confuse platform terms with a public license and does not deploy full contracts or personal identity.",
+				steps: [
+					"Choose an accepted public rights basis.",
+					"Publish only a sanitized summary under rights/evidence/.",
+					"Hash the summary and record its reference on the chart.",
+					"Use license only when the basis is public-license.",
+				],
+				code:
+					'const rights = {\n  kind: "direct-permission",\n  evidence: {\n    id: "permission-123",\n    url: "rights/evidence/permission-123.json",\n    sha256,\n  },\n};',
+				memoryPrompt:
+					"Without looking: which basis may contain the license field?",
+				nextQuestion:
+					"Ask the agent to review a chart and its evidence before a public build.",
 			},
 		},
 	},
@@ -1300,7 +1456,7 @@ export const packageConceptDocs: readonly PackageConceptDoc[] = [
 	{
 		packageId: "tab-renderer",
 		id: "chord-detection",
-		source: "packages/tab-renderer/README.md, docs/plans/2026-06-03-chord-symbols-and-diagrammable-boundaries.md, src/core/collectDiagrammableChords.ts",
+		source: "packages/tab-renderer/README.md, src/core/collectDiagrammableChords.ts",
 		copy: {
 			"pt-BR": {
 				label: "Detecção de acordes",
@@ -1480,7 +1636,7 @@ export const packageConceptDocs: readonly PackageConceptDoc[] = [
 	{
 		packageId: "svguitar-react",
 		id: "voicing-first-api",
-		source: "packages/svguitar-react/README.md, specs/001-guitar-svg/data-model.md, docs/plans/2026-06-03-voicing-render-adapter-boundaries.md",
+		source: "packages/svguitar-react/README.md, src/components/ChordDiagram/types.ts, src/components/ChordDiagram/utils.ts",
 		copy: {
 			"pt-BR": {
 				label: "API voicing-first",
@@ -1525,7 +1681,7 @@ export const packageConceptDocs: readonly PackageConceptDoc[] = [
 	{
 		packageId: "svguitar-react",
 		id: "legacy-inputs",
-		source: "packages/svguitar-react/README.md, specs/001-guitar-svg/data-model.md, src/components/ChordDiagram/types.ts",
+		source: "packages/svguitar-react/README.md, src/components/ChordDiagram/types.ts",
 		copy: {
 			"pt-BR": {
 				label: "Entradas legadas",
@@ -1615,7 +1771,7 @@ export const packageConceptDocs: readonly PackageConceptDoc[] = [
 	{
 		packageId: "svguitar-react",
 		id: "auto-first-fret",
-		source: "packages/svguitar-react/README.md, specs/001-guitar-svg/spec.md, src/components/ChordDiagram/utils/autoFirstFret.ts",
+		source: "packages/svguitar-react/README.md, src/components/ChordDiagram/utils/autoFirstFret.ts",
 		copy: {
 			"pt-BR": {
 				label: "Auto first fret",
@@ -1660,7 +1816,7 @@ export const packageConceptDocs: readonly PackageConceptDoc[] = [
 	{
 		packageId: "svguitar-react",
 		id: "renderer-boundary",
-		source: "packages/svguitar-react/docs/plans/2026-06-03-voicing-render-adapter-boundaries.md, specs/001-guitar-svg/spec.md",
+		source: "packages/svguitar-react/README.md, src/components/ChordDiagram/ChordDiagram.tsx",
 		copy: {
 			"pt-BR": {
 				label: "Limite do renderer",
@@ -1750,7 +1906,7 @@ export const packageConceptDocs: readonly PackageConceptDoc[] = [
 	{
 		packageId: "interactive-fretboard",
 		id: "viewbox-hit-testing",
-		source: "packages/interactive-fretboard/README.md, specs/001-interactive-fretboard/research.md, src/interaction/screenToSvgPoint.ts, src/interaction/hitTestFretCell.ts",
+		source: "packages/interactive-fretboard/README.md, src/interaction/screenToSvgPoint.ts, src/interaction/hitTestFretCell.ts",
 		copy: {
 			"pt-BR": {
 				label: "Hit-test SVG",
@@ -1933,7 +2089,7 @@ export const appConceptDocs = [
 	{
 		appId: "ac15",
 		id: "offline-first-state",
-		source: "../ac15/README.md, docs/rfc/0001-offline-first-agent-friendly-chord-platform.md, docs/prd/0001-offline-first-foundation.md",
+		source: "AC15 README, RFC 0001, and PRD 0001",
 		copy: {
 			"pt-BR": {
 				label: "Estado offline-first",
@@ -2121,7 +2277,7 @@ export const appConceptDocs = [
 	{
 		appId: "ac15",
 		id: "source-catalog-import",
-		source: "../ac15/docs/prd/0020-artist-portal-base-e-importacao-portal-aware.md, apps/web/src/features/source-catalog/source-catalog-sync.ts, packages/sync-engine/src/source-catalog-importer.ts",
+		source: "AC15 PRD 0020, source-catalog-sync.ts, and source-catalog-importer.ts",
 		copy: {
 			"pt-BR": {
 				label: "Importação de catálogo",
@@ -2168,7 +2324,7 @@ export const appConceptDocs = [
 	{
 		appId: "ac15",
 		id: "outbox-sync",
-		source: "../ac15/docs/prd/0006-sync-engine-mvp.md, packages/sync-engine/src/index.ts, packages/storage/src/repositories/outbox.dexie-repository.ts",
+		source: "AC15 PRD 0006, sync-engine, and the outbox repository",
 		copy: {
 			"pt-BR": {
 				label: "Outbox de sync",

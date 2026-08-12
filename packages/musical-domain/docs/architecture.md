@@ -1,46 +1,60 @@
-# Architecture
+# One musical language across packages
 
-`achorde-musical-domain` is a public TypeScript contract package for musical software. It provides shared data shapes for parsers, renderers, editors, and applications that need to exchange chord-chart, tab, diagnostic, and fretted-voicing data.
+`@achorde/musical-domain` gives parsers, renderers, editors, and applications the same small vocabulary so they can exchange musical data without depending on one another.
 
-## Included Scope
+## In this note
 
-- parser diagnostic contracts
-- parsed chord-symbol contracts
-- textual tab AST contracts (`ParsedTab` — four strict line kinds; `ParsedTabTokenKind` includes `DecorationToken` since 0.3.1)
-- legacy chord-chart AST contracts with sections, lines, and segments (`ChordChartAst`, deprecated)
-- fretted-instrument voicing contracts
-- chord label lookup normalization (`normalizeChordSymbolLabel`)
-- fretted voicing ranking helpers (`compareFrettedVoicings`, `selectPreferredFrettedVoicing`)
-- display base-fret normalization for compact diagrams (`resolveVoicingDisplayBaseFret`, `normalizeVoicingDisplayBaseFret`)
-- chord spelling metadata (`ChordSpellingMetadata`, `spellingFromParsedChordSymbol`)
-- an explicit port for external music-theory adapters
+- What belongs in the shared domain
+- What stays in specialized packages
+- How guitar strings are numbered
+- How contract changes are released
 
-## Excluded Scope
+---
 
-- React
-- local storage
-- sync
-- routing
-- product-specific application rules
-- SVG rendering
-- complete text parser implementations
-- bundled music-theory engines
-- authored catalog metadata, contribution packages, Git workflows, or forge authorization
+Think of this package as the legend on a map. It explains what every symbol means, but it does not choose the route, draw the landscape, or store your trip history.
 
-## Dependency Rule
+The shared vocabulary includes parsed chord symbols, `ParsedTab`, parser diagnostics, fretted-instrument voicings, chord-label normalization, voicing selection, display-fret helpers, and a port for external music-theory engines.
 
-Consumers should depend on this package for shared public contracts and keep implementation-specific behavior in their own packages. Parser libraries own parsing behavior. Renderer libraries own visual rendering. Applications own persistence, sync, routing, and product workflows.
+For example, a parser can return a `ParsedTab`, a React package can render it, and an application can store it. All three agree on the shape without importing each other's implementation.
 
-## Fretted String Coordinate Rule
+## The boundary
 
-Fretted-instrument guitar voicings use low-to-high string coordinates. For standard EADGBE guitar, `stringIndex: 1` is low E, `2` is A, `3` is D, `4` is G, `5` is B, and `6` is high E. `fromStringIndex` and `toStringIndex` on barres use the same coordinate system.
+The package contains contracts and pure musical helpers. It does not contain React, routing, local storage, synchronization, SVG drawing, authored catalog data, or product rules.
 
-Helpers that parse or format fret notation preserve the common low-E-first notation order. For example, `244xxx` means frets 2, 4, and 4 on low E, A, and D, followed by three muted higher strings.
+This leads to a simple ownership rule:
 
-## Versioning Rule
+- parsers decide how text becomes musical structures;
+- renderers decide how those structures look;
+- editors decide how people change them;
+- applications decide how data is stored and synchronized;
+- `@achorde/musical-domain` defines the shared meaning between them.
 
-Contract changes follow semantic versioning:
+## Guitar string coordinates
 
-- patch releases may clarify docs or fix non-breaking type details
-- minor releases may add optional fields or new exported contracts
-- major releases may rename, remove, or structurally change public contracts
+Guitar voicings always use low-to-high string coordinates. In standard EADGBE tuning, `stringIndex: 1` is low E and `stringIndex: 6` is high E. Barres use the same order.
+
+Fret notation also reads low E first. The shape `x32010` therefore means muted low E, fret 3 on A, fret 2 on D, open G, fret 1 on B, and open high E.
+
+A visual package may mirror the drawing for handedness, but it must not rewrite the canonical string indices.
+
+## Compatibility
+
+Contract changes follow semantic versioning. Patches clarify or fix compatible details, minor releases add compatible types or fields, and major releases may remove or reshape public contracts.
+
+`ChordChartAst` remains available for older consumers, but new code should use `ParsedTab`.
+
+---
+
+## Main ideas
+
+- The domain package defines meaning, not product behavior.
+- Shared contracts prevent each package from inventing its own musical model.
+- Guitar data stays low-E-first even when a view is mirrored.
+- Breaking contract changes require a major release.
+
+## Vault connections
+
+- [[../../source-catalog/README|Source Catalog]] — publishes musical records with stable public contracts.
+- [[../../tab-renderer/README|Tab Renderer]] — turns chart text into the shared `ParsedTab` model.
+- [[../../svguitar-react/README|SVGuitar React]] — draws shared voicings without owning their identity.
+- [[../../interactive-fretboard/README|Interactive Fretboard]] — edits the same voicing contract through pointer input.
