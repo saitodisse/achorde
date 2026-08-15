@@ -1,18 +1,18 @@
 import {
   assertNoForbiddenSourceCatalogKeys,
-  assertSourceCatalogRightsBasis,
   createIsoDateTime,
   generateSourceCatalog,
   type IsoDateTime,
+  SOURCE_CATALOG_CONTENT_LICENSE,
+  type SourceCatalogOperator,
   type SourceCatalogBuildOutput,
-  type SourceCatalogRightsBasis,
 } from "@achorde/source-catalog";
 import {
-  assertContributionManifestV2,
+  assertContributionManifestV3,
   canonicalContributionEntryOrder,
   sha256Text,
-  type ContributionManifestEntryV2,
-  type ContributionManifestV2,
+  type ContributionManifestEntryV3,
+  type ContributionManifestV3,
 } from "@achorde/contribution-protocol";
 
 export type CatalogPortalArtist = {
@@ -39,13 +39,13 @@ export type CatalogPortalChart = {
   version: string;
   rawText: string;
   updatedAt: IsoDateTime;
-  rights: SourceCatalogRightsBasis;
   published: boolean;
 };
 
 export type EditorialCatalog = {
   sourceId: string;
   name: string;
+  operator: SourceCatalogOperator;
   artists: ReadonlyArray<CatalogPortalArtist>;
   works: ReadonlyArray<CatalogPortalWork>;
   charts?: ReadonlyArray<CatalogPortalChart>;
@@ -70,6 +70,20 @@ function stableHash(value: string): number {
 function titleCaseInitials(value: string): string {
   const words = value.trim().split(/\s+/).filter(Boolean);
   return words.slice(0, 2).map((word) => [...word][0]?.toLocaleUpperCase("pt-BR") ?? "").join("");
+}
+
+function assertNoLegacyPublicationPolicyFields(value: unknown): void {
+  if (!value || typeof value !== "object") return;
+  if (Array.isArray(value)) {
+    for (const item of value) assertNoLegacyPublicationPolicyFields(item);
+    return;
+  }
+  for (const [key, nested] of Object.entries(value)) {
+    if (key === "rights" || key === "evidence" || key === "evidenceId") {
+      throw new Error("Editorial catalogs no longer accept rights/evidence fields.");
+    }
+    assertNoLegacyPublicationPolicyFields(nested);
+  }
 }
 
 export function createArtistMonogram(artist: Pick<CatalogPortalArtist, "id" | "name">): { initials: string; color: string } {
@@ -97,6 +111,11 @@ export function searchCatalog(catalog: EditorialCatalog, query: string): Catalog
 
 export function validateEditorialCatalog(catalog: EditorialCatalog): EditorialCatalog {
   if (!catalog.sourceId.trim() || !catalog.name.trim()) throw new Error("Editorial catalog sourceId and name are required.");
+  assertNoLegacyPublicationPolicyFields(catalog);
+  if (!catalog.operator || !catalog.operator.name.trim() || !catalog.operator.noticeUrl.trim()) throw new Error("Editorial catalog operator name and noticeUrl are required.");
+  let noticeUrl: URL;
+  try { noticeUrl = new URL(catalog.operator.noticeUrl); } catch { throw new Error("Editorial catalog operator noticeUrl must be an absolute URL."); }
+  if (noticeUrl.protocol !== "https:") throw new Error("Editorial catalog operator noticeUrl must use HTTPS.");
   const artistIds = new Set<string>();
   const artistSlugs = new Set<string>();
   for (const artist of catalog.artists) {
@@ -114,8 +133,10 @@ export function validateEditorialCatalog(catalog: EditorialCatalog): EditorialCa
     workIds.add(work.id); workKeys.add(key);
   }
   for (const chart of catalog.charts ?? []) {
+    const legacyChart = chart as unknown as Record<string, unknown>;
+    if ("rights" in legacyChart || "evidence" in legacyChart) throw new Error("Editorial charts no longer accept rights/evidence fields.");
     if (!workIds.has(chart.workId) || !chart.rawText.trim()) throw new Error(`Chart ${chart.id} references an unknown work or is empty.`);
-    if (chart.published) assertSourceCatalogRightsBasis(chart.rights);
+    if (chart.published && !chart.rawText.trim()) throw new Error(`Chart ${chart.id} is empty.`);
   }
   assertNoForbiddenSourceCatalogKeys(catalog);
   return catalog;
@@ -126,9 +147,9 @@ export async function projectPublicSourceCatalog(catalog: EditorialCatalog): Pro
   const records = [
     ...valid.artists.map((artist) => ({ entityType: "artist" as const, sourceRecordId: artist.id, updatedAt: artist.updatedAt, payload: { name: artist.name, slug: artist.slug, ...(artist.summary ? { summary: artist.summary } : {}), ...(artist.links?.length ? { links: artist.links } : {}) } })),
     ...valid.works.map((work) => ({ entityType: "musicalWork" as const, sourceRecordId: work.id, updatedAt: work.updatedAt, payload: { title: work.title, slug: work.slug, artistSlug: work.artistSlug, identityKey: `${work.artistSlug}:${work.slug}` } })),
-    ...(valid.charts ?? []).filter((chart) => chart.published).map((chart) => ({ entityType: "chordChart" as const, sourceRecordId: chart.id, updatedAt: chart.updatedAt, payload: { playableVersionSourceRecordId: chart.workId, rawText: chart.rawText, rights: chart.rights, published: true } })),
+    ...(valid.charts ?? []).filter((chart) => chart.published).map((chart) => ({ entityType: "chordChart" as const, sourceRecordId: chart.id, updatedAt: chart.updatedAt, payload: { playableVersionSourceRecordId: chart.workId, rawText: chart.rawText, published: true } })),
   ];
-  return generateSourceCatalog({ id: valid.sourceId, name: valid.name, schemaVersion: "1.2.0", records });
+  return generateSourceCatalog({ id: valid.sourceId, name: valid.name, operator: valid.operator, contentLicense: SOURCE_CATALOG_CONTENT_LICENSE, schemaVersion: "1.3.0", records });
 }
 
 export type LocalDraft = {
@@ -142,11 +163,11 @@ export function createLocalDraft(input: Omit<LocalDraft, "updatedAt"> & { update
   return { ...input, updatedAt: createIsoDateTime(input.updatedAt ?? new Date().toISOString()) };
 }
 
-export type ContributionApplyResult = { files: Readonly<Record<string, string>>; manifest: ContributionManifestV2 };
+export type ContributionApplyResult = { files: Readonly<Record<string, string>>; manifest: ContributionManifestV3 };
 
 export async function applyContributionFiles(input: { manifest: unknown; files: Readonly<Record<string, string>> }): Promise<ContributionApplyResult> {
-  assertContributionManifestV2(input.manifest);
-  const manifest = input.manifest as ContributionManifestV2;
+  assertContributionManifestV3(input.manifest);
+  const manifest = input.manifest as ContributionManifestV3;
   const sorted = canonicalContributionEntryOrder(manifest.entries);
   const next = { ...input.files };
   for (const entry of sorted) {

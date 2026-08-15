@@ -1,6 +1,6 @@
 # @achorde/catalog-portal
 
-This package contains shared building blocks for multi-artist catalog portals. Version `0.1.0` provides a framework-free core, small React adapters, and browser draft storage.
+This package contains shared building blocks for multi-artist catalog portals. Version `0.2.0` provides a framework-free core, small React adapters, and browser draft storage.
 
 ## Install
 
@@ -27,6 +27,7 @@ import { createIsoDateTime } from "@achorde/source-catalog";
 const catalog: EditorialCatalog = {
   sourceId: "demo",
   name: "Demo catalog",
+  operator: { name: "Demo operator", noticeUrl: "https://demo.example/notice" },
   artists: [
     {
       id: "artist:joao",
@@ -51,13 +52,11 @@ import { projectPublicSourceCatalog } from "@achorde/catalog-portal";
 const output = await projectPublicSourceCatalog(catalog);
 
 JSON.stringify(output.manifest); // write as source-manifest.json
-output.files;                    // entity NDJSON and public evidence files
+output.files;                    // entity NDJSON for the read-only catalog
 output.checksums;                // write as checksums.json
 ```
 
-The projection uses Source Catalog schema `1.2.0`. Metadata-only catalogs work today, and unpublished charts and local drafts are left out.
-
-The current `EditorialCatalog` model does not carry evidence-file content. For that reason, `projectPublicSourceCatalog()` cannot complete a chart publication: Source Catalog correctly rejects the missing evidence file. A publisher that includes charts must call `generateSourceCatalog()` with sanitized `evidenceFiles` or provide an application-level adapter that does so.
+The projection uses Source Catalog schema `1.3.0` and declares the fixed `CC-BY-NC-SA-4.0` content license plus the operator notice channel. A published chart carries no per-chart rights/evidence object; unpublished charts and local drafts are left out.
 
 The package returns strings in memory. The portal application decides where and how to write them.
 
@@ -92,7 +91,7 @@ The components are intentionally small and use built-in Portuguese labels. A pro
 
 ## Contribution files
 
-`applyContributionFiles()` validates a v2 manifest, sorts allowlisted paths, and checks the supplied content hashes. It does not compare `baseSha256` with an existing repository, write files, or run Git. A caller must perform those steps before applying an update.
+`applyContributionFiles()` validates a v3 manifest, sorts allowlisted paths, and checks the supplied content hashes. It does not compare `baseSha256` with an existing repository, write files, or run Git. A caller must perform those steps before applying an update.
 
 ## What this package does not do
 

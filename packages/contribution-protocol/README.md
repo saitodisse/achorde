@@ -1,6 +1,6 @@
 # @achorde/contribution-protocol
 
-This package validates portable contribution manifests without depending on React, a browser UI, Git, or a hosting provider. Version `0.2.0` keeps the v1 parser and adds the stricter `achorde.portal-contribution/v2` contract.
+This package validates portable contribution manifests without depending on React, a browser UI, Git, or a hosting provider. Version `0.3.0` keeps v1/v2 readers and adds `achorde.portal-contribution/v3` for new bundles.
 
 ## Install
 
@@ -11,22 +11,23 @@ pnpm add @achorde/contribution-protocol
 ## Choose a protocol
 
 - Use `assertContributionManifest()` to keep reading existing v1 manifests.
-- Use `assertContributionManifestV2()` for new chart, version, work, and artist contributions.
+- Use `assertContributionManifestV3()` for new chart, version, work, and artist contributions.
 
-V2 records the accepted terms and a rights attestation in the contribution bundle. Those fields are review metadata and do not become part of a public Source Catalog.
+V3 records accepted, versioned terms and the fixed `CC-BY-NC-SA-4.0` content license. It deliberately has no rights attestation, `evidenceId`, `rights-evidence` role, or evidence path. V2 remains readable for old bundles, but is not emitted by new generators.
 
-## Validate a v2 manifest
+## Validate a v3 manifest
 
 ```ts
 import {
-  CONTRIBUTION_PROTOCOL_V2,
-  assertContributionManifestV2,
+  CONTRIBUTION_PROTOCOL_V3,
+  CONTRIBUTION_CONTENT_LICENSE,
+  assertContributionManifestV3,
   canonicalContributionEntryOrder,
-  type ContributionManifestV2,
+  type ContributionManifestV3,
 } from "@achorde/contribution-protocol";
 
 const manifest = {
-  protocol: CONTRIBUTION_PROTOCOL_V2,
+  protocol: CONTRIBUTION_PROTOCOL_V3,
   contributionId: "contribution-123",
   createdAt: "2026-08-11T12:00:00.000Z",
   sourceId: "demo-catalog",
@@ -35,10 +36,7 @@ const manifest = {
   termsId: "catalog-contribution-terms",
   termsVersion: "1.0.0",
   acceptedAt: "2026-08-11T12:00:00.000Z",
-  rights: {
-    kind: "rightsholder-contribution",
-    evidenceId: "evidence-123",
-  },
+  contentLicense: CONTRIBUTION_CONTENT_LICENSE,
   entries: [
     {
       path: "catalog/charts/demo/song/main.md",
@@ -48,9 +46,9 @@ const manifest = {
       contentSha256: "b".repeat(64),
     },
   ],
-} satisfies ContributionManifestV2;
+} satisfies ContributionManifestV3;
 
-assertContributionManifestV2(manifest);
+assertContributionManifestV3(manifest);
 const entries = canonicalContributionEntryOrder(manifest.entries);
 ```
 
@@ -58,13 +56,12 @@ An update requires `baseSha256`. A create entry must not contain it. `create-art
 
 ## Paths and limits
 
-V2 accepts only these editorial paths:
+V3 accepts only these editorial paths:
 
 ```text
 catalog/artists/<artist>.md
 catalog/works/<artist>/<work>.md
 catalog/charts/<artist>/<work>/<version>.md
-rights/evidence/<id>.json
 manifest.json
 proposal.md
 ```

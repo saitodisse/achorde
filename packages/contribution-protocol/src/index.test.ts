@@ -2,8 +2,11 @@ import { describe, expect, it } from "vitest";
 import {
   CONTRIBUTION_PROTOCOL,
   CONTRIBUTION_PROTOCOL_V2,
+  CONTRIBUTION_PROTOCOL_V3,
+  CONTRIBUTION_CONTENT_LICENSE,
   assertContributionManifest,
   assertContributionManifestV2,
+  assertContributionManifestV3,
   canonicalContributionEntryOrder,
   canonicalJson,
   contributionIdempotencyKey,
@@ -93,5 +96,25 @@ describe("contribution protocol", () => {
   it("rejects malformed bundle size metadata", () => {
     expect(() => assertContributionBundleLimits({ entryCount: Number.NaN, compressedBytes: 1, expandedBytes: 1, textBytes: [1] })).toThrow("finite");
     expect(() => assertContributionBundleLimits({ entryCount: 1, compressedBytes: -1, expandedBytes: 1, textBytes: [1] })).toThrow("finite");
+  });
+
+  it("validates v3 terms and fixed content license without rights evidence", () => {
+    const value = {
+      protocol: CONTRIBUTION_PROTOCOL_V3,
+      contributionId: "c-3",
+      createdAt: "2026-08-11T00:00:00.000Z",
+      sourceId: "ac12",
+      publicationBranch: "main",
+      operation: "update-chart",
+      termsId: "ac12-terms",
+      termsVersion: "2.0.0",
+      acceptedAt: "2026-08-11T00:00:00.000Z",
+      contentLicense: CONTRIBUTION_CONTENT_LICENSE,
+      entries: [{ path: "catalog/charts/demo/song/v1.md", role: "chart", action: "update", baseSha256: "a".repeat(64), contentSha256: "b".repeat(64) }],
+    };
+    expect(() => assertContributionManifestV3(value)).not.toThrow();
+    expect(() => assertContributionManifestV3({ ...value, contentLicense: "CC-BY-4.0" })).toThrow("CC-BY-NC-SA-4.0");
+    expect(() => assertContributionManifestV3({ ...value, rights: { kind: "direct-permission" } })).toThrow("rights");
+    expect(() => assertContributionManifestV3({ ...value, entries: [{ ...value.entries[0], path: "rights/evidence/e.json" }] })).toThrow("allowlist");
   });
 });

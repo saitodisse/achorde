@@ -236,7 +236,7 @@ export const packageDocs = [
 				label: "Catálogos estáticos",
 				headline: "O contrato para importar catálogos públicos somente leitura.",
 				paragraph:
-					"Este pacote valida manifestos e registros de catálogos somente leitura. O schema 1.2 também separa licença pública do fundamento que autoriza publicar uma cifra.",
+					"Este pacote valida manifestos e registros de catálogos somente leitura. O schema 1.3 fixa a licença editorial em CC-BY-NC-SA-4.0 e exige um operador com canal de notificação.",
 				steps: [
 					"Publique um manifesto com a lista de arquivos disponíveis.",
 					"Coloque cada registro dentro de um envelope com origem, tipo e versão de schema.",
@@ -251,7 +251,7 @@ export const packageDocs = [
 				label: "Static catalogs",
 				headline: "The contract for importing public read-only catalogs.",
 				paragraph:
-					"This package validates read-only catalog manifests and records. Schema 1.2 also separates a public license from the rights basis that permits a chart publication.",
+					"This package validates read-only catalog manifests and records. Schema 1.3 fixes the editorial license to CC-BY-NC-SA-4.0 and requires an operator with a notice channel.",
 				steps: [
 					"Publish a manifest listing the available files.",
 					"Wrap each record in an envelope with source, type, and schema version.",
@@ -1014,7 +1014,7 @@ export const packageConceptDocs: readonly PackageConceptDoc[] = [
 					"Mantenha auth como none e conflictResolution como manual.",
 				],
 				code:
-					'assertSourceCatalogManifest({\n  id: "demo-portal",\n  name: "Demo Portal",\n  version: "2d69b40d9898c542",\n  schemaVersion: "1.2.0",\n  mode: "readonly",\n  generatedAt: createIsoDateTime("2026-08-11T00:00:00.000Z"),\n  files: [{ url: "entities/artist.ndjson", entityType: "artist", mediaType: "application/x-ndjson" }],\n  capabilities: { pull: true, push: false, batchPush: false, realtime: false, proposals: false, revisions: false, moderation: false, conflictResolution: "manual", auth: "none" },\n});',
+					'assertSourceCatalogManifest({\n  id: "demo-portal",\n  name: "Demo Portal",\n  version: "2d69b40d9898c542",\n  schemaVersion: "1.3.0",\n  mode: "readonly",\n  generatedAt: createIsoDateTime("2026-08-11T00:00:00.000Z"),\n  contentLicense: "CC-BY-NC-SA-4.0",\n  operator: { name: "Demo operator", noticeUrl: "https://demo.example/notice" },\n  files: [{ url: "entities/artist.ndjson", entityType: "artist", mediaType: "application/x-ndjson" }],\n  capabilities: { pull: true, push: false, batchPush: false, realtime: false, proposals: false, revisions: false, moderation: false, conflictResolution: "manual", auth: "none" },\n});',
 				memoryPrompt:
 					"Sem olhar: quais duas capacidades deixam um manifesto inválido?",
 				nextQuestion:
@@ -1034,7 +1034,7 @@ export const packageConceptDocs: readonly PackageConceptDoc[] = [
 					"Keep auth as none and conflictResolution as manual.",
 				],
 				code:
-					'assertSourceCatalogManifest({\n  id: "demo-portal",\n  name: "Demo Portal",\n  version: "2d69b40d9898c542",\n  schemaVersion: "1.2.0",\n  mode: "readonly",\n  generatedAt: createIsoDateTime("2026-08-11T00:00:00.000Z"),\n  files: [{ url: "entities/artist.ndjson", entityType: "artist", mediaType: "application/x-ndjson" }],\n  capabilities: { pull: true, push: false, batchPush: false, realtime: false, proposals: false, revisions: false, moderation: false, conflictResolution: "manual", auth: "none" },\n});',
+					'assertSourceCatalogManifest({\n  id: "demo-portal",\n  name: "Demo Portal",\n  version: "2d69b40d9898c542",\n  schemaVersion: "1.3.0",\n  mode: "readonly",\n  generatedAt: createIsoDateTime("2026-08-11T00:00:00.000Z"),\n  contentLicense: "CC-BY-NC-SA-4.0",\n  operator: { name: "Demo operator", noticeUrl: "https://demo.example/notice" },\n  files: [{ url: "entities/artist.ndjson", entityType: "artist", mediaType: "application/x-ndjson" }],\n  capabilities: { pull: true, push: false, batchPush: false, realtime: false, proposals: false, revisions: false, moderation: false, conflictResolution: "manual", auth: "none" },\n});',
 				memoryPrompt:
 					"Without looking: which two capabilities make a manifest invalid?",
 				nextQuestion:
@@ -1228,48 +1228,48 @@ export const packageConceptDocs: readonly PackageConceptDoc[] = [
 	},
 	{
 		packageId: "source-catalog",
-		id: "rights-basis",
+		id: "catalog-publication-policy",
 		source: "packages/source-catalog/docs/contract.md, src/index.ts, src/index.test.ts",
 		copy: {
 			"pt-BR": {
-				label: "Fundamento de direitos",
-				title: "Toda cifra pública no schema 1.2 aponta para evidência sanitizada.",
+				label: "Política do catálogo",
+				title: "Todo catálogo novo declara uma licença única e seu operador.",
 				summary:
-					"SourceCatalogRightsBasis registra por que uma cifra pode ser publicada e liga esse fundamento a um resumo JSON público protegido por SHA-256.",
+					"O schema 1.3 declara CC-BY-NC-SA-4.0 e um canal de notificação. A cifra não carrega fundamento ou evidência individual; leitores antigos continuam compatíveis.",
 				whyItMatters:
-					"O catálogo não confunde termos de plataforma com licença pública e não envia contratos completos ou identidade pessoal para o deploy.",
+					"O consumidor sabe quem opera a fonte e pode preservar uma cópia local quando a distribuição na origem for retirada.",
 				steps: [
-					"Escolha um fundamento público aceito.",
-					"Publique apenas um resumo sanitizado em rights/evidence/.",
-					"Faça o checksum do resumo e registre a referência na cifra.",
-					"Use license somente quando o fundamento for public-license.",
+					"Declare contentLicense como CC-BY-NC-SA-4.0.",
+					"Identifique operator.name e operator.noticeUrl no manifesto.",
+					"Não emita direitos, evidence ou arquivos de evidência em catálogos 1.3.",
+					"Valide checksums antes de materializar uma cópia no consumidor.",
 				],
 				code:
-					'const rights = {\n  kind: "direct-permission",\n  evidence: {\n    id: "permission-123",\n    url: "rights/evidence/permission-123.json",\n    sha256,\n  },\n};',
+					'const publication = {\n  contentLicense: "CC-BY-NC-SA-4.0",\n  operator: {\n    name: "Demo operator",\n    noticeUrl: "https://demo.example/notice",\n  },\n};',
 				memoryPrompt:
-					"Sem olhar: em qual fundamento o campo license é permitido?",
+					"Sem olhar: quais dois campos identificam a política de publicação do schema 1.3?",
 				nextQuestion:
-					"Peça para o agente revisar uma cifra e sua evidência antes do build público.",
+					"Peça para o agente revisar um manifesto 1.3 e verificar a política de cópia local.",
 			},
 			en: {
-				label: "Rights basis",
-				title: "Every public schema 1.2 chart points to sanitized evidence.",
+				label: "Catalog publication policy",
+				title: "Every new catalog declares one license and its operator.",
 				summary:
-					"SourceCatalogRightsBasis records why a chart can be published and connects that basis to a public JSON summary protected by SHA-256.",
+					"Schema 1.3 declares CC-BY-NC-SA-4.0 and a notice channel. Charts carry no per-chart basis or evidence; readers remain compatible with old catalogs.",
 				whyItMatters:
-					"The catalog does not confuse platform terms with a public license and does not deploy full contracts or personal identity.",
+					"The consumer knows who operates the source and can preserve a local copy when distribution at the origin is withdrawn.",
 				steps: [
-					"Choose an accepted public rights basis.",
-					"Publish only a sanitized summary under rights/evidence/.",
-					"Hash the summary and record its reference on the chart.",
-					"Use license only when the basis is public-license.",
+					"Declare contentLicense as CC-BY-NC-SA-4.0.",
+					"Identify operator.name and operator.noticeUrl in the manifest.",
+					"Do not emit rights, evidence, or evidence files in schema 1.3 catalogs.",
+					"Validate checksums before materializing a copy in the consumer.",
 				],
 				code:
-					'const rights = {\n  kind: "direct-permission",\n  evidence: {\n    id: "permission-123",\n    url: "rights/evidence/permission-123.json",\n    sha256,\n  },\n};',
+					'const publication = {\n  contentLicense: "CC-BY-NC-SA-4.0",\n  operator: {\n    name: "Demo operator",\n    noticeUrl: "https://demo.example/notice",\n  },\n};',
 				memoryPrompt:
-					"Without looking: which basis may contain the license field?",
+					"Without looking: which two fields identify the schema 1.3 publication policy?",
 				nextQuestion:
-					"Ask the agent to review a chart and its evidence before a public build.",
+					"Ask the agent to review a schema 1.3 manifest and its local-copy policy.",
 			},
 		},
 	},

@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.4.0
+
+- Added Source Catalog schema 1.3 with fixed `CC-BY-NC-SA-4.0` licensing and operator notice metadata.
+- Removed rights/evidence authoring from new catalogs while retaining 1.0.0–1.2.0 readers.
+
 ## 0.3.0 - 2026-08-11
 
 ### Added

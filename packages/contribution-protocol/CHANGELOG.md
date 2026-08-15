@@ -1,5 +1,12 @@
 # Changelog
 
+## 0.3.0
+
+### Added
+
+- Version 3 manifests with versioned terms and fixed `CC-BY-NC-SA-4.0` content licensing.
+- Explicit rejection of rights attestations, `evidenceId`, the `rights-evidence` role, and evidence paths in new bundles.
+
 ## 0.2.0 - 2026-08-11
 
 ### Added

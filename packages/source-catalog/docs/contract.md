@@ -1,6 +1,6 @@
 # Source Catalog contract
 
-This document is the normative reference for the file layout and validation behavior implemented by `@achorde/source-catalog@0.3.0`.
+This document is the normative reference for the file layout and validation behavior implemented by `@achorde/source-catalog@0.4.0`.
 
 ## Publication layout
 
@@ -10,7 +10,6 @@ A catalog normally publishes these paths below `/source-catalog/`:
 source-manifest.json
 checksums.json
 entities/<entity-type>.ndjson
-rights/evidence/<id>.json
 ```
 
 `checksums.json` is optional only when every entity file in the manifest already contains `sha256`. When a checksum exists in both places, the values must match.
@@ -19,7 +18,14 @@ File URLs must be relative. Absolute URLs, scheme-relative URLs, absolute paths,
 
 ## Supported schemas
 
-Readers accept `1.0.0`, `1.1.0`, and `1.2.0`. Every envelope must match the manifest `id`, `schemaVersion`, and the `entityType` declared for its file.
+Readers accept `1.0.0`, `1.1.0`, `1.2.0`, and `1.3.0`. Every envelope must match the manifest `id`, `schemaVersion`, and the `entityType` declared for its file. New generators emit `1.3.0` only.
+
+Schema `1.3.0` requires:
+
+- `contentLicense: "CC-BY-NC-SA-4.0"`;
+- `operator.name` and absolute HTTPS `operator.noticeUrl`;
+- no `rights`, `evidence`, or `evidenceId` field anywhere in the manifest or envelopes;
+- no file below `rights/` or `evidence/`.
 
 Entity types are `artist`, `musicalWork`, `playableVersion`, `chordChart`, `voicing`, and `chordAlias`.
 
@@ -35,9 +41,9 @@ A public manifest must use:
 
 Contribution bundles and gateways are separate systems. They do not add write or authentication capabilities to a Source Catalog.
 
-## Rights in schema 1.2
+## Legacy rights in schema 1.2
 
-Every public `chordChart` must have non-empty `rawText` and a `SourceCatalogRightsBasis`.
+The reader still validates old `1.2.0` charts with their historical rights basis so existing catalogs remain readable. This structure is not part of the schema 1.3 authoring API.
 
 Accepted rights bases are:
 
@@ -49,7 +55,7 @@ Accepted rights bases are:
 
 Every basis points to a sanitized summary at `rights/evidence/<id>.json` and includes its SHA-256 checksum. Only `public-license` may also contain a real SPDX or custom public license. `review-required` is never public.
 
-The generator requires the referenced evidence text, validates it as a JSON object, rejects forbidden sensitive keys, and verifies its checksum. The current contract does not model evidence expiration.
+Schema 1.3 does not accept rights/evidence files or per-chart rights fields.
 
 ## Sensitive information
 
@@ -61,12 +67,12 @@ The check is key-based and recursive. Publishers remain responsible for reviewin
 
 `generateSourceCatalog()`:
 
-- defaults to schema `1.2.0`;
+- defaults to schema `1.3.0`;
 - sorts entity files by the exported entity-type order;
 - sorts rows by `sourceRecordId`;
 - sets `generatedAt` to the newest record `updatedAt`, or the Unix epoch when none exists;
 - derives a 16-character manifest version from canonical content;
-- returns entity and evidence text in `files` and all checksums in `checksums`.
+- returns entity text in `files` and all checksums in `checksums`.
 
 The caller writes `source-manifest.json` and `checksums.json`; the package performs no file-system IO.
 

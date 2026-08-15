@@ -4,6 +4,7 @@ import { applyContributionFiles, createArtistMonogram, projectPublicSourceCatalo
 const catalog: EditorialCatalog = {
   sourceId: "ac12",
   name: "Acervo AC12",
+  operator: { name: "AC12 operator", noticeUrl: "https://ac12.example/notice" },
   artists: [
     { id: "artist:joao", slug: "joao", name: "João da Silva", updatedAt: "2026-08-11T00:00:00.000Z" },
   ],
@@ -23,16 +24,20 @@ describe("catalog portal core", () => {
   });
   it("projects metadata-only source catalogs", async () => {
     const output = await projectPublicSourceCatalog(catalog);
-    expect(output.manifest.schemaVersion).toBe("1.2.0");
+    expect(output.manifest.schemaVersion).toBe("1.3.0");
     expect(Object.keys(output.files)).toEqual(["entities/artist.ndjson", "entities/musicalWork.ndjson"]);
     expect(output.files["entities/artist.ndjson"]).not.toMatch(/rawText|imageUrl|discogs|sourceTabUrl/);
   });
-  it("rejects charts without rights basis", () => {
-    expect(() => validateEditorialCatalog({ ...catalog, charts: [{ id: "chart:1", workId: "work:joao:cancao", version: "v1", rawText: "C", updatedAt: "2026-08-11T00:00:00.000Z", rights: { kind: "direct-permission", evidence: { id: "e", url: "rights/evidence/e.json", sha256: "a".repeat(64) } }, published: false }] })).not.toThrow();
+  it("accepts editorial charts without a per-chart rights object", () => {
+    expect(() => validateEditorialCatalog({ ...catalog, charts: [{ id: "chart:1", workId: "work:joao:cancao", version: "v1", rawText: "C", updatedAt: "2026-08-11T00:00:00.000Z", published: true }] })).not.toThrow();
+  });
+  it("rejects legacy policy fields even when they are outside a chart", () => {
+    expect(() => validateEditorialCatalog({ ...catalog, rights: {} } as never)).toThrow("rights/evidence");
+    expect(() => validateEditorialCatalog({ ...catalog, evidenceId: "legacy" } as never)).toThrow("rights/evidence");
   });
   it("applies only allowlisted contribution paths and verifies content hashes", async () => {
     const manifest = {
-      protocol: "achorde.portal-contribution/v2",
+      protocol: "achorde.portal-contribution/v3",
       contributionId: "c",
       createdAt: "2026-08-11T00:00:00.000Z",
       sourceId: "ac12",
@@ -41,7 +46,7 @@ describe("catalog portal core", () => {
       termsId: "terms",
       termsVersion: "1",
       acceptedAt: "2026-08-11T00:00:00.000Z",
-      rights: { kind: "direct-permission", evidenceId: "e" },
+      contentLicense: "CC-BY-NC-SA-4.0",
       entries: [{ path: "catalog/works/joao/cancao.md", role: "work", action: "create", contentSha256: "b".repeat(64) }],
     };
     const content = "title: Canção\n";

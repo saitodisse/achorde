@@ -1,6 +1,6 @@
 # @achorde/source-catalog
 
-This package defines and validates static, read-only Source Catalogs. Version `0.3.0` reads schemas `1.0.0`, `1.1.0`, and `1.2.0` and can generate deterministic `1.2.0` catalogs.
+This package defines and validates static, read-only Source Catalogs. Version `0.4.0` reads schemas `1.0.0` through `1.2.0` for compatibility and generates deterministic schema `1.3.0` catalogs.
 
 ## Install
 
@@ -27,7 +27,7 @@ const dataset = assertSourceCatalogDataset(
 
 `assertSourceCatalogDataset()` checks the manifest, declared entity files, envelope identity, schema agreement, and checksum declarations. The caller must hash each downloaded raw file before parsing it; this function receives decoded rows and cannot recompute those hashes.
 
-## Generate a metadata-only catalog
+## Generate a schema 1.3 catalog
 
 ```ts
 import {
@@ -38,7 +38,10 @@ import {
 const output = await generateSourceCatalog({
   id: "demo-catalog",
   name: "Demo catalog",
-  schemaVersion: "1.2.0",
+  operator: {
+    name: "Demo operator",
+    noticeUrl: "https://demo.example/notice",
+  },
   records: [
     {
       entityType: "artist",
@@ -69,26 +72,13 @@ The generator sorts records and files, derives `generatedAt` from the newest rec
 
 ## Publishing a chart
 
-Schema `1.2.0` requires every published `chordChart` to contain a `SourceCatalogRightsBasis`. The basis points to a checksum-protected JSON summary under `rights/evidence/`.
-
-```ts
-const rights = {
-  kind: "direct-permission" as const,
-  evidence: {
-    id: "permission-123",
-    url: "rights/evidence/permission-123.json",
-    sha256: evidenceChecksum,
-  },
-};
-```
-
-Only `public-license` may contain a `license` field. `review-required` is private editorial state and is rejected in a public catalog. Full contracts, personal identity, and private documents do not belong in evidence summaries.
+Schema `1.3.0` applies `CC-BY-NC-SA-4.0` to the editorial content declared by the catalog. A `chordChart` contains its text and relationship to a playable version, but no per-chart rights basis or evidence object. The operator and its notification channel are recorded in the manifest.
 
 ## Important limits
 
 - Manifest capabilities are always pull-only and unauthenticated.
-- Payload TypeScript types are exported, but runtime validation is structural. Chart rights and forbidden sensitive keys receive extra validation.
-- Evidence summaries are checked for safe paths, JSON shape, forbidden keys, and checksums. The contract has no expiration field.
+- Payload TypeScript types are exported, but runtime validation is structural. Schema 1.3 rejects `rights`, `evidence`, and `evidenceId` fields and rejects files under `rights/` or `evidence/`.
+- Readers keep legacy 1.0.0–1.2.0 validation for already published catalogs; new generators cannot emit those schemas.
 - The package does not fetch URLs, write files, schedule synchronization, or provide a CLI.
 
 See the normative [`Source Catalog contract`](./docs/contract.md) for file rules and validation responsibilities.

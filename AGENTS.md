@@ -8,7 +8,7 @@ This repository is the public monorepo root for the shared music ecosystem.
 
 - `packages/musical-domain` — **`@achorde/musical-domain`**: shared contracts and headless helpers.
 - `packages/source-catalog` — **`@achorde/source-catalog`**: read-only static catalog contracts and validators.
-- `packages/contribution-protocol` — **`@achorde/contribution-protocol`**: portable v1/v2 contribution manifest contracts and validation.
+- `packages/contribution-protocol` — **`@achorde/contribution-protocol`**: portable v1/v2 readers and v3 contribution manifest contracts and validation.
 - `packages/catalog-portal` — **`@achorde/catalog-portal`**: shared portal core with optional React and browser adapters.
 - `packages/tab-editor` — **`@achorde/tab-editor`**: reusable chord chart editor, diagnostics, export payloads, and preview adapter.
 - `packages/tab-renderer` — **`@achorde/tab-renderer`**: parse, transpose, React chord-sheet rendering.

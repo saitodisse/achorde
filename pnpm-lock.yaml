@@ -19,10 +19,10 @@ importers:
   packages/catalog-portal:
     dependencies:
       '@achorde/contribution-protocol':
-        specifier: workspace:^0.2.0
+        specifier: workspace:^0.3.0
         version: link:../contribution-protocol
       '@achorde/source-catalog':
-        specifier: workspace:^0.3.0
+        specifier: workspace:^0.4.0
         version: link:../source-catalog
     devDependencies:
       '@types/react':

@@ -1,5 +1,7 @@
 export const CONTRIBUTION_PROTOCOL = "achorde.portal-contribution/v1" as const;
 export const CONTRIBUTION_PROTOCOL_V2 = "achorde.portal-contribution/v2" as const;
+export const CONTRIBUTION_PROTOCOL_V3 = "achorde.portal-contribution/v3" as const;
+export const CONTRIBUTION_CONTENT_LICENSE = "CC-BY-NC-SA-4.0" as const;
 
 export type ContributionOperation = "update-version" | "create-version" | "create-work";
 export type ContributionState = "local" | "prepared" | "awaiting-review";
@@ -56,6 +58,29 @@ export type ContributionManifestV2 = {
   entries: readonly ContributionManifestEntryV2[];
 };
 
+export type ContributionOperationV3 = ContributionOperationV2;
+export type ContributionEntryRoleV3 = "artist" | "work" | "chart" | "manifest" | "proposal";
+export type ContributionManifestEntryV3 = {
+  path: string;
+  role: ContributionEntryRoleV3;
+  action: ContributionEntryAction;
+  baseSha256?: string;
+  contentSha256: string;
+};
+export type ContributionManifestV3 = {
+  protocol: typeof CONTRIBUTION_PROTOCOL_V3;
+  contributionId: string;
+  createdAt: string;
+  sourceId: string;
+  publicationBranch: string;
+  operation: ContributionOperationV3;
+  termsId: string;
+  termsVersion: string;
+  acceptedAt: string;
+  contentLicense: typeof CONTRIBUTION_CONTENT_LICENSE;
+  entries: readonly ContributionManifestEntryV3[];
+};
+
 export const CONTRIBUTION_LIMITS = {
   maxEntries: 16,
   maxCompressedBytes: 2 * 1024 * 1024,
@@ -65,7 +90,8 @@ export const CONTRIBUTION_LIMITS = {
 
 const SHA_256 = /^[a-f0-9]{64}$/i;
 const SAFE_PATH = /^(?!\/)(?!.*(?:^|\/)\.\.(?:\/|$))[A-Za-z0-9._/-]+$/;
-const EDITORIAL_PATH = /^(?:catalog\/(?:artists\/[^/]+|works\/[^/]+\/[^/]+|charts\/[^/]+\/[^/]+\/[^/]+)\.md|rights\/evidence\/[^/]+\.json|manifest\.json|proposal\.md)$/;
+const LEGACY_EDITORIAL_PATH = /^(?:catalog\/(?:artists\/[^/]+|works\/[^/]+\/[^/]+|charts\/[^/]+\/[^/]+\/[^/]+)\.md|rights\/evidence\/[^/]+\.json|manifest\.json|proposal\.md)$/;
+const EDITORIAL_PATH = /^(?:catalog\/(?:artists\/[^/]+|works\/[^/]+\/[^/]+|charts\/[^/]+\/[^/]+\/[^/]+)\.md|manifest\.json|proposal\.md)$/;
 
 function stableCompare(left: string, right: string): number {
   return left < right ? -1 : left > right ? 1 : 0;
@@ -105,14 +131,29 @@ function assertSha256(value: unknown, label: string): asserts value is string {
   if (typeof value !== "string" || !SHA_256.test(value)) throw new Error(`${label} must be a SHA-256 checksum.`);
 }
 
+function assertNoLegacyRightsFields(value: unknown): void {
+  if (!value || typeof value !== "object") return;
+  if (Array.isArray(value)) {
+    for (const item of value) assertNoLegacyRightsFields(item);
+    return;
+  }
+  for (const [key, nested] of Object.entries(value)) {
+    if (key === "rights" || key === "evidence" || key === "evidenceId") {
+      throw new Error("Contribution v3 does not accept rights attestations or evidence fields.");
+    }
+    assertNoLegacyRightsFields(nested);
+  }
+}
+
 function assertTimestamp(value: unknown, label: string): void {
   if (typeof value !== "string" || !/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(?:\.\d{3})?Z$/.test(value)) {
     throw new Error(`${label} must be an ISO-8601 UTC timestamp.`);
   }
 }
 
-function assertEditorialPath(value: unknown, label: string): asserts value is string {
-  if (typeof value !== "string" || !SAFE_PATH.test(value) || !EDITORIAL_PATH.test(value)) {
+function assertEditorialPath(value: unknown, label: string, legacy = false): asserts value is string {
+  const allowlist = legacy ? LEGACY_EDITORIAL_PATH : EDITORIAL_PATH;
+  if (typeof value !== "string" || !SAFE_PATH.test(value) || !allowlist.test(value)) {
     throw new Error(`${label} is outside the editorial allowlist.`);
   }
 }
@@ -143,7 +184,7 @@ export function assertContributionManifestV2(value: unknown): asserts value is C
   for (const item of manifest.entries) {
     if (!item || typeof item !== "object" || Array.isArray(item)) throw new Error("Contribution v2 entry must be an object.");
     const entry = item as Record<string, unknown>;
-    assertEditorialPath(entry.path, "Contribution v2 entry path");
+    assertEditorialPath(entry.path, "Contribution v2 entry path", true);
     if (paths.has(entry.path)) throw new Error("Contribution v2 entries must not contain duplicate paths.");
     paths.add(entry.path);
     if (!["artist", "work", "chart", "rights-evidence", "manifest", "proposal"].includes(String(entry.role))) throw new Error("Contribution v2 entry role is invalid.");
@@ -164,8 +205,49 @@ export function assertContributionManifestV2(value: unknown): asserts value is C
   if (operation === "update-chart" && !roles.has("chart")) throw new Error("update-chart requires a chart entry.");
 }
 
+export function assertContributionManifestV3(value: unknown): asserts value is ContributionManifestV3 {
+  if (!value || typeof value !== "object" || Array.isArray(value)) throw new Error("Contribution v3 manifest must be an object.");
+  const manifest = value as Record<string, unknown>;
+  if (manifest.protocol !== CONTRIBUTION_PROTOCOL_V3) throw new Error("Unsupported contribution protocol: expected v3.");
+  assertNoLegacyRightsFields(manifest);
+  for (const field of ["contributionId", "sourceId", "publicationBranch", "termsId", "termsVersion"] as const) {
+    if (typeof manifest[field] !== "string" || !manifest[field].trim()) throw new Error(`Contribution v3 ${field} must be a non-empty string.`);
+  }
+  assertTimestamp(manifest.createdAt, "createdAt");
+  assertTimestamp(manifest.acceptedAt, "acceptedAt");
+  if (!["update-chart", "create-version", "create-work", "create-artist"].includes(String(manifest.operation))) {
+    throw new Error("Unsupported contribution v3 operation.");
+  }
+  if (manifest.contentLicense !== CONTRIBUTION_CONTENT_LICENSE) {
+    throw new Error("Contribution v3 contentLicense must be CC-BY-NC-SA-4.0.");
+  }
+  if (!Array.isArray(manifest.entries) || manifest.entries.length === 0 || manifest.entries.length > CONTRIBUTION_LIMITS.maxEntries) {
+    throw new Error(`Contribution v3 entries must contain 1-${CONTRIBUTION_LIMITS.maxEntries} files.`);
+  }
+  const paths = new Set<string>();
+  for (const item of manifest.entries) {
+    if (!item || typeof item !== "object" || Array.isArray(item)) throw new Error("Contribution v3 entry must be an object.");
+    const entry = item as Record<string, unknown>;
+    assertEditorialPath(entry.path, "Contribution v3 entry path");
+    if (String(entry.path).startsWith("rights/") || String(entry.path).includes("/evidence/")) throw new Error("Contribution v3 evidence paths are forbidden.");
+    if (paths.has(String(entry.path))) throw new Error("Contribution v3 entries must not contain duplicate paths.");
+    paths.add(String(entry.path));
+    if (!["artist", "work", "chart", "manifest", "proposal"].includes(String(entry.role))) throw new Error("Contribution v3 entry role is invalid.");
+    if (entry.action !== "create" && entry.action !== "update") throw new Error("Contribution v3 entry action is invalid.");
+    assertSha256(entry.contentSha256, "Contribution v3 contentSha256");
+    if (entry.action === "update") assertSha256(entry.baseSha256, "Contribution v3 baseSha256");
+    else if (entry.baseSha256 !== undefined) throw new Error("baseSha256 is forbidden for create entries.");
+  }
+  const operation = manifest.operation as ContributionOperationV3;
+  const roles = new Set((manifest.entries as unknown[]).map((entry) => (entry as Record<string, unknown>).role));
+  if (operation === "create-artist" && (!roles.has("artist") || !roles.has("work") || !roles.has("chart"))) {
+    throw new Error("create-artist must atomically include artist, work, and chart entries.");
+  }
+  if (operation === "update-chart" && !roles.has("chart")) throw new Error("update-chart requires a chart entry.");
+}
+
 /** Stable entry order used by ZIP writers in browser, CLI, and gateway adapters. */
-export function canonicalContributionEntryOrder(entries: ReadonlyArray<ContributionManifestEntryV2>): ContributionManifestEntryV2[] {
+export function canonicalContributionEntryOrder<T extends ContributionManifestEntryV2 | ContributionManifestEntryV3>(entries: ReadonlyArray<T>): T[] {
   return [...entries].sort((left, right) => stableCompare(left.path, right.path));
 }
 
